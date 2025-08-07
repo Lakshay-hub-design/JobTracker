@@ -3,11 +3,13 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Axis3D } from "lucide-react";
+import { useAuth } from "../context/AuthContex";
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const validate = () => {
     const newErrors = {};
@@ -17,7 +19,7 @@ const Login = () => {
     return newErrors;
   };
 
-  const handleChange =  (e) => {
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
     setErrors({ ...errors, [e.target.name]: "" });
   };
@@ -28,16 +30,19 @@ const Login = () => {
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
     } else {
-      try{
-        const res = await axios.post("http://localhost:4000/api/auth/login", form);
+      try {
+        const res = await axios.post(
+          "http://localhost:4000/api/auth/login",
+          form
+        );
         const { token, user } = res.data;
-
-        localStorage.setItem("token", token);
-        localStorage.setItem("user", JSON.stringify(user));
+        login(token, user);
         navigate("/dashboard");
-      }catch (error) {
-        setErrors(error.response?.data?.message || "Login failed");
-      }
+      } catch (error) {
+  const backendMessage = error.response?.data?.message || "Login failed";
+  setErrors({ general: backendMessage });
+}
+
     }
   };
 
@@ -49,7 +54,9 @@ const Login = () => {
         transition={{ duration: 0.5 }}
         className="bg-black/30 backdrop-blur-lg rounded-2xl shadow-xl w-full max-w-md p-8 space-y-6"
       >
-        <h2 className="text-3xl font-bold text-center text-white">Welcome Back</h2>
+        <h2 className="text-3xl font-bold text-center text-white">
+          Welcome Back
+        </h2>
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email */}
           <div>
@@ -69,7 +76,9 @@ const Login = () => {
 
           {/* Password */}
           <div>
-            <label className="block mb-1 font-medium text-white">Password</label>
+            <label className="block mb-1 font-medium text-white">
+              Password
+            </label>
             <input
               type="password"
               name="password"
@@ -81,6 +90,21 @@ const Login = () => {
             {errors.password && (
               <p className="text-red-400 text-sm mt-1">{errors.password}</p>
             )}
+            {errors.general && (
+              <p className="text-red-400 text-sm text-center mb-2">
+                {errors.general}
+              </p>
+            )}
+            <p className="text-right text-sm mt-2">
+              <Link
+                to="/forgot-password"
+                className="text-white/70 hover:underline"
+              >
+                Forgot Password?
+              </Link>
+            </p>
+
+ 
           </div>
 
           {/* Submit Button */}

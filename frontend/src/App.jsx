@@ -5,6 +5,8 @@ import RegisterPage from './pages/Register'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import PrivateRoute from './components/PrivateRoutes'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPasswordPage from './pages/ResetPasswordPage'
 
 
 const App = () => {
@@ -13,6 +15,9 @@ const App = () => {
       <Route path="/" element={<Landing />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/login" element={<Login />} />
+      <Route path="/forgot-password" element={<ForgotPassword />} />
+      <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+
       <Route 
       path='/dashboard'
       element={

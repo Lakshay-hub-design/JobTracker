@@ -1,9 +1,15 @@
-import React from 'react'
+import { useAuth } from "../context/AuthContex";
 
 const Dashboard = () => {
-  return (
-    <div>Dashboard</div>
-  )
-}
+  const { user, logout } = useAuth();
 
-export default Dashboard
+  return (
+    <div>
+      <h1>Hello, {user?.email}</h1>
+      <p>Welcome {user?.name} to your dashboard!</p>
+      <button onClick={logout}>Logout</button>
+    </div>
+  );
+};
+
+export default Dashboard;
