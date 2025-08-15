@@ -10,6 +10,7 @@ import ResetPasswordPage from './pages/ResetPasswordPage'
 import AddJob from './pages/AddJob'
 import Jobs from './pages/Jobs'
 import EditJob from './pages/EditJob'
+import JobDetail from './pages/JobDetail'
 
 
 const App = () => {
@@ -33,7 +34,10 @@ const App = () => {
         </PrivateRoute>
       } />
 
+      <Route path="/jobs/:id" element={<JobDetail />} />
+
     </Routes>
+    
   )
 }
 

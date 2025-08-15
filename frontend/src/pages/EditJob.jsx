@@ -42,7 +42,7 @@ const EditJob = () => {
       await axios.put(`http://localhost:4000/api/jobs/${id}`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      navigate("/jobs");
+      navigate("/dashboard");
     } catch (err) {
       setError("Failed to update job");
     }
@@ -76,6 +76,8 @@ const EditJob = () => {
          <input type="text" name="resumeUrl" placeholder="Resume Link" value={form.resumeUrl} onChange={handleChange} className="w-full border p-2 rounded" />
         <textarea name="notes" value={form.notes} onChange={handleChange}
                   placeholder="Notes" className="w-full px-3 py-2 border rounded" rows={4} />
+        <textarea name="description" value={form.description} onChange={handleChange}
+                  placeholder="Job Description" className="w-full px-3 py-2 border rounded" rows={4} />
         <button className="w-full bg-yellow-300 text-black py-2 rounded">Update Job</button>
       </form>
     </div>

@@ -19,6 +19,7 @@ const JobSchema = new mongoose.Schema({
   },
   appliedDate: { type: Date, default: Date.now },
   notes: { type: String, default: '' },
+  description: { type: String, default: '' },
   resumeUrl: { type: String, default: '' }, // optional (for resume upload)
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });

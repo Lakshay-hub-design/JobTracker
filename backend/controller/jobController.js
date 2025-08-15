@@ -1,9 +1,9 @@
 const Job = require('../models/job');
-
+const mongoose = require('mongoose')
 // Create job
 exports.createJob = async (req, res) => {
   try {
-    const { company, position, status, jobType, location, appliedDate, notes, resumeUrl } = req.body;
+    const { company, position, status, jobType, location, appliedDate, notes, description, resumeUrl } = req.body;
     const job = await Job.create({
       company,
       position,
@@ -12,6 +12,7 @@ exports.createJob = async (req, res) => {
       location,
       appliedDate: appliedDate ? new Date(appliedDate) : undefined,
       notes,
+      description,
       resumeUrl,
       createdBy: req.user.id // assuming auth middleware adds req.user
     });
@@ -54,14 +55,22 @@ exports.getJobs = async (req, res) => {
 // Get single job
 exports.getJob = async (req, res) => {
   try {
-    const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
-    if (!job) return res.status(404).json({ success: false, message: 'Job not found' });
-    res.json({ success: true, job });
+    const job = await Job.findOne({
+      _id: req.params.id,
+      createdBy: req.user.id
+    });
+
+    if (!job) {
+      return res.status(404).json({ message: 'Job not found' });
+    }
+
+    res.status(200).json(job); // Directly send job object
   } catch (err) {
     console.error('Get Job error:', err);
-    res.status(500).json({ success: false, message: 'Server error' });
+    res.status(500).json({ message: 'Server error' });
   }
 };
+
 
 // Update job
 exports.updateJob = async (req, res) => {
@@ -69,7 +78,7 @@ exports.updateJob = async (req, res) => {
     const job = await Job.findOne({ _id: req.params.id, createdBy: req.user.id });
     if (!job) return res.status(404).json({ success: false, message: 'Job not found' });
 
-    const allowed = ['company', 'position', 'status', 'jobType', 'appliedDate', 'notes', 'resumeUrl'];
+    const allowed = ['company', 'position', 'status', 'jobType', 'appliedDate', 'notes', 'description', 'resumeUrl'];
     allowed.forEach((key) => {
       if (req.body[key] !== undefined) job[key] = req.body[key];
     });
@@ -91,5 +100,36 @@ exports.deleteJob = async (req, res) => {
   } catch (err) {
     console.error('Delete Job error:', err);
     res.status(500).json({ success: false, message: 'Server error' });
+  }
+};
+
+exports.getStats = async (req, res) => {
+  try {
+    // 1. Find all jobs for the logged-in user
+    const jobs = await Job.find({ createdBy: req.user.userId });
+
+    // 2. Count jobs for each status
+    const stats = {
+      applied: jobs.filter(job => job.status === 'applied').length,
+      interview: jobs.filter(job => job.status === 'interview').length,
+      offer: jobs.filter(job => job.status === 'offer').length,
+      rejected: jobs.filter(job => job.status === 'rejected').length,
+    };
+
+    const typeCounts = {
+      'full-time': jobs.filter(job => job.jobType === 'full-time').length,
+      'part-time': jobs.filter(job => job.jobType === 'part-time').length,
+      internship: jobs.filter(job => job.jobType === 'internship').length,
+      remote: jobs.filter(job => job.jobType === 'remote').length
+    };
+
+    // 3. Send the response
+    res.status(200).json({
+      stats,
+      totalJobs: jobs.length,
+      typeCounts
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Something went wrong', error: error.message });
   }
 };
