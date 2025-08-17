@@ -17,10 +17,14 @@ const JobSchema = new mongoose.Schema({
     enum: ['full-time', 'part-time', 'internship', 'remote'],
     default: 'full-time'
   },
+  followUpDate: {
+      type: Date,
+  },
   appliedDate: { type: Date, default: Date.now },
   notes: { type: String, default: '' },
   description: { type: String, default: '' },
-  resumeUrl: { type: String, default: '' }, // optional (for resume upload)
+  resume: { type: String, default: '' }, 
+  coverLetter: { type: String },
   createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true }
 }, { timestamps: true });
 

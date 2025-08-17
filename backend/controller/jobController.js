@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 // Create job
 exports.createJob = async (req, res) => {
   try {
-    const { company, position, status, jobType, location, appliedDate, notes, description, resumeUrl } = req.body;
+    const { company, position, status, jobType, location, appliedDate, notes, description, resumeUrl, followUpDate } = req.body;
     const job = await Job.create({
       company,
       position,
@@ -14,6 +14,7 @@ exports.createJob = async (req, res) => {
       notes,
       description,
       resumeUrl,
+      followUpDate,
       createdBy: req.user.id // assuming auth middleware adds req.user
     });
     res.status(201).json({ success: true, job });

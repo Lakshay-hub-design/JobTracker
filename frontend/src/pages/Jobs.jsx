@@ -40,11 +40,11 @@ const Jobs = () => {
 
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
+    <div className="min-h-screen bg-gray-100 p-6 dark:bg-black dark:text-white">
       <h1 className="text-3xl font-bold mb-4">My Job Applications</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {jobs.map(job => (
-          <div key={job._id} className="bg-white shadow rounded p-4">
+          <div key={job._id} className="bg-white shadow rounded p-4 dark:bg-[#2a2a2a] dark:text-white">
             <h2 className="text-xl font-semibold">{job.position}</h2>
             <p className="text-gray-700">{job.company}</p>
             <p>Status: <span className="font-bold">{job.status}</span></p>

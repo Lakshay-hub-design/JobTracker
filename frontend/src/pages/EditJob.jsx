@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContex";
+import { toast } from "sonner";
 
 const EditJob = () => {
   const { id } = useParams();
@@ -42,9 +43,10 @@ const EditJob = () => {
       await axios.put(`http://localhost:4000/api/jobs/${id}`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
+      toast.success("Job updated!");
       navigate("/dashboard");
     } catch (err) {
-      setError("Failed to update job");
+      toast.error("Failed to update job");
     }
   };
 

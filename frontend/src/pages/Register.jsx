@@ -3,7 +3,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import { toast } from "sonner";
 
 const RegisterPage = () => {
 
@@ -40,8 +40,10 @@ const RegisterPage = () => {
         localStorage.setItem("token", token);
         localStorage.setItem("user", JSON.stringify(user));
         navigate("/dashboard");
-      }catch (error) {
-        setErrors(error.response?.data?.message || "Registration failed");
+        const success = res?.data?.message;
+        toast.success(success);
+      } catch (error) {
+        toast.error(error.response?.data?.message || "Registration failed");
       }
     }
   };

@@ -134,7 +134,7 @@ Store it in MongoDB
 
 Show upcoming follow-ups in a sidebar or dashboard section
 
-Bonus: Send email via Node (using nodemailer + cron job)
+Bonus: Send email via Node (using nodemailer + cron job) //later//
 
 🎨 Phase 8: Polish UI & UX (Day 17–19)
 Add dark mode toggle (useContext)

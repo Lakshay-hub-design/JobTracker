@@ -4,6 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Axis3D } from "lucide-react";
 import { useAuth } from "../context/AuthContex";
+import { toast } from "sonner";
+
 
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
@@ -37,12 +39,12 @@ const Login = () => {
         );
         const { token, user } = res.data;
         login(token, user);
+        toast.success("Logged in successfully!");
         navigate("/dashboard");
       } catch (error) {
-  const backendMessage = error.response?.data?.message || "Login failed";
-  setErrors({ general: backendMessage });
-}
-
+        const backendMessage = error.response?.data?.message || "Login failed";
+        toast.error(backendMessage);
+      }
     }
   };
 

@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const jobController = require('../controller/jobController');
-const auth = require('../middleware/authMiddleware'); // make sure path correct
+const auth = require('../middleware/authMiddleware');
 
 // All routes protected
 router.use(auth);

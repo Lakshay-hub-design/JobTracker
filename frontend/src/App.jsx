@@ -11,10 +11,12 @@ import AddJob from './pages/AddJob'
 import Jobs from './pages/Jobs'
 import EditJob from './pages/EditJob'
 import JobDetail from './pages/JobDetail'
+import {Toaster} from 'sonner'
 
 
 const App = () => {
   return (
+    <>
     <Routes>
       <Route path="/" element={<Landing />} />
       <Route path="/register" element={<RegisterPage />} />
@@ -37,7 +39,8 @@ const App = () => {
       <Route path="/jobs/:id" element={<JobDetail />} />
 
     </Routes>
-    
+    <Toaster richColors position="top-right" />
+    </>
   )
 }
 

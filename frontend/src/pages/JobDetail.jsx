@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
+import { toast } from "sonner";
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -36,9 +37,10 @@ export default function JobDetail() {
       await axios.delete(`http://localhost:4000/api/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      toast.success("Job deleted!");
       navigate("/jobs");
     } catch (err) {
-      console.error("Error deleting job", err);
+      toast.error("Error deleting job");
     }
   };
 
@@ -63,7 +65,7 @@ export default function JobDetail() {
 
     try {
       const res = await axios.post(
-        `http://localhost:4000/api/jobs/${id}/upload-${field}`,
+        `http://localhost:4000/api/jobs/${id}/upload`,
         formData,
         {
           headers: {
