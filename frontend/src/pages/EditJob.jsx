@@ -4,10 +4,11 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContex";
 import { toast } from "sonner";
 
-const EditJob = ({ onClose, fetchJobs }) => {
+const EditJob = ({ onClose, fetchJobs, jobId }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useAuth();
+
 
   const [form, setForm] = useState({
     company: "",
@@ -20,11 +21,13 @@ const EditJob = ({ onClose, fetchJobs }) => {
   });
 
   const [error, setError] = useState("");
+  
+
 
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/jobs/${id}`, {
+        const res = await axios.get(`http://localhost:4000/api/jobs/${jobId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setForm(res.data);
@@ -32,15 +35,15 @@ const EditJob = ({ onClose, fetchJobs }) => {
         setError("Failed to fetch job details");
       }
     };
-    fetchJob();
-  }, [id, token]);
+    if (jobId) fetchJob();
+  }, [jobId, token]);
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:4000/api/jobs/${id}`, form, {
+      await axios.put(`http://localhost:4000/api/jobs/${jobId}`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Job updated!");

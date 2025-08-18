@@ -17,9 +17,11 @@ export default function JobDetail() {
   const [notes, setNotes] = useState("");
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedJobId, setSelectedJobId] = useState(null);
 
-  const handleOpenModal = () => {
+  const handleOpenModal = (jobId) => {
     setIsModalOpen(true);
+    setSelectedJobId(jobId);
   };
 
   const handleCloseModal = () => {
@@ -213,7 +215,7 @@ export default function JobDetail() {
                         </button>
           
                         {/* AddJob Component */}
-                        <EditJob onClose={handleCloseModal} fetchJobs={fetchJob} />
+                        <EditJob onClose={handleCloseModal} fetchJobs={fetchJob} jobId={selectedJobId} />
                       </div>
                     </div>
                   </>
@@ -221,7 +223,7 @@ export default function JobDetail() {
 
           {/* Edit & Delete */}
           <div className="flex justify-between mt-6">
-            <Button variant="outline" onClick={handleOpenModal}>
+            <Button variant="outline" onClick={() => handleOpenModal(job._id)}>
               <Pencil className="mr-2" size={16} /> Edit Application
             </Button>
             <Button variant="destructive" onClick={handleDelete}>
