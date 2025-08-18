@@ -12,6 +12,7 @@ import Jobs from './pages/Jobs'
 import EditJob from './pages/EditJob'
 import JobDetail from './pages/JobDetail'
 import {Toaster} from 'sonner'
+import Profile from './pages/Profile'
 
 
 const App = () => {
@@ -37,6 +38,7 @@ const App = () => {
       } />
 
       <Route path="/jobs/:id" element={<JobDetail />} />
+      <Route path="/profile" element={<Profile />} />
 
     </Routes>
     <Toaster richColors position="top-right" />

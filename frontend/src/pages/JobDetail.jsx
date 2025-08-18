@@ -8,6 +8,7 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
+import EditJob from "./EditJob";
 
 export default function JobDetail() {
   const { id } = useParams();
@@ -15,19 +16,29 @@ export default function JobDetail() {
   const [job, setJob] = useState(null);
   const [notes, setNotes] = useState("");
   const navigate = useNavigate();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  };
+
+  const fetchJob = async () => {
+    try {
+      const res = await axios.get(`http://localhost:4000/api/jobs/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setJob(res.data);
+      setNotes(res.data.notes || "");
+    } catch (error) {
+      console.error("Failed to fetch job", error);
+    }
+  };
 
   useEffect(() => {
-    const fetchJob = async () => {
-      try {
-        const res = await axios.get(`http://localhost:4000/api/jobs/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setJob(res.data);
-        setNotes(res.data.notes || "");
-      } catch (error) {
-        console.error("Failed to fetch job", error);
-      }
-    };
     fetchJob();
   }, [id, token]);
 
@@ -38,7 +49,7 @@ export default function JobDetail() {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Job deleted!");
-      navigate("/jobs");
+      navigate("/dashboard");
     } catch (err) {
       toast.error("Error deleting job");
     }
@@ -182,10 +193,35 @@ export default function JobDetail() {
               </div>
             </div>
           </div>
+          {isModalOpen && (
+                  <>
+                    {/* Overlay */}
+                    <div className="fixed inset-0 z-40" onClick={handleCloseModal}></div>
+          
+                    {/* Modal Content */}
+                    <div className="fixed inset-0 flex items-center justify-center  z-50">
+                      <div
+                        className="bg-white rounded-lg shadow-lg p-6 w-full max-w-lg relative"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        {/* Close Button */}
+                        <button
+                          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700"
+                          onClick={handleCloseModal}
+                        >
+                          ✖
+                        </button>
+          
+                        {/* AddJob Component */}
+                        <EditJob onClose={handleCloseModal} fetchJobs={fetchJob} />
+                      </div>
+                    </div>
+                  </>
+                )}
 
           {/* Edit & Delete */}
           <div className="flex justify-between mt-6">
-            <Button variant="outline" onClick={() => navigate(`/edit-job/${job._id}`)}>
+            <Button variant="outline" onClick={handleOpenModal}>
               <Pencil className="mr-2" size={16} /> Edit Application
             </Button>
             <Button variant="destructive" onClick={handleDelete}>

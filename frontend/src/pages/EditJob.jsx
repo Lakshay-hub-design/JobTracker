@@ -4,7 +4,7 @@ import axios from "axios";
 import { useAuth } from "../context/AuthContex";
 import { toast } from "sonner";
 
-const EditJob = () => {
+const EditJob = ({ onClose, fetchJobs }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { token } = useAuth();
@@ -44,15 +44,22 @@ const EditJob = () => {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Job updated!");
-      navigate("/dashboard");
+      await fetchJobs();
+      onClose();
     } catch (err) {
       toast.error("Failed to update job");
     }
   };
 
   return (
-     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-orange-500 p-4">
-    <div className="max-w-xl mx-auto p-6 bg-white rounded shadow">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm ">
+      <div className="relative w-full max-w-xl p-6 bg-white rounded-lg shadow-lg dark:bg-[#232b2b] dark:text-white">
+        <button
+          onClick={onClose}
+          className="absolute top-3 right-3 text-gray-500 hover:text-gray-700 text-xl"
+        >
+          &times;
+        </button>
       <h3 className="text-xl font-semibold mb-4">Edit Job</h3>
       {error && <div className="text-red-500 mb-3">{error}</div>}
       <form onSubmit={handleSubmit} className="space-y-3">

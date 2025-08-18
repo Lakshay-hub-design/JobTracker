@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { toast } from "sonner";
 
-export default function AddJob({ onClose, onJobAdded }) {
+export default function AddJob({ onClose , onAddJob }) {
   const { token } = useAuth();
   const [form, setForm] = useState({
     company: '', position: '', status: 'applied', location: "", jobType: 'full-time', notes: '', description: '', resumeUrl: "", followUpDate: ''
@@ -24,7 +24,7 @@ export default function AddJob({ onClose, onJobAdded }) {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       toast.success("Job added!");
-      if (onJobAdded) onJobAdded();
+      if (onAddJob) onAddJob(); 
       onClose(); // close popup after submit
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to add job');

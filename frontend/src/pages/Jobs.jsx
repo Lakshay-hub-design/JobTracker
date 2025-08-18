@@ -2,10 +2,14 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useAuth } from '../context/AuthContex';
 import { useNavigate } from "react-router-dom";
+import Navbar from "../components/Navbar";
+import { useTheme } from "../context/ThemeContext";
 
 const Jobs = () => {
   const { token } = useAuth();
   const [jobs, setJobs] = useState([]);
+  const { darkMode, toggleTheme } = useTheme();
+  const { logout } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -40,6 +44,8 @@ const Jobs = () => {
 
 
   return (
+    <>
+    <Navbar darkMode={darkMode} toggleTheme={toggleTheme} logout={logout} />
     <div className="min-h-screen bg-gray-100 p-6 dark:bg-black dark:text-white">
       <h1 className="text-3xl font-bold mb-4">My Job Applications</h1>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -60,6 +66,7 @@ const Jobs = () => {
         ))}
       </div>
     </div>
+    </>
   );
 };
 

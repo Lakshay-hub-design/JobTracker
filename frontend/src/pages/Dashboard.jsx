@@ -19,6 +19,7 @@ import JobsBarChart from "../components/JobBarChart";
 import { useTheme } from "../context/ThemeContext";
 import { Sun, Moon } from "lucide-react";
 import { toast } from "sonner";
+import Navbar from "../components/Navbar";
 
 
 /** ---------- Memoized UI Bits ---------- */
@@ -90,9 +91,9 @@ const Dashboard = () => {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
 
-    const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-      const [searchTerm, setSearchTerm] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [typeFilter, setTypeFilter] = useState("");
   const [statusFilter, setStatusFilter] = useState("");
 
@@ -192,38 +193,15 @@ const barChartData = Object.entries(jobsByMonth).map(([month, count]) => ({
 
 
   return (
+    <>
+    <Navbar
+        user={user}
+        toggleTheme={toggleTheme}
+        darkMode={darkMode}
+        handleOpenModal={handleOpenModal}
+        logout={logout}
+      />
     <div className="p-4 sm:p-6">
-      {/* Header */}
-      <motion.div
-        initial={{ y: -20, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        className="flex flex-col sm:flex-row justify-between items-start sm:items-center bg-white shadow-md rounded-lg p-4 mb-6 gap-4 dark:bg-[#0e1111] dark:text-white"
-      >
-        <h2 className="text-lg sm:text-xl font-bold">
-          Hello, {user?.name || user?.username || "User"} 👋
-        </h2>
-        <div className="flex gap-3">
-                  <button
-          onClick={toggleTheme}
-          className="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700"
-        >
-          {darkMode ? <Sun size={20} /> : <Moon size={20} />}
-        </button>
-          <button
-            onClick={handleOpenModal}
-            className="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition"
-          >
-            + Add Job
-          </button>
-          <button
-            onClick={logout}
-            className="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition"
-          >
-            Logout
-          </button>
-        </div>
-      </motion.div>
-
       {/* Stats */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -273,7 +251,7 @@ const barChartData = Object.entries(jobsByMonth).map(([month, count]) => ({
             <select
               value={typeFilter}
               onChange={(e) => setTypeFilter(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none dark:bg-[#0e1111] dark:text-white"
             >
               <option value="">All Types</option>
               <option value="full-time">Full-time</option>
@@ -284,7 +262,7 @@ const barChartData = Object.entries(jobsByMonth).map(([month, count]) => ({
             <select
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none"
+              className="border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500 outline-none dark:bg-[#0e1111] dark:text-white"
             >
               <option value="">All Status</option>
               <option value="applied">Applied</option>
@@ -402,12 +380,13 @@ const barChartData = Object.entries(jobsByMonth).map(([month, count]) => ({
               </button>
 
               {/* AddJob Component */}
-              <AddJob onClose={handleCloseModal} />
+              <AddJob onClose={handleCloseModal} onAddJob={fetchJobs} />
             </div>
           </div>
         </>
       )}
     </div>
+    </>
   );
 };
 
