@@ -8,11 +8,19 @@ import About from '../components/landing/About'
 const Landing = () => {
   return (
     <div className="bg-gradient-to-br from-slate-900 to-slate-950 text-white min-h-screen">
-        <Navbar />
-      <HeroSection />
-      <FeaturesSection />
-      <About />
-      <Footer />
+      <Navbar />
+      <section id="home">
+        <HeroSection />
+      </section>
+      <section id="features">
+        <FeaturesSection />
+      </section>
+      <section id="about">
+        <About />
+      </section>
+      <section id="footer"> 
+        <Footer />
+      </section>
     </div>
   )
 }

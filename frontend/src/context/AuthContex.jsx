@@ -7,12 +7,13 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem("token"));
   const [user, setUser] = useState(null);
+  
   const navigate = useNavigate();
 
   useEffect(() => {
     if (token) {
       const storedUser = JSON.parse(localStorage.getItem("user"));
-      setUser({ email: storedUser?.email , name: storedUser?.username });
+      setUser({ id: storedUser?.id, email: storedUser?.email , name: storedUser?.username });
     } else {
       setUser(null);
     }

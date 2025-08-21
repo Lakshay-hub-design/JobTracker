@@ -6,7 +6,6 @@ import { Axis3D } from "lucide-react";
 import { useAuth } from "../context/AuthContex";
 import { toast } from "sonner";
 
-
 const Login = () => {
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
@@ -39,7 +38,6 @@ const Login = () => {
         );
         const { token, user } = res.data;
         login(token, user);
-        toast.success("Logged in successfully!");
         navigate("/dashboard");
       } catch (error) {
         const backendMessage = error.response?.data?.message || "Login failed";
@@ -50,6 +48,10 @@ const Login = () => {
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-orange-500 text-white px-4">
+      <div className="absolute top-8 left-8 text-3xl font-lobster text-white drop-shadow-lg">
+        JobTracker
+      </div>
+
       <motion.div
         initial={{ scale: 0.95, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
@@ -105,8 +107,6 @@ const Login = () => {
                 Forgot Password?
               </Link>
             </p>
-
- 
           </div>
 
           {/* Submit Button */}

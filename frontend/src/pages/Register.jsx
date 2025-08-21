@@ -50,6 +50,10 @@ const RegisterPage = () => {
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-orange-500 to-purple-700 text-white px-4">
+      <div className="absolute top-8 left-8 text-3xl font-lobster text-white drop-shadow-lg">
+        JobTracker
+      </div>
+
       <motion.div
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}

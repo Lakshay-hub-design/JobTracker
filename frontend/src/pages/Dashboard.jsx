@@ -89,7 +89,7 @@ const JobItem = React.memo(function JobItem({ job }) {
 const Dashboard = () => {
   const [jobs, setJobs] = useState([]);
   const { user, logout } = useAuth();
-
+  
   const navigate = useNavigate();
 
   const [isModalOpen, setIsModalOpen] = useState(false);

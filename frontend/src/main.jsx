@@ -8,12 +8,12 @@ import { ThemeProvider } from './context/ThemeContext.jsx'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <ThemeProvider>
       <BrowserRouter>
         <AuthProvider>
-          <App />
+          <ThemeProvider>
+            <App />
+          </ThemeProvider>    
         </AuthProvider>
       </BrowserRouter>
-    </ThemeProvider>
   </StrictMode>,
 )
