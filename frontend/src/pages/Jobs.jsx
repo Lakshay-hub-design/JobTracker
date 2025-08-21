@@ -19,13 +19,14 @@ import {
 import EditJob from "./EditJob";
 
 const Jobs = () => {
-  const { token, logout } = useAuth();
+  const { user, token, logout } = useAuth();
   const [jobs, setJobs] = useState([]);
   const { darkMode, toggleTheme } = useTheme();
   const navigate = useNavigate();
   const [expandedJobId, setExpandedJobId] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
+  
 
   const handleOpenModal = (jobId) => {
     setIsModalOpen(true);

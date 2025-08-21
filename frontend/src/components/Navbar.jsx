@@ -1,8 +1,8 @@
-import { LayoutDashboard, List, User, LogOut, Moon, Sun } from "lucide-react";
+import { LayoutDashboard, List, User, LogOut, Moon, Sun, Plus } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 
-const Navbar = ({ logout, toggleTheme, darkMode }) => {
+const Navbar = ({ logout, toggleTheme, darkMode, handleOpenModal }) => {
   const navigate = useNavigate();
 
   return (
@@ -11,7 +11,7 @@ const Navbar = ({ logout, toggleTheme, darkMode }) => {
       animate={{ y: 0, opacity: 1 }}
       className="sticky top-0 z-50 w-full bg-blue-700 text-white shadow-md"
     >
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-3">
+      <div className="max-w-7xl mx-auto flex items-center justify-between py-3">
         
         {/* Left - Logo + App Name */}
         <div className="flex items-center gap-2">
@@ -36,17 +36,24 @@ const Navbar = ({ logout, toggleTheme, darkMode }) => {
 
         {/* Right - Theme Toggle + Logout */}
         <div className="flex items-center gap-3">
+          
           <button
-            onClick={toggleTheme}
-            className="p-2 rounded-full hover:bg-blue-600 transition"
+            onClick={handleOpenModal}
+            className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-3 py-2 rounded-md transition"
           >
-            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            <Plus size={18} /> Add Job
           </button>
           <button
             onClick={logout}
             className="flex items-center gap-2 bg-blue-600 hover:bg-blue-500 px-3 py-2 rounded-md transition"
           >
             <LogOut size={18} /> <span className="hidden sm:inline">Logout</span>
+          </button>
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-full hover:bg-blue-600 transition"
+          >
+            {darkMode ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
       </div>

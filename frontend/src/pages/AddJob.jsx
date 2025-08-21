@@ -75,7 +75,7 @@ export default function AddJob({ onClose , onAddJob }) {
               name="status"
               value={form.status}
               onChange={handleChange}
-              className="flex-1 px-3 py-2 border rounded"
+              className="flex-1 px-3 py-2 border rounded dark:bg-[#232b2b] dark:text-white"
             >
               <option value="applied">Applied</option>
               <option value="interview">Interview</option>
@@ -86,7 +86,7 @@ export default function AddJob({ onClose , onAddJob }) {
               name="jobType"
               value={form.jobType}
               onChange={handleChange}
-              className="flex-1 px-3 py-2 border rounded"
+              className="flex-1 px-3 py-2 border rounded dark:bg-[#232b2b] dark:text-white"
             >
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
