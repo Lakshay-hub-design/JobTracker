@@ -60,7 +60,7 @@ export default function JobDetail() {
   const handleNotesSave = async () => {
     try {
       await axios.put(
-        `http://localhost:4000/api/jobs/${id}`,
+        `${process.env.REACT_APP_BASE_URL}/jobs/${id}`,
         { notes },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -78,7 +78,7 @@ export default function JobDetail() {
 
     try {
       const res = await axios.post(
-        `http://localhost:4000/api/jobs/${id}/upload`,
+        `${process.env.REACT_APP_BASE_URL}/jobs/${id}/upload`,
         formData,
         {
           headers: {

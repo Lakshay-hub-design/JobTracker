@@ -27,7 +27,7 @@ const EditJob = ({ onClose, fetchJobs, jobId }) => {
   useEffect(() => {
     const fetchJob = async () => {
       try {
-        const res = await axios.get(`http://localhost:4000/api/jobs/${jobId}`, {
+        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/jobs/${jobId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         setForm(res.data);
@@ -43,7 +43,7 @@ const EditJob = ({ onClose, fetchJobs, jobId }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(`http://localhost:4000/api/jobs/${jobId}`, form, {
+      await axios.put(`${process.env.REACT_APP_BASE_URL}/jobs/${jobId}`, form, {
         headers: { Authorization: `Bearer ${token}` }
       });
       toast.success("Job updated!");
