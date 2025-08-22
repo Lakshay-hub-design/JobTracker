@@ -34,7 +34,7 @@ const RegisterPage = () => {
     setErrors(newErrors);
     if (Object.keys(newErrors).length === 0) {
       try {
-        const res = await axios.post("http://localhost:4000/api/auth/register", formData);
+        const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/register`, formData);
         const { token, user } = res.data;
 
         localStorage.setItem("token", token);
