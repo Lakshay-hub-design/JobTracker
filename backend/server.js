@@ -7,7 +7,17 @@ const path = require('path')
 dotenv.config()
 
 const app = express();
-app.use(cors());
+const whitelist = ['https://job-tracker-theta-eight.vercel.app/']; 
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+app.use(cors(corsOptions));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 
