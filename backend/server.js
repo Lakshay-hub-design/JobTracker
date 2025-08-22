@@ -7,17 +7,25 @@ const path = require('path')
 dotenv.config()
 
 const app = express();
-const whitelist = ['https://job-tracker-theta-eight.vercel.app/']; 
-const corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true);
-    } else {
-      callback(new Error('Not allowed by CORS'));
-    }
-  }
-};
-app.use(cors(corsOptions));
+const allowedOrigins = [
+  "https://finance-tracker-virid-chi.vercel.app",
+  "http://localhost:4000"
+]; 
+
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"]
+  })
+);
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.static(path.join(__dirname, 'public')));
 

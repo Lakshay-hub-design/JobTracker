@@ -33,7 +33,7 @@ const Login = () => {
     } else {
       try {
         const res = await axios.post(
-          "https://jobtracker-69kv.onrender.com/api/auth/login",
+          `${process.env.REACT_APP_BASE_URL}/auth/login`,
           form
         );
         const { token, user } = res.data;
