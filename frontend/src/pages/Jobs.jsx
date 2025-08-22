@@ -40,7 +40,7 @@ const Jobs = () => {
 
   const fetchJobs = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/jobs`, {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setJobs(res.data.jobs || []);
@@ -57,7 +57,7 @@ const Jobs = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("Are you sure you want to delete this job?")) return;
     try {
-      await axios.delete(`${process.env.REACT_APP_BASE_URL}/jobs/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJobs(jobs.filter((job) => job._id !== id));

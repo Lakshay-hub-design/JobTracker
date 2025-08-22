@@ -30,7 +30,7 @@ export default function JobDetail() {
 
   const fetchJob = async () => {
     try {
-      const res = await axios.get(`http://localhost:4000/api/jobs/${id}`, {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setJob(res.data);
@@ -47,7 +47,7 @@ export default function JobDetail() {
   const handleDelete = async () => {
     if (!window.confirm("Are you sure you want to delete this application?")) return;
     try {
-      await axios.delete(`http://localhost:4000/api/jobs/${id}`, {
+      await axios.delete(`${import.meta.env.VITE_BASE_URL}/jobs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       toast.success("Job deleted!");
@@ -60,7 +60,7 @@ export default function JobDetail() {
   const handleNotesSave = async () => {
     try {
       await axios.put(
-        `${process.env.REACT_APP_BASE_URL}/jobs/${id}`,
+        `${import.meta.env.VITE_BASE_URL}/jobs/${id}`,
         { notes },
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -78,7 +78,7 @@ export default function JobDetail() {
 
     try {
       const res = await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/jobs/${id}/upload`,
+        `${import.meta.env.VITE_BASE_URLL}/jobs/${id}/upload`,
         formData,
         {
           headers: {

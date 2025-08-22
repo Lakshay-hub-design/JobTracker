@@ -33,7 +33,7 @@ const Login = () => {
     } else {
       try {
         const res = await axios.post(
-          `${process.env.REACT_APP_BASE_URL}/auth/login`,
+          `${import.meta.env.VITE_BASE_URL}/auth/login`,
           form
         );
         const { token, user } = res.data;

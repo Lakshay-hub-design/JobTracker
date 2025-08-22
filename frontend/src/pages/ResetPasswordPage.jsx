@@ -19,7 +19,7 @@ const ResetPasswordPage = () => {
     }
 
     try {
-      const res = await axios.post(`${process.env.REACT_APP_BASE_URL}/auth/reset-password/${token}`, {
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/reset-password/${token}`, {
         password,
       })
 

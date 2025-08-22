@@ -112,7 +112,7 @@ const Dashboard = () => {
   const fetchJobs = useCallback(async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${process.env.REACT_APP_BASE_URL}/jobs`, {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       // support both [{}, {}] and { jobs: [] }

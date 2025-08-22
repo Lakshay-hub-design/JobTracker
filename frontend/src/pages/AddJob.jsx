@@ -19,7 +19,7 @@ export default function AddJob({ onClose , onAddJob }) {
     setError('');
     try {
       await axios.post(
-        `${process.env.REACT_APP_BASE_URL}/jobs`,
+        `${import.meta.env.VITE_BASE_URL}/jobs`,
         form,
         { headers: { Authorization: `Bearer ${token}` } }
       );

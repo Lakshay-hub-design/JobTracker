@@ -18,7 +18,7 @@ const ForgotPassword = () => {
     try {
         console.log("Sending reset link to:", email);
 
-      const res = await axios.post("http://localhost:4000/api/auth/forgot-password", { email });      
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/api/auth/forgot-password`, { email });
         setMessage(res.data.message);
     } catch (err) {
       setError("Something went wrong.");
