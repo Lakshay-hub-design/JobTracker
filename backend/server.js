@@ -8,7 +8,7 @@ dotenv.config()
 
 const app = express();
 const allowedOrigins = [
-  "https://finance-tracker-virid-chi.vercel.app",
+  "https://job-tracker-theta-eight.vercel.app",
   "http://localhost:4000"
 ]; 
 
