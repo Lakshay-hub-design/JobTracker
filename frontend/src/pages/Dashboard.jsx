@@ -14,7 +14,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { FaBuilding, FaSearch } from "react-icons/fa";
 import { FaRegCalendarAlt } from "react-icons/fa";
-import AddJob from "./AddJob";
+import AddJob from "../features/dashboard/AddJob";
 import JobsBarChart from "../components/JobBarChart";
 import { useTheme } from "../context/ThemeContext";
 import { Sun, Moon } from "lucide-react";

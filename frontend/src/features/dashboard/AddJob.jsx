@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useAuth } from "../context/AuthContex";
+import { useAuth } from "../../context/AuthContex";
 import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import { toast } from "sonner";

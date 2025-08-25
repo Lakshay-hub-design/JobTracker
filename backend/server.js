@@ -9,7 +9,7 @@ dotenv.config()
 const app = express();
 const allowedOrigins = [
   "https://job-tracker-theta-eight.vercel.app",
-  "http://localhost:4000"
+  "http://localhost:5173",
 ]; 
 
 app.use(

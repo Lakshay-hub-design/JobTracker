@@ -26,7 +26,7 @@ const handleSave = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.put(
-        "http://localhost:4000/api/user/profile",
+        `${import.meta.env.VITE_BASE_URL}/user/profile`,
         profile,
         {
           headers: {
@@ -59,7 +59,7 @@ const handleSave = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.put(
-        "http://localhost:4000/api/user/profile",
+        `${import.meta.env.VITE_BASE_URL}/user/profile`,
         profile,
         {
           headers: {

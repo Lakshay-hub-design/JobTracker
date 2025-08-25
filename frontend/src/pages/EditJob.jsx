@@ -17,26 +17,43 @@ const EditJob = ({ onClose, fetchJobs, jobId }) => {
     jobType: "",
     location: "",
     notes: "",
-    resumeUrl: ""
+    resumeUrl: "",
+    description: ""
   });
 
   const [error, setError] = useState("");
   
 
 
-  useEffect(() => {
-    const fetchJob = async () => {
-      try {
-        const res = await axios.get(`${import.meta.env.VITE_BASE_URLL}/jobs/${jobId}`, {
-          headers: { Authorization: `Bearer ${token}` }
-        });
-        setForm(res.data);
-      } catch (err) {
-        setError("Failed to fetch job details");
-      }
-    };
-    if (jobId) fetchJob();
-  }, [jobId, token]);
+useEffect(() => {
+  const fetchJob = async () => {
+    try {
+      const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/jobs/${jobId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      
+      // Sanitize the fetched data
+      const jobData = res.data;
+      const sanitizedData = {
+        company: jobData.company || "",
+        position: jobData.position || "",
+        status: jobData.status || "applied",
+        jobType: jobData.jobType || "full-time",
+        location: jobData.location || "",
+        notes: jobData.notes || "",
+        resumeUrl: jobData.resumeUrl || "",
+        description: jobData.description || ""
+      };
+
+      setForm(sanitizedData);
+
+    } catch (err) {
+      setError("Failed to fetch job details");
+    }
+  };
+  if (jobId) fetchJob();
+}, [jobId, token]);
+
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
