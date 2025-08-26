@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import JobItem from '../../components/JobItem'; // Assuming this is in your components folder
+import JobItem from '../../components/dashboard/JobItem'; // Assuming this is in your components folder
 import { FaSearch } from 'react-icons/fa';
 
 // This component now takes all the filter state and setters directly

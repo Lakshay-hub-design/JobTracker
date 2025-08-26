@@ -1,7 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContex";
+import { useAuth } from "../../context/AuthContex";
 import { Building, Link2, FileText, Trash2, Pencil } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -9,16 +9,18 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import EditJob from "./EditJob";
-import Navbar from "../components/Navbar";
+import Navbar from "../../components/dashboard/Navbar";
+import { useTheme } from "../../context/ThemeContext";
 
 export default function JobDetail() {
   const { id } = useParams();
-  const { token } = useAuth();
+  const { token, logout } = useAuth();
   const [job, setJob] = useState(null);
   const [notes, setNotes] = useState("");
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedJobId, setSelectedJobId] = useState(null);
+  const { darkMode, toggleTheme } = useTheme();
 
   const handleOpenModal = (jobId) => {
     setIsModalOpen(true);
@@ -127,7 +129,7 @@ export default function JobDetail() {
 
   return (
     <div>
-      <Navbar />
+      <Navbar darkMode={darkMode} toggleTheme={toggleTheme} logout={logout} />
       <div className="p-4 md:p-6 max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Left Column - Job Info */}
         <Card className="shadow-md">

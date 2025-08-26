@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { useAuth } from "../context/AuthContex";
+import { useAuth } from "../../context/AuthContex";
 import { useNavigate } from "react-router-dom";
-import Navbar from "../components/Navbar";
-import { useTheme } from "../context/ThemeContext";
+import Navbar from "../../components/dashboard/Navbar";
+import { useTheme } from "../../context/ThemeContext";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import {

@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContex';
 import { useTheme } from '../../context/ThemeContext';
-import { useJobs } from './hooks/useJobs';
+import { useJobs } from '../../hooks/useJobs';
 
 // Import the new components
-import Navbar from '../../components/Navbar';
-import StatsGrid from './StatsGrid';
-import JobList from './JobList';
-import ChartsContainer from './ChartsContainer';
-import UpcomingFollowUps from './UpcomingFollowUps';
-import AddJob from './AddJob'; // Assuming this is your modal form component
+import Navbar from '../../components/dashboard/Navbar';
+import StatsGrid from '../../features/dashboard/StatsGrid';
+import JobList from '../../features/dashboard/JobList';
+import ChartsContainer from '../../features/dashboard/ChartsContainer';
+import AddJob from '../../features/dashboard/AddJob'; // Assuming this is your modal form component
 
 
 const Dashboard = () => {

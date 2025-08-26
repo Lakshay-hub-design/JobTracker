@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import StatCard from '../../components/StatCard';
+import StatCard from '../../components/dashboard/StatCard';
 import { Briefcase, Send, UserCheck, Award, XCircle } from 'lucide-react';
 import { cn } from "@/lib/utils"; // Make sure you have this utility from shadcn/ui
 

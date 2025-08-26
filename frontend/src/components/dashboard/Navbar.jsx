@@ -3,7 +3,7 @@
   import { motion, AnimatePresence } from "framer-motion";
   import { useNavigate, useLocation } from "react-router-dom";
 import FollowUpBell from "./FollowUpBell";
-import { useJobs } from "../features/dashboard/hooks/useJobs";
+import { useJobs } from "../../hooks/useJobs";
 
   // A reusable NavLink component for both desktop and mobile
   const NavLink = ({ to, icon: Icon, children, onClick }) => {

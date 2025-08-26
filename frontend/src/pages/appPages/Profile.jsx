@@ -1,13 +1,13 @@
 // src/pages/Profile.jsx
 
 import { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContex";
-import { useTheme } from "../context/ThemeContext";
+import { useAuth } from "../../context/AuthContex";
+import { useTheme } from "../../context/ThemeContext";
 import { toast } from "sonner";
 import axios from "axios";
-import Navbar from "../components/Navbar";
-import ProfileLeft from "../components/ProfileComps/ProfileLeft";
-import ProfileImage from "../components/ProfileComps/ProfileImage";
+import Navbar from "../../components/dashboard/Navbar";
+import ProfileLeft from "../../components/ProfileComps/ProfileLeft";
+import ProfileImage from "../../components/ProfileComps/ProfileImage";
 // It's good practice to have a reusable loading component
 // import LoadingSpinner from "../components/ui/LoadingSpinner"; 
 

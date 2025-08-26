@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Axis3D } from "lucide-react";
-import { useAuth } from "../context/AuthContex";
+import { useAuth } from "../../context/AuthContex";
 import { toast } from "sonner";
 
 const Login = () => {
