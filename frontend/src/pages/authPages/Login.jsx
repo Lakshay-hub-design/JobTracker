@@ -5,8 +5,10 @@ import axios from "axios";
 import { Axis3D } from "lucide-react";
 import { useAuth } from "../../context/AuthContex";
 import { toast } from "sonner";
+import Loading from "../../components/Loading";
 
 const Login = () => {
+  const [loading, setLoading] = useState(false)
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
@@ -27,6 +29,7 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
     const validationErrors = validate();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
@@ -40,11 +43,16 @@ const Login = () => {
         login(token, user);
         navigate("/dashboard");
       } catch (error) {
+        setLoading(false)
         const backendMessage = error.response?.data?.message || "Login failed";
         toast.error(backendMessage);
       }
     }
   };
+
+  if (loading) {
+    return <Loading />;
+  }
 
   return (
     <section className="min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-600 to-orange-500 text-white px-4">

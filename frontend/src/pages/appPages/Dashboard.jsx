@@ -29,8 +29,8 @@ const Dashboard = () => {
     upcomingFollowUps,
     pieChartData,
     barChartData,
-    fetchJobs, // To pass to the AddJob modal to refresh the list
-    ...filterProps // Passes all the filter state and setters to JobList
+    fetchJobs,
+    ...filterProps
   } = useJobs();
 
   const handleOpenModal = () => setIsModalOpen(true);

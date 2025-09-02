@@ -107,7 +107,7 @@ exports.deleteJob = async (req, res) => {
 exports.getStats = async (req, res) => {
   try {
     // 1. Find all jobs for the logged-in user
-    const jobs = await Job.find({ createdBy: req.user.userId });
+    const jobs = await Job.find({ createdBy: req.user.id });
 
     // 2. Count jobs for each status
     const stats = {
