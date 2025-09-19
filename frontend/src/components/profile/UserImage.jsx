@@ -10,7 +10,7 @@ const UserImage = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try{
-        const res = await axios.get('http://localhost:3000/api/profile/me',
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/profile/me`,
           {withCredentials: true}
         )
         setprofile(res.data.user)
@@ -35,7 +35,7 @@ const UserImage = () => {
       const formData = new FormData();
       formData.append("profileImage", file);
 
-      const res = await axios.post('http://localhost:3000/api/profile/image', formData,
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/profile/image`, formData,
         {withCredentials: true}
       )
       setprofile(res.data.profile)

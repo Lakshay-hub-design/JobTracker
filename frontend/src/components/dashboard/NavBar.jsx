@@ -62,7 +62,7 @@ const NavBar = ({theme, toggleTheme}) => {
 
   const logout = async () => {
     try {
-      await axios.get("http://localhost:3000/api/auth/user/logout", {
+      await axios.get(`${import.meta.env.VITE_BASE_URL}/auth/user/logout`, {
         withCredentials: true,
       });
       navigate("/user/login");

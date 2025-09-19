@@ -19,7 +19,7 @@ export default function AddJob({ onClose , isOpen }) {
     e.preventDefault();
     setError('');
     try{
-        await axios.post('http://localhost:3000/api/job/add-job',
+        await axios.post(`${import.meta.env.VITE_BASE_URL}/job/add-job`,
             form,
             {withCredentials: true}
         )

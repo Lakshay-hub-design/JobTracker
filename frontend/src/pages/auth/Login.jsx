@@ -33,7 +33,7 @@ export default function Login() {
     if (Object.keys(v).length === 0) {
     }
     try{
-        const res = await axios.post('http://localhost:3000/api/auth/user/login',
+        const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/user/login`,
             form
         , {withCredentials:true})
         login(res.data?.user || res.data);

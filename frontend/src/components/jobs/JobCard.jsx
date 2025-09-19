@@ -32,7 +32,7 @@ const JobCard = ({ job }) => {
     return;
 
   try {
-    await axios.post(`http://localhost:3000/api/job/delete/${id}`,{}, {
+    await axios.post(`${import.meta.env.VITE_BASE_URL}/job/delete/${id}`,{}, {
       withCredentials: true,
     });
     fetchJobs()

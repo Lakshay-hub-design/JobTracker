@@ -10,7 +10,7 @@ const UserInfo = () => {
   useEffect(() => {
     const fetchProfile = async () => {
       try{
-        const res = await axios.get('http://localhost:3000/api/profile/me',
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/profile/me`,
           {withCredentials: true}
         )
         setProfile(res.data.user)
@@ -37,7 +37,7 @@ const UserInfo = () => {
 
   const handleSavePersonal = async () => {
     try{
-      const res = await axios.post('http://localhost:3000/api/profile/user-info', 
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/profile/user-info`, 
         {
           username: profile.username,
           email: profile.email,
@@ -59,7 +59,7 @@ const UserInfo = () => {
   const handleSaveProfessional = async () => {
     
     try{
-      const res = await axios.post('http://localhost:3000/api/profile/user-info',
+      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/profile/user-info`,
         {
           position: profile.position,
           workPermit: profile.workPermit,

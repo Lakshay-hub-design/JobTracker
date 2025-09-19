@@ -41,7 +41,7 @@ const handleChange = (e) => {
 const handleSubmit = async (e) =>{
   e.preventDefault();
   try{  
-    await axios.put(`http://localhost:3000/api/job/${job._id}`, formData, {
+    await axios.put(`${import.meta.env.VITE_BASE_URL}/job/${job._id}`, formData, {
       withCredentials: true
     });
     fetchJobs()

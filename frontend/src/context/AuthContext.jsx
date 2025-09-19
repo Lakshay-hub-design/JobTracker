@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const res = await axios.get("http://localhost:3000/api/profile/me", {
+        const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/profile/me`, {
           withCredentials: true,
         });
         setCurrentUser(res.data?.user || res.data);
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
 
   const logout = async () => {
     try {
-      await axios.post("http://localhost:3000/api/auth/user/logout", {}, { withCredentials: true });
+      await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/user/logout`, {}, { withCredentials: true });
     } catch (err) {
       console.error("Logout failed", err);
     }

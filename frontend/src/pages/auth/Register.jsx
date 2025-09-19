@@ -31,7 +31,7 @@ export default function Register() {
     if (Object.keys(v).length === 0) {
       try {
         const res = await axios.post(
-          "http://localhost:3000/api/auth/user/register",
+          `${import.meta.env.VITE_BASE_URL}/auth/user/register`,
           form,
           { withCredentials: true }
         );

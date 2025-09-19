@@ -10,7 +10,7 @@ export const JobProvider = ({children}) =>{
 
     const fetchJobs = async () =>{
         try{
-            const res = await axios.get('http://localhost:3000/api/job/jobs',
+            const res = await axios.get(`${import.meta.env.VITE_BASE_URL}/job/jobs`,
                 {withCredentials: true}
             )
             setJobs(res.data.jobs)
