@@ -12,7 +12,7 @@ app.use(cookieParser());
 app.use(cors({
     origin: [ 
         'http://localhost:5173',
-        `https://job-tracker-beta-ecru.vercel.app/`
+        `https://job-tracker-beta-ecru.vercel.app`
         ],
     credentials: true
 }))
