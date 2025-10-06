@@ -9,7 +9,7 @@ const HeroSection = () => {
     if (token) {
       navigate("/dashboard");
     } else {
-      navigate("/register");
+      navigate("/user/register");
     }
   };
 

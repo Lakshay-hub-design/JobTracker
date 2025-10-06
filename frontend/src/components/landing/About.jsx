@@ -5,7 +5,7 @@ const About = () => {
             <div className="grid lg:grid-cols-2 gap-12 items-center">
               {/* Left Content */}
               <div>
-                <span className="font-bold text-brand-purple">OUR MISSION</span>
+                <span className="font-bold text-orange-600">OUR MISSION</span>
                 <h2 className="mt-2 text-4xl lg:text-5xl font-bebas-neue tracking-wide text-gray-900">
                   From Job Seekers, For Job Seekers
                 </h2>
