@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
   LayoutGrid,
   List,
@@ -14,15 +14,16 @@ import AddJobForm from "../features/AddJob";
 import axios from "axios";
 import { motion, AnimatePresence } from "framer-motion";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
-import { useTheme } from "../../context/ThemeContext";
 import FollowUpBell from "../navbar/FollowUpBell";
 import { useJobs } from "../../context/JobContext";
+import { AuthContext } from "../../context/AuthContext";
 
-const NavBar = ({theme, toggleTheme}) => {
+const NavBar = ({ theme, toggleTheme }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onDashboard = location.pathname === "/dashboard";
   const navigate = useNavigate();
-  const { upcomingFollowUps } = useJobs()
+  const { upcomingFollowUps } = useJobs();
+  const { logout } = useContext(AuthContext);
 
   const NavLink = ({ to, icon: Icon, children, onClick }) => {
     const location = useLocation();
@@ -60,23 +61,12 @@ const NavBar = ({theme, toggleTheme}) => {
     );
   };
 
-  const logout = async () => {
-    try {
-      await axios.get(`${import.meta.env.VITE_BASE_URL}/auth/user/logout`, {
-        withCredentials: true,
-      });
-      navigate("/user/login");
-    } catch (err) {
-      console.error("Logout failed:", err.response?.data || err.message);
-    }
-  };
+
 
   return (
     <>
-      {/* --- DESKTOP NAVIGATION (Visible on md screens and up) --- */}
       <motion.nav className="sticky top-0 z-50 hidden w-full border-b dark:border-[#262626] bg-background/95 dark:bg-[#0B0B0B] dark:text-white backdrop-blur-sm md:block">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-6">
-          {/* Left - Logo + Nav Links */}
           <div className="flex items-center gap-6">
             <button
               onClick={() => navigate("/dashboard")}
@@ -89,7 +79,6 @@ const NavBar = ({theme, toggleTheme}) => {
                 JobTracker
               </h1>
             </button>
-            {/* Centered navigation links for desktop */}
             <div className="flex items-center gap-2">
               <NavLink
                 to="/dashboard"
@@ -111,7 +100,6 @@ const NavBar = ({theme, toggleTheme}) => {
             </div>
           </div>
 
-          {/* Right - Actions */}
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsModalOpen(true)}
@@ -146,7 +134,7 @@ const NavBar = ({theme, toggleTheme}) => {
         </div>
       </motion.nav>
 
-      {/* --- MOBILE NAVIGATION (Visible on screens smaller than md) --- */}
+      {/* --- MOBILE NAVIGATION  --- */}
       <div className="block md:hidden sticky top-0">
         {/* Top bar for mobile (logo and theme toggle) */}
         <div className="z-50 flex h-14 items-center justify-between border-b dark:border-[#262626] px-4 backdrop-blur-sm">

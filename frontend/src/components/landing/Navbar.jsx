@@ -38,7 +38,7 @@ const Navbar = () => {
   };
   
   const handleMobileSignIn = () => {
-    navigate("/login");
+    navigate("/user/login");
     closeMenu();
   };
 

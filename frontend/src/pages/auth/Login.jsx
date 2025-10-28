@@ -36,6 +36,8 @@ export default function Login() {
         const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/user/login`,
             form
         , {withCredentials:true})
+        const token = res.data.token;
+        if (token) localStorage.setItem("token", token);
         login(res.data?.user || res.data);
         fetchJobs()
         navigate('/dashboard')
