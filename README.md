@@ -29,10 +29,12 @@ JobTracker/
 │ └── public/  
 │  
 ├── backend/ # Backend (Express)  
-│ ├── controllers/  
-│ ├── models/  
-│ ├── routes/  
-│ └── config/  
+│ └── src/  
+│   ├── controller/  
+│   ├── models/  
+│   ├── routes/  
+│   ├── db/
+│   └── services/  
 │  
 └── README.md  
 
@@ -41,8 +43,8 @@ JobTracker/
 - Clone the repository: git clone https://github.com/Lakshay-hub-design/JobTracker.git
 - Navigate into the project: cd JobTracker
 - Install dependencies for both client and server:
-  - cd client && npm install
-  - cd ../server && npm install
+  - cd frontend && npm install
+  - cd backend && npm install
 - Create a .env file in the server folder and add the following:
   - MONGO_URI=your_mongodb_connection_string
   - JWT_SECRET=your_secret_key
