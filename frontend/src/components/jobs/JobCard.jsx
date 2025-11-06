@@ -35,8 +35,8 @@ const JobCard = ({ job }) => {
     await axios.post(`${import.meta.env.VITE_BASE_URL}/job/delete/${id}`,{}, {
       withCredentials: true,
     });
-    toast.success("Job deleted successfully!");
     fetchJobs();
+    toast.success("Job deleted successfully!");
   } catch (error) {
     console.error("Error deleting job:", error.response?.data || error.message);
   }
