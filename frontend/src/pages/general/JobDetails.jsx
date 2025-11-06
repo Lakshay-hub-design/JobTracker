@@ -5,6 +5,7 @@ import EditJob from "../../components/features/EditJob";
 import axios from "axios";
 import NavBar from "../../components/dashboard/NavBar";
 import { useTheme } from "../../context/ThemeContext";
+import { toast } from "react-toastify";
 
 export default function JobDetails() {
   const { id } = useParams();
@@ -37,8 +38,8 @@ export default function JobDetails() {
         {},
         { withCredentials: true }
       );
-
       navigate("/dashboard");
+      toast.success("Job deleted successfully!");
       fetchJobs();
     } catch (error) {
       console.error("Error deleting job:", error.response?.data || error.message);
@@ -112,7 +113,7 @@ export default function JobDetails() {
               ✏️ Edit
             </button>
             <button
-              onClick={() => handleDelete(job.id)}
+              onClick={() => handleDelete(job._id)}
               className="px-3 py-1 bg-red-600 text-white rounded text-sm sm:text-base"
             >
               🗑 Delete

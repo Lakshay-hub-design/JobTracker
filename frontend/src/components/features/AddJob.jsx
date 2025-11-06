@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useJobs } from '../../context/JobContext';
+import { toast } from 'react-toastify';
 
 
 export default function AddJob({ onClose , isOpen }) {
@@ -11,7 +11,6 @@ export default function AddJob({ onClose , isOpen }) {
   });
   const {fetchJobs} = useJobs()
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -23,6 +22,7 @@ export default function AddJob({ onClose , isOpen }) {
             form,
             {withCredentials: true}
         )
+        toast.success("Job added successfully!")
         fetchJobs()
         onClose();
     }
@@ -79,7 +79,7 @@ export default function AddJob({ onClose , isOpen }) {
               name="status"
               value={form.status}
               onChange={handleChange}
-              className="flex-1 px-3 py-2 border rounded"
+              className="flex-1 px-3 py-2 border rounded dark:bg-[#232B2B]"
             >
               <option value="applied">Applied</option>
               <option value="interview">Interview</option>
@@ -90,7 +90,7 @@ export default function AddJob({ onClose , isOpen }) {
               name="jobType"
               value={form.jobType}
               onChange={handleChange}
-              className="flex-1 px-3 py-2 border rounded"
+              className="flex-1 px-3 py-2 border rounded dark:bg-[#232B2B]"
             >
               <option value="full-time">Full-time</option>
               <option value="part-time">Part-time</option>
@@ -132,7 +132,7 @@ export default function AddJob({ onClose , isOpen }) {
             className="w-full px-3 py-2 border rounded"
             rows={3}
           />
-          <button className="w-full bg-yellow-300 text-black py-2 rounded">
+          <button className="w-full bg-yellow-300 text-black py-2 rounded cursor-pointer hover:bg-yellow-400 transition">
             Add Job
           </button>
         </form>

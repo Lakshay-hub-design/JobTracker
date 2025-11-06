@@ -78,7 +78,7 @@ export default function JobsList({jobs}) {
           <div
             key={job._id}
             onClick={() => navigate(`/jobs/${job._id}`)}
-            className="p-4 rounded-lg shadow flex flex-col cursor-pointer dark:bg-[#232B2B] hover:bg-gray-200 transition"
+            className="p-4 rounded-lg shadow flex flex-col cursor-pointer dark:bg-[#232B2B] dark:hover:bg-[#353c3c] hover:bg-gray-200 hover:scale-102 transition"
           >
             <div className="flex justify-between items-center mb-2">
               <h3 className="font-semibold">{job.position}</h3>

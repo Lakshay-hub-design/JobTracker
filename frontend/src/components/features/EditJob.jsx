@@ -3,6 +3,7 @@ import React from "react";
 import { useEffect } from "react";
 import { useState } from "react";
 import { useJobs } from "../../context/JobContext";
+import { toast } from "react-toastify";
 
 const EditJob = ({ job, onClose }) => {
   const {fetchJobs} = useJobs();
@@ -44,6 +45,7 @@ const handleSubmit = async (e) =>{
     await axios.put(`${import.meta.env.VITE_BASE_URL}/job/${job._id}`, formData, {
       withCredentials: true
     });
+    toast.success("Job updated successfully!")
     fetchJobs()
     onClose()
   } catch(err){
@@ -68,13 +70,13 @@ const handleSubmit = async (e) =>{
                placeholder="Position" className="w-full px-3 py-2 border rounded" required />
         <input type="text" name="location" placeholder="Location" value={formData.location} onChange={handleChange} className="w-full border p-2 rounded" />
         <div className="flex gap-3">
-          <select name="status" value={formData.status} onChange={handleChange} className="flex-1 px-3 py-2 border rounded">
+          <select name="status" value={formData.status} onChange={handleChange} className="flex-1 px-3 py-2 border rounded dark:bg-[#232B2B]">
             <option value="applied">Applied</option>
             <option value="interview">Interview</option>
             <option value="offer">Offer</option>
             <option value="rejected">Rejected</option>
           </select>
-          <select name="jobType" value={formData.jobType} onChange={handleChange} className="flex-1 px-3 py-2 border rounded">
+          <select name="jobType" value={formData.jobType} onChange={handleChange} className="flex-1 px-3 py-2 border rounded dark:bg-[#232B2B]">
             <option value="full-time">Full-time</option>
             <option value="part-time">Part-time</option>
             <option value="internship">Internship</option>

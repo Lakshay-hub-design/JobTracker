@@ -61,9 +61,6 @@ async function updateJob(req, res){
             },
             { new: true, runValidators: true}
         );
-        console.log(req.user._id)
-        console.log(req.params.id)
-        console.log(job)
         if(!job){
             return res.status(404).json({
                 message: 'job not found or not authorized'
@@ -89,6 +86,7 @@ async function deleteJob(req, res){
         })
     } catch (error) {
         res.status(500).json({ success: false, message: 'Server error' });
+        console.error("Delete job error", error);
     }
 }
 
