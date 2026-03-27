@@ -1,5 +1,5 @@
 const userModel = require('../models/user.model')
-const storageService = require('../services/storage.service')
+const storageService = require('../providers/storage.service')
 const { v4:uuid } = require('uuid')
 
 async function imageUpload(req, res){

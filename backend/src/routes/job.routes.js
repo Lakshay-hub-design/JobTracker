@@ -1,6 +1,6 @@
 const express = require('express')
-const jobController = require('../controller/job.controller')
-const authMiddleware = require('../middleware/auth.middleware')
+const jobController = require('../controllers/job.controller')
+const authMiddleware = require('../middlewares/auth.middleware')
 const router = express.Router();
 
 router.post('/add-job', authMiddleware, jobController.addJob)

@@ -2,39 +2,33 @@ import React, { useContext, useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { motion } from "framer-motion";
 import axios from 'axios'
-import { useJobs } from '../../context/JobContext'
-import { AuthContext } from '../../context/AuthContext';
+import { useJobs } from '../../../context/JobContext'
+import { AuthContext } from '../../../context/AuthContext';
 
 export default function Login() {
-  const [form, setForm] = useState({ email: '', password: '' })
+  const [formData, setFormData] = useState({
+        email: "",
+        password: ""
+  })
+  
   const [errors, setErrors] = useState({})
   const { login } = useContext(AuthContext);
   const {fetchJobs} = useJobs();
   const navigate = useNavigate();
 
-  function validate(values) {
-    const errs = {}
-    if (!values.email) errs.email = 'Email is required'
-    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(values.email)) errs.email = 'Enter a valid email'
-    if (!values.password) errs.password = 'Password is required'
-    else if (values.password.length < 6) errs.password = 'Password must be at least 6 characters'
-    return errs
+  const handleChange = (e) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
+      })
   }
 
-  function handleChange(e) {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-    setErrors(prev => ({ ...prev, [e.target.name]: undefined }))
-  }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    const v = validate(form)
-    setErrors(v)
-    if (Object.keys(v).length === 0) {
-    }
     try{
         const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/user/login`,
-            form
+            formData
         , {withCredentials:true})
         const token = res.data.token;
         if (token) localStorage.setItem("token", token);
@@ -72,7 +66,7 @@ export default function Login() {
             <input
               type="email"
               name="email"
-              value={form.email}
+              value={formData.email}
               onChange={handleChange}
               placeholder="Enter your email"
               className="w-full px-4 py-2 rounded bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"

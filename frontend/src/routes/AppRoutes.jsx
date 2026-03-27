@@ -1,14 +1,15 @@
 import React from 'react'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import Register from '../pages/auth/Register'
-import Login from '../pages/auth/Login'
 import Dashboard from '../pages/general/Dashboard'
 import Jobs from '../pages/general/Jobs'
 import Profile from '../pages/general/Profile'
 import JobDetails from '../pages/general/JobDetails'
 import Landing from '../pages/general/Landing'
-import ForgotPassword from '../pages/auth/ForgotPassword'
-import ResetPasswordPage from '../pages/auth/ResetPasswordPage'
+
+import Login from '../features/auth/pages/Login'
+import Register from '../features/auth/pages/Register'
+import ResetPasswordPage from '../features/auth/pages/ResetPasswordPage'
+import ForgotPassword from '../features/auth/pages/ForgotPassword'
 
 const AppRoutes = () => {
   return (
