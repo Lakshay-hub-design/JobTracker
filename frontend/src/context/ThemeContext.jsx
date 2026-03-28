@@ -1,11 +1,12 @@
 import React, { createContext, useState, useEffect, useContext } from "react";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../features/auth/context/AuthContext";
+
 
 export const ThemeContext = createContext();
 
 export const ThemeProvider = ({ children }) => {
-  const { currentUser } = useContext(AuthContext);
-  const userEmail = currentUser?.email || currentUser?.user?.email;
+  const { user } = useContext(AuthContext);
+  const userEmail = user?.email || user?.user?.email;
   const [theme, setTheme] = useState("light");
 
   useEffect(() => {

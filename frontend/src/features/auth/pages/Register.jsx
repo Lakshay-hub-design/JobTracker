@@ -1,49 +1,26 @@
 import React, { useState } from 'react'
-import axios from 'axios'
 import { motion } from "framer-motion";
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
+import { useAuth } from '../hooks/useAuth';
 
 export default function Register() {
-  const [form, setForm] = useState({ username: '', email: '', password: '' })
-  const [errors, setErrors] = useState({})
-  const [showPassword, setShowPassword] = useState(false)
-  const navigate = useNavigate();
+  const [formData, setFormData] = useState({ 
+    name: '', 
+    email: '',  
+    password: '' 
+  })
 
-  function validate(values) {
-    const errs = {}
-    if (!values.username.trim()) errs.username = 'Username is required'
-    if (!values.email) errs.email = 'Email is required'
-    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(values.email)) errs.email = 'Enter a valid email'
-    if (!values.password) errs.password = 'Password is required'
-    else if (values.password.length < 6) errs.password = 'Password must be at least 6 characters'
-    return errs
-  }
+
+  const { handleRegister, error, loading } = useAuth()
 
   function handleChange(e) {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
-    setErrors(prev => ({ ...prev, [e.target.name]: undefined }))
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
   async function handleSubmit(e) {
     e.preventDefault();
-    const v = validate(form);
-    setErrors(v);
-    if (Object.keys(v).length === 0) {
-      try {
-        const res = await axios.post(
-          `${import.meta.env.VITE_BASE_URL}/auth/user/register`,
-          form,
-          { withCredentials: true }
-        );
-        navigate("/dashboard");
-      } catch (err) {
-        if (err.response.data.message) {
-          setErrors({ general: err.response.data.message }); // set custom error
-        } else {
-          setErrors({ general: "Something went wrong. Try again." });
-        }
-      }
-    }
+    console.log(formData)
+    handleRegister(formData)
   }
 
   return (
@@ -63,43 +40,44 @@ export default function Register() {
           <div>
             <input
               type="text"
-              name="username"
-              placeholder="Username"
-              value={form.username}
+              name="name"
+              placeholder="Name"
+              value={formData.name}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"
             />
-            {errors.username && <p className="text-yellow-200 text-sm">{errors.username}</p>}
+            
           </div>
           <div>
             <input
               type="email"
               name="email"
               placeholder="Email Address"
-              value={form.email}
+              value={formData.email}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"
             />
-            {errors.email && <p className="text-yellow-200 text-sm">{errors.email}</p>}
+            
           </div>
           <div>
             <input
               type="password"
               name="password"
               placeholder="Password"
-              value={form.password}
+              value={formData.password}
               onChange={handleChange}
               className="w-full px-4 py-2 rounded bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"
             />
-            {errors.password && <p className="text-yellow-200 text-sm">{errors.password}</p>}
+            {error && <p className="text-yellow-200 text-sm">{error}</p>}
           </div>
           <div>
           </div>
           <button
+            disabled={loading}
             type="submit"
             className="w-full bg-yellow-300 text-orange-800 font-semibold py-2 rounded-full hover:bg-yellow-400 transition"
           >
-            Register
+            {loading ? "Creating...": "Register"}
           </button>
         </form>
         <p className="text-center text-sm text-white/80">

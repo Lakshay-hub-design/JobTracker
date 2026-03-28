@@ -10,6 +10,7 @@ import Login from '../features/auth/pages/Login'
 import Register from '../features/auth/pages/Register'
 import ResetPasswordPage from '../features/auth/pages/ResetPasswordPage'
 import ForgotPassword from '../features/auth/pages/ForgotPassword'
+import VerifyEmail from '../features/auth/pages/VerifyEmail'
 
 const AppRoutes = () => {
   return (
@@ -17,6 +18,7 @@ const AppRoutes = () => {
             <Routes>
                 <Route path='/' element={<Landing />} />
                 <Route path='/user/register' element={<Register />} />
+                <Route path='/user/verify-email' element={<VerifyEmail />} />
                 <Route path='/user/login' element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
                 <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
