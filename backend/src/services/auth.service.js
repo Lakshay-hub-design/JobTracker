@@ -4,6 +4,7 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/generate
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const emailService = require('../providers/sendMail')
+const crypto = require('crypto')
 
 const registerUser = async (data) => {
     const { name, email, password } = data
@@ -49,7 +50,7 @@ const registerUser = async (data) => {
 }
 
 const verifyEmailOtp = async ({ email, otp }) => {
-    console.log(email, otp)
+
     const hashedOtp = hashOtp(otp)
 
     const user = await User.findOne({
@@ -105,6 +106,44 @@ const resendEmailOtp = async (email) => {
     await emailService.sendOtpEmail(email, otp)
 }
 
+const forgotPassword = async (email) => {
+    const user = await User.findOne({ email })
+
+    if(!user){
+        const error = new Error('User not found')
+        error.statusCode = 400
+        throw error
+    }
+
+    const resetToken = user.getPasswordResetToken()
+    await user.save({ validateBeforeSave: false })
+
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`
+
+    await emailService.sendForgotPasswordEmail(email, resetLink)
+}
+
+const resetPassrord = async (token, newPassword) => {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
+
+    const user = await User.findOne({
+        resetPasswordToken: hashedToken,
+        resetPasswordExpires: { $gt: Date.now() }
+    })
+
+    if(!user){
+        const error = new Error('Invalid or expired token')
+        error.statusCode = 400
+        throw error
+    }
+
+    user.password = newPassword
+    user.resetPasswordToken = undefined
+    user.resetPasswordExpires = undefined
+
+    await user.save()
+}
+
 const refreshAccessToken = async (refreshToken) => {
     if(!refreshToken){
         const error = new Error('Refresh token not found')
@@ -132,9 +171,9 @@ const refreshAccessToken = async (refreshToken) => {
 
 const loginUser = async (data) => {
     const { email, password } = data
-    console.log(password, email)
-    const user = await User.findOne({ email })
-    console.log(user.password, user.email)
+
+    const user = await User.findOne({ email }).select('+password')
+
     if(!user){
         const error = new Error('Invalid credentials')
         error.statusCode = 401
@@ -186,5 +225,7 @@ module.exports = {
     resendEmailOtp,
     refreshAccessToken,
     loginUser,
+    forgotPassword,
+    resetPassrord,
     logoutUser,
 }

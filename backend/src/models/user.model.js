@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs')
+const crypto = require('crypto')
 
 const personalInfoSchema = new mongoose.Schema({
     profileImage: {
@@ -88,6 +89,14 @@ const userSchema = new mongoose.Schema({
       type: Date,
       select: false,
     },
+    resetPasswordToken: {
+      type: String,
+      select: false,
+    },
+    resetPasswordExpires: {
+      type: Date,
+      select: false,
+    },
     personalInfo: [personalInfoSchema]
 },{
     timestamps: true
@@ -104,6 +113,15 @@ userSchema.pre("save", async function () {
 
 userSchema.method.comparePassword = async function (password) {
     return await bcrypt.compare(password, this.password)
+}
+
+userSchema.method.getPasswordResetToken = function () {
+    const resetToken = crypto.randomBytes(32).toString('hex')
+
+    this.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex')
+    this.resetPasswordExpires = Date.now() + 10 * 60 * 1000
+
+    return resetToken
 }
 
 module.exports = mongoose.model('user', userSchema)

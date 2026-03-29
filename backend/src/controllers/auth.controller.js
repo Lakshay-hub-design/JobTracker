@@ -1,6 +1,6 @@
 const asyncHandler = require("../middlewares/asyncHandler");
 const User = require("../models/user.model");
-const { registerUser, verifyEmailOtp, loginUser, resendEmailOtp, refreshAccessToken, logoutUser, logoutAll } = require("../services/auth.service")
+const { registerUser, verifyEmailOtp, loginUser, resendEmailOtp, refreshAccessToken, logoutUser, logoutAll, forgotPassword, resetPassrord } = require("../services/auth.service")
 const crypto = require('crypto')
 
 const register = asyncHandler(async (req, res, next) => {
@@ -83,6 +83,29 @@ const login = asyncHandler(async (req, res, next) => {
     })
 })
 
+const forgotPasswordController = asyncHandler(async (req, res) => {
+    const { email } = req.body
+
+    await forgotPassword(email)
+
+    res.status(200).json({
+        success: true,
+        message: "Password reset link sent to your email"
+    })
+})
+
+const resetPasswordController = asyncHandler(async (req, res) => {
+    const { token } = req.params
+    const { password } = req.body
+
+    await resetPassrord(token, password)
+
+    res.status(200).json({
+      success: true,
+      message: "Password updated successfully",
+    })
+})
+
 const getMe = asyncHandler(async (req, res) => {
     const user = await User.findById(req.user.id)
 
@@ -112,6 +135,8 @@ module.exports = {
     resendOtp,
     refreshAccessTokenController,
     login,
+    forgotPasswordController,
+    resetPasswordController,
     getMe,
     logout,
 }
