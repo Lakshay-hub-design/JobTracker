@@ -8,9 +8,9 @@ import Landing from '../pages/general/Landing'
 
 import Login from '../features/auth/pages/Login'
 import Register from '../features/auth/pages/Register'
-import ResetPasswordPage from '../features/auth/pages/ResetPasswordPage'
 import ForgotPassword from '../features/auth/pages/ForgotPassword'
 import VerifyEmail from '../features/auth/pages/VerifyEmail'
+import ResetPassword from '../features/auth/pages/ResetPassword'
 
 const AppRoutes = () => {
   return (
@@ -21,7 +21,7 @@ const AppRoutes = () => {
                 <Route path='/user/verify-email' element={<VerifyEmail />} />
                 <Route path='/user/login' element={<Login />} />
                 <Route path="/forgot-password" element={<ForgotPassword />} />
-                <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
+                <Route path="/reset-password/:token" element={<ResetPassword />} />
                 <Route path='/dashboard' element={<Dashboard />} />
                 <Route path='/jobs' element={<Jobs />} />
                 <Route path='/profile' element={<Profile />} />

@@ -11,10 +11,7 @@ export default function Login() {
   const { handleLogin, loading, error } = useAuth()
 
   const handleChange = (e) => {
-      setFormData({
-        ...formData,
-        [e.target.name]: e.target.value
-      })
+      setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }))
   }
 
   async function handleSubmit(e) {

@@ -13,7 +13,7 @@ router.post('/login', validate(loginSchema), authController.login)
 router.get('/refresh-token', authController.refreshAccessTokenController)
 router.get('/logout', authController.logout)
 
-// router.post('/forgot-password', authController.forgotPassword)
-// router.post('/reset-password/:token', authController.resetPassword)
+router.post('/forgot-password', authController.forgotPasswordController)
+router.post('/reset-password/:token', authController.resetPasswordController)
 
 module.exports = router

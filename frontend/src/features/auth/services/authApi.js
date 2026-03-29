@@ -48,6 +48,27 @@ export async function login({ email, password }) {
     }
 }
 
+export async function forgotPassword(email) {
+    try {
+        await api.post('/api/auth/forgot-password', {
+            email
+        })
+    
+    } catch (error) {
+        throw error.response?.data || error
+    }
+}
+
+export async function resetPassword(token, password) {
+    try {
+        await api.post(`/api/auth/reset-password/${token}`, {
+            password
+        })
+    } catch (error) {
+        throw error.response?.data || error
+    }
+}
+
 export async function logout() {
     try {
         await api.post('/api/auth/logout')
@@ -55,4 +76,3 @@ export async function logout() {
         throw error.response?.data || error
     }
 }
-

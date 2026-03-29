@@ -1,6 +1,6 @@
 import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
-import { login, register, resendOtp, verifyEmail } from "../services/authApi"
+import { forgotPassword, login, register, resendOtp, resetPassword, verifyEmail } from "../services/authApi"
 import { useNavigate } from "react-router-dom"
 
 
@@ -18,7 +18,7 @@ export const useAuth = () => {
             const data = await register({name, email, password})
 
             setUser(data.user)
-            navigate('/verify-email', {
+            navigate('/user/verify-email', {
                 state: {email: email}
             })
         } catch (err) {
@@ -73,5 +73,32 @@ export const useAuth = () => {
         }
     }
 
-    return { user, loading, error, handleRegister, handleVerifyEmail, handleResendOtp, handleLogin }
+    const handleForgotPassword = async(email) => {
+        try {
+            setLoading(true)
+            setError(null)
+
+            await forgotPassword(email)
+        } catch (err) {
+            setError(err.message || 'Something went wrong')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    const handleResetPassword = async(token, password) => {
+        try {
+            setLoading(true)
+            setError(null)
+
+            await resetPassword(token, password)
+            navigate('/user/login')
+        } catch (err) {
+            setError(err.message || 'Something went wrong')
+        } finally {
+            setLoading(false)
+        }
+    }
+
+    return { user, loading, error, handleRegister, handleVerifyEmail, handleResendOtp, handleLogin, handleForgotPassword, handleResetPassword }
 }

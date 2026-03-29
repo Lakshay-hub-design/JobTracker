@@ -1,28 +1,18 @@
-// src/pages/ForgotPassword.jsx
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { Lock } from "lucide-react";
-import axios from "axios";
+
+import { useAuth } from "../hooks/useAuth";
 
 const ForgotPassword = () => {
+  const { handleForgotPassword, error, loading} = useAuth()
   const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-  const [error, setError] = useState("");
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage("");
-    setError("");
-
-    try {
-        console.log("Sending reset link to:", email);
-
-      const res = await axios.post(`${import.meta.env.VITE_BASE_URL}/auth/user/forgot-password`, { email });
-        setMessage(res.data.message);
-    } catch (err) {
-      setError("Something went wrong.");
-    }
+    handleForgotPassword(email)
   };
 
   return (
@@ -58,10 +48,10 @@ const ForgotPassword = () => {
             type="submit"
             className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-2 rounded"
           >
-            Send reset link
+            {loading ? "Sending..." : "Send Reset Link"}
           </button>
         </form>
-        {message && <p className="text-green-300 text-sm mt-2">{message}</p>}
+      
         {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
         
         <Link to="/user/login" className="mt-6 inline-block text-sm text-white/80 hover:underline">
