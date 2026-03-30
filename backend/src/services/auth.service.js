@@ -1,4 +1,5 @@
 const User = require('../models/user.model')
+const Session = require('../models/session.model')
 const { generateOtp, hashOtp } = require('../utils/generateOtp')
 const { generateAccessToken, generateRefreshToken } = require('../utils/generateToken')
 const bcrypt = require('bcryptjs')
@@ -118,12 +119,13 @@ const forgotPassword = async (email) => {
     const resetToken = user.getPasswordResetToken()
     await user.save({ validateBeforeSave: false })
 
-    const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${resetToken}`
+    const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
 
     await emailService.sendForgotPasswordEmail(email, resetLink)
 }
 
 const resetPassrord = async (token, newPassword) => {
+    console.log(token)
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
 
     const user = await User.findOne({
@@ -141,7 +143,7 @@ const resetPassrord = async (token, newPassword) => {
     user.resetPasswordToken = undefined
     user.resetPasswordExpires = undefined
 
-    await user.save()
+    await user.save({ validateBeforeSave: false })
 }
 
 const refreshAccessToken = async (refreshToken) => {
@@ -154,10 +156,28 @@ const refreshAccessToken = async (refreshToken) => {
     try {
         const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
 
+        const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
+
+        const session = await Session.findOne({
+            refreshTokenHash,
+            revoked: false,
+        })
+
+        if(!session){
+            const error = new Error('Invalid refresh token')
+            error.statusCode = 401
+            throw error
+        }
+
         const user = await User.findById(decoded.id)
 
         const newAccessToken = generateAccessToken(user)
         const newRefreshToken = generateRefreshToken(user)
+
+        const newRefreshTokenHash = crypto.createHash('sha256').update(newRefreshToken).digest('hex')
+
+        session.refreshTokenHash = newRefreshTokenHash
+        await session.save()
 
 
         return {
@@ -216,6 +236,38 @@ const logoutUser = async (refreshToken) => {
         throw error
     }
 
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
+
+    const session = await Session.findOne({
+        refreshTokenHash,
+        revoked: false,
+    })
+
+    if(!session){
+        const error = new Error('Invalid refresh token')
+        error.statusCode = 401
+        throw error
+    }
+
+    session.revoked = true
+    await session.save()
+}
+
+const logoutAllDevices = async (refreshToken) => {
+    if(!refreshToken){
+        const error = new Error('Refresh token not found')
+        error.statusCode = 404
+        throw error
+    }
+
+    const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
+
+    await Session.updateMany({
+        user: decoded.id,
+        revoked: false
+    }, {
+        revoked: true
+    })
 }
 
 
@@ -228,4 +280,5 @@ module.exports = {
     forgotPassword,
     resetPassrord,
     logoutUser,
+    logoutAllDevices
 }

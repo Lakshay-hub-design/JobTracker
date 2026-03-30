@@ -1,6 +1,7 @@
 const asyncHandler = require("../middlewares/asyncHandler");
 const User = require("../models/user.model");
-const { registerUser, verifyEmailOtp, loginUser, resendEmailOtp, refreshAccessToken, logoutUser, logoutAll, forgotPassword, resetPassrord } = require("../services/auth.service")
+const Session = require('../models/session.model')
+const { registerUser, verifyEmailOtp, loginUser, resendEmailOtp, refreshAccessToken, logoutUser, logoutAll, forgotPassword, resetPassrord, logoutAllDevices } = require("../services/auth.service")
 const crypto = require('crypto')
 
 const register = asyncHandler(async (req, res, next) => {
@@ -14,6 +15,15 @@ const register = asyncHandler(async (req, res, next) => {
 
 const verifyEmail = asyncHandler(async (req, res, next) => {
     const { user, accessToken, refreshToken } = await verifyEmailOtp(req.body)
+
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
+
+    await Session.create({
+        user: user._id,
+        refreshTokenHash,
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+    })
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -65,6 +75,15 @@ const refreshAccessTokenController = asyncHandler(async (req, res) => {
 const login = asyncHandler(async (req, res, next) => {
     const { user, accessToken, refreshToken } = await loginUser(req.body)
 
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
+
+    await Session.create({
+        user: user._id,
+        refreshTokenHash,
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+    })
+
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: false,
@@ -107,6 +126,7 @@ const resetPasswordController = asyncHandler(async (req, res) => {
 })
 
 const getMe = asyncHandler(async (req, res) => {
+    console.log(req.user.id)
     const user = await User.findById(req.user.id)
 
     res.status(200).json({
@@ -128,6 +148,19 @@ const logout = asyncHandler(async (req, res) => {
     })
 })
 
+const logoutAll = asyncHandler(async (req, res) => {
+    const refreshToken = req.cookies.refreshToken
+
+    await logoutAllDevices(refreshToken)
+
+    res.clearCookie('refreshToken')
+
+    res.status(200).json({
+        success: true,
+        message: "Logged out from all devices successfully"
+    })
+})
+
 
 module.exports = {
     register,
@@ -139,4 +172,5 @@ module.exports = {
     resetPasswordController,
     getMe,
     logout,
+    logoutAll
 }
