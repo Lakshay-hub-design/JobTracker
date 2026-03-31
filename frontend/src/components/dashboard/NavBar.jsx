@@ -17,13 +17,14 @@ import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import FollowUpBell from "../navbar/FollowUpBell";
 import { useJobs } from "../../context/JobContext";
 import { AuthContext } from "../../context/AuthContext";
+import { useAuth } from "../../features/auth/hooks/useAuth";
 
 const NavBar = ({ theme, toggleTheme }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const onDashboard = location.pathname === "/dashboard";
   const navigate = useNavigate();
   const { upcomingFollowUps } = useJobs();
-  const { logout } = useContext(AuthContext);
+ const { handleLogout } = useAuth()
 
   const NavLink = ({ to, icon: Icon, children, onClick }) => {
     const location = useLocation();
@@ -125,7 +126,7 @@ const NavBar = ({ theme, toggleTheme }) => {
               </AnimatePresence>
             </button>
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className="rounded-full p-2 text-muted-foreground transition-colors hover:bg-muted hover:text-foreground hover:dark:bg-[#181818] hover:dark:text-white"
             >
               <LogOut size={18} />
@@ -206,7 +207,7 @@ const NavBar = ({ theme, toggleTheme }) => {
               Profile
             </MobileLink>
             <button
-              onClick={logout}
+              onClick={handleLogout}
               className="flex flex-col items-center gap-1 p-2 text-muted-foreground w-16"
             >
               <LogOut size={22} />

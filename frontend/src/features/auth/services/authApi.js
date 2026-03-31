@@ -1,9 +1,4 @@
-import axios from "axios";
-
-const api = axios.create({
-    baseURL: 'http://localhost:3000',
-    withCredentials: true
-})
+import api from "../../../shared/api/axios"
 
 export async function register({ name, email, password }) {
     try {
@@ -29,7 +24,7 @@ export async function verifyEmail({email, otp}) {
 
 export async function resendOtp( email ){
     try {
-        await api.post('/api/v1/auth/resend-otp',{
+        await api.post('/api/auth/resend-otp',{
             email
         })
     } catch (error) {
@@ -69,9 +64,20 @@ export async function resetPassword(token, password) {
     }
 }
 
-export async function logout() {
+export async function getMe(axiosPrivate) {
+    
     try {
-        await api.post('/api/auth/logout')
+        const res = await axiosPrivate.get('/api/auth/get-me')
+
+        return res.data 
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export async function logout(axiosPrivate) {
+    try {
+        await axiosPrivate.get('/api/auth/logout')
     } catch (error) {
         throw error.response?.data || error
     }

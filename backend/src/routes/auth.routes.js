@@ -11,7 +11,7 @@ router.post('/verify-email', authController.verifyEmail)
 router.post('/resend-otpmail', authController.resendOtp)
 router.post('/login', validate(loginSchema), authController.login)
 
-router.get('/get-me', authMiddleware,  authController.getMe)
+router.get('/get-me', authMiddleware, authController.getMe)
 router.get('/refresh-token', authController.refreshAccessTokenController)
 router.get('/logout', authController.logout)
 router.get('/logout-all', authController.logoutAll)

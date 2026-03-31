@@ -1,4 +1,3 @@
-import React, { useEffect, useState } from 'react'
 import Navbar from '../../components/dashboard/NavBar'
 import JobsList from '../../components/dashboard/JobList';
 import { useJobs } from '../../context/JobContext';

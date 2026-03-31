@@ -7,12 +7,17 @@ import { useAuth } from "../hooks/useAuth";
 
 const ForgotPassword = () => {
   const { handleForgotPassword, error, loading} = useAuth()
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("")
+  const [success, setSuccess] = useState(false)
   
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    handleForgotPassword(email)
+    const res = await handleForgotPassword(email);
+
+    if(res.success){
+        setSuccess(true)
+    }
   };
 
   return (
@@ -33,28 +38,56 @@ const ForgotPassword = () => {
         </div>
         <h2 className="text-2xl font-semibold">Trouble logging in?</h2>
         <p className="text-sm text-white/80">
-          Enter your email and we’ll send you a link to get back into your account.
+          Enter your email and we’ll send you a link to get back into your
+          account.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-4 mt-4">
-          <input
-            type="email"
-            placeholder="Email"
-            className="w-full px-4 py-2 rounded bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-          <button
-            type="submit"
-            className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-2 rounded"
-          >
-            {loading ? "Sending..." : "Send Reset Link"}
-          </button>
-        </form>
-      
+        {!success ? (
+          <form onSubmit={handleSubmit} className="space-y-4 mt-4">
+            <input
+              type="email"
+              placeholder="Email"
+              className="w-full px-4 py-2 rounded bg-white/20 text-white placeholder-white/70 focus:outline-none focus:ring-2 focus:ring-yellow-300"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button
+              disabled={loading}
+              type="submit"
+              className="w-full bg-blue-600 hover:bg-blue-700 transition text-white font-semibold py-2 rounded"
+            >
+              {loading ? "Sending..." : "Send Reset Link"}
+            </button>
+          </form>
+        ) : (
+          <div className="space-y-4 mt-4">
+            <h3 className="text-lg font-semibold text-green-300">
+              📩 Check your email
+            </h3>
+            <p className="text-sm text-white/80">
+              If an account exists for{" "}
+              <span className="font-medium">{email}</span>, we’ve sent a
+              password reset link.
+            </p>
+            <p className="text-xs text-white/60">
+              Don’t forget to check your spam folder.
+            </p>
+
+            <button
+              onClick={() => setSuccess(false)}
+              className="text-sm underline text-yellow-300"
+            >
+              Try another email
+            </button>
+          </div>
+        )}
+
         {error && <p className="text-red-300 text-sm mt-2">{error}</p>}
-        
-        <Link to="/user/login" className="mt-6 inline-block text-sm text-white/80 hover:underline">
+
+        <Link
+          to="/user/login"
+          className="mt-6 inline-block text-sm text-white/80 hover:underline"
+        >
           Back to login
         </Link>
       </motion.div>

@@ -76,6 +76,15 @@ const verifyEmailOtp = async ({ email, otp }) => {
     user.refreshToken = refreshToken
     await user.save()
 
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
+
+    await Session.create({
+        user: user._id,
+        refreshTokenHash,
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+    })
+
     return {
         user,
         accessToken,
@@ -125,7 +134,6 @@ const forgotPassword = async (email) => {
 }
 
 const resetPassrord = async (token, newPassword) => {
-    console.log(token)
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
 
     const user = await User.findOne({
@@ -189,7 +197,7 @@ const refreshAccessToken = async (refreshToken) => {
     }
 }
 
-const loginUser = async (data) => {
+const loginUser = async (data, req) => {
     const { email, password } = data
 
     const user = await User.findOne({ email }).select('+password')
@@ -201,7 +209,7 @@ const loginUser = async (data) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
-    console.log(isMatch)
+    // console.log(isMatch)
 
     if(!isMatch){
         const error = new Error('Invalid credentials')
@@ -225,6 +233,15 @@ const loginUser = async (data) => {
 
     const accessToken = generateAccessToken(user)
     const refreshToken = generateRefreshToken(user)
+
+    const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
+
+    await Session.create({
+        user: user._id,
+        refreshTokenHash,
+        ip: req.ip,
+        userAgent: req.headers['user-agent']
+    })
 
     return { user, accessToken, refreshToken }
 }
