@@ -1,5 +1,5 @@
-const User = require('../models/user.model')
-const Session = require('../models/session.model')
+const authRepository = require('../repositories/user.repository')
+const sessionRepository = require('../repositories/session.repository')
 const { generateOtp, hashOtp } = require('../utils/generateOtp')
 const { generateAccessToken, generateRefreshToken } = require('../utils/generateToken')
 const bcrypt = require('bcryptjs')
@@ -10,7 +10,11 @@ const crypto = require('crypto')
 const registerUser = async (data) => {
     const { name, email, password } = data
 
-    const existing = await User.findOne({ email })
+    const existing = await authRepository.findByEmail(email)
+
+    const otp = generateOtp()
+    const hashedOtp = hashOtp(otp) 
+    const otpExpiry = Date.now() + 10 * 60 * 1000
 
     if(existing){
 
@@ -20,29 +24,24 @@ const registerUser = async (data) => {
             throw error
         }
 
-        const otp = generateOtp()
-        const hashedOtp = hashOtp(otp) 
-        
-        existing.name = name
-        existing.password = password
-        existing.emailVerificationOtp = hashedOtp
-        existing.emailVerificationOtpExpires = Date.now() + 10 * 60 * 1000
+        const updatedUser = await authRepository.updateUser(existing, {
+            name,
+            password,
+            emailVerificationOtp: hashedOtp,
+            emailVerificationOtpExpires: otpExpiry
+        })
 
-        await existing.save()
         await emailService.sendOtpEmail(email, otp)
         
-        return existing
+        return updatedUser
     }
 
-    const otp = generateOtp()
-    const hashedOtp = hashOtp(otp)
-
-    const user = await User.create({
+    const user = await authRepository.createUser({
         name, 
         email, 
         password,
         emailVerificationOtp: hashedOtp,
-        emailVerificationOtpExpires: Date.now() + 10 * 60 * 1000
+        emailVerificationOtpExpires: otpExpiry
     })
 
     await emailService.sendOtpEmail(email, otp)
@@ -50,35 +49,31 @@ const registerUser = async (data) => {
     return user
 }
 
-const verifyEmailOtp = async ({ email, otp }) => {
+const verifyEmailOtp = async ({ email, otp }, req) => {
 
     const hashedOtp = hashOtp(otp)
 
-    const user = await User.findOne({
-        email,
-        emailVerificationOtp: hashedOtp,
-        emailVerificationOtpExpires: { $gt: Date.now() }
-    })
-
+    const user = await authRepository.findByEmailAndOtp(email, hashedOtp)
+    console.log(user)
     if(!user){
         const error = new Error("Invalid or expired OTP")
         error.statusCode = 400
         throw error
     }
 
-    user.isVerified = true
-    user.emailVerificationOtp = undefined
-    user.emailVerificationOtpExpires = undefined
-
     const accessToken = generateAccessToken(user)
     const refreshToken = generateRefreshToken(user)
 
-    user.refreshToken = refreshToken
-    await user.save()
+    await authRepository.updateUser(user, {
+        isVerified: true,
+        emailVerificationOtp: undefined,
+        emailVerificationOtpExpires: undefined,
+        refreshToken: refreshToken
+    })
 
     const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
 
-    await Session.create({
+    await sessionRepository.createSession({
         user: user._id,
         refreshTokenHash,
         ip: req.ip,
@@ -93,7 +88,7 @@ const verifyEmailOtp = async ({ email, otp }) => {
 }
 
 const resendEmailOtp = async (email) => {
-    const user = await User.findOne({ email })
+    const user = await authRepository.findByEmail(email)
 
     if(!user){
         const error = new Error('User not found')
@@ -108,16 +103,16 @@ const resendEmailOtp = async (email) => {
     const otp = generateOtp()
     const hashedOtp = hashOtp(otp)
 
-    user.emailVerificationOtp = hashedOtp
-    user.emailVerificationOtpExpires = Date.now() + 10 * 60 * 1000
-
-    await user.save()
+    await authRepository.updateUser(user, {
+        emailVerificationOtp: hashedOtp,
+        emailVerificationOtpExpires: Date.now() + 10 * 60 * 1000
+    })
 
     await emailService.sendOtpEmail(email, otp)
 }
 
 const forgotPassword = async (email) => {
-    const user = await User.findOne({ email })
+    const user = await authRepository.findByEmail({ email })
 
     if(!user){
         const error = new Error('User not found')
@@ -126,7 +121,7 @@ const forgotPassword = async (email) => {
     }
 
     const resetToken = user.getPasswordResetToken()
-    await user.save({ validateBeforeSave: false })
+    await authRepository.save(user, { validateBeforeSave: false })
 
     const resetLink = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`
 
@@ -136,22 +131,21 @@ const forgotPassword = async (email) => {
 const resetPassrord = async (token, newPassword) => {
     const hashedToken = crypto.createHash('sha256').update(token).digest('hex')
 
-    const user = await User.findOne({
-        resetPasswordToken: hashedToken,
-        resetPasswordExpires: { $gt: Date.now() }
-    })
+    const user = await authRepository.findByResetToken(hashedToken)
 
     if(!user){
         const error = new Error('Invalid or expired token')
         error.statusCode = 400
         throw error
     }
+    
+    await authRepository.updateUser(user, {
+        password: newPassword,
+        resetPasswordToken: undefined,
+        resetPasswordExpires: undefined
+    })
 
-    user.password = newPassword
-    user.resetPasswordToken = undefined
-    user.resetPasswordExpires = undefined
-
-    await user.save({ validateBeforeSave: false })
+    await authRepository.save(user, { validateBeforeSave: false })
 }
 
 const refreshAccessToken = async (refreshToken) => {
@@ -166,10 +160,7 @@ const refreshAccessToken = async (refreshToken) => {
 
         const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
 
-        const session = await Session.findOne({
-            refreshTokenHash,
-            revoked: false,
-        })
+        const session = await sessionRepository.findSessionByRefreshTokenHash(refreshTokenHash)
 
         if(!session){
             const error = new Error('Invalid refresh token')
@@ -177,16 +168,16 @@ const refreshAccessToken = async (refreshToken) => {
             throw error
         }
 
-        const user = await User.findById(decoded.id)
+        const user = await authRepository.findById(decoded.id)
 
         const newAccessToken = generateAccessToken(user)
         const newRefreshToken = generateRefreshToken(user)
 
         const newRefreshTokenHash = crypto.createHash('sha256').update(newRefreshToken).digest('hex')
 
-        session.refreshTokenHash = newRefreshTokenHash
-        await session.save()
-
+        await sessionRepository.updateSession(session, {
+            refreshTokenHash: newRefreshTokenHash
+        })
 
         return {
             newAccessToken,
@@ -200,7 +191,7 @@ const refreshAccessToken = async (refreshToken) => {
 const loginUser = async (data, req) => {
     const { email, password } = data
 
-    const user = await User.findOne({ email }).select('+password')
+    const user = await authRepository.findByEmailWithPassword(email)
 
     if(!user){
         const error = new Error('Invalid credentials')
@@ -209,7 +200,6 @@ const loginUser = async (data, req) => {
     }
 
     const isMatch = await bcrypt.compare(password, user.password)
-    // console.log(isMatch)
 
     if(!isMatch){
         const error = new Error('Invalid credentials')
@@ -221,10 +211,10 @@ const loginUser = async (data, req) => {
         const otp = generateOtp()
         const hashedOtp = hashOtp(otp)
 
-        user.emailVerificationOtp = hashedOtp
-        user.emailVerificationOtpExpires = Date.now() + 10 * 60 * 1000
-
-        await user.save()
+        await authRepository.updateUser(user, {
+            emailVerificationOtp: hashedOtp,
+            emailVerificationOtpExpires: Date.now() + 10 * 60 * 1000
+        })
 
         await emailService.sendOtpEmail(user.email, otp)
 
@@ -236,7 +226,7 @@ const loginUser = async (data, req) => {
 
     const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
 
-    await Session.create({
+    await sessionRepository.createSession({
         user: user._id,
         refreshTokenHash,
         ip: req.ip,
@@ -255,10 +245,8 @@ const logoutUser = async (refreshToken) => {
 
     const refreshTokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex')
 
-    const session = await Session.findOne({
-        refreshTokenHash,
-        revoked: false,
-    })
+    
+    const session = await sessionRepository.findSessionByRefreshTokenHash(refreshTokenHash)
 
     if(!session){
         const error = new Error('Invalid refresh token')
@@ -266,8 +254,10 @@ const logoutUser = async (refreshToken) => {
         throw error
     }
 
-    session.revoked = true
-    await session.save()
+    await sessionRepository.updateSession(session, {
+        revoked: true
+    })
+
 }
 
 const logoutAllDevices = async (refreshToken) => {
@@ -279,12 +269,7 @@ const logoutAllDevices = async (refreshToken) => {
 
     const decoded = jwt.verify(refreshToken, process.env.JWT_REFRESH_SECRET)
 
-    await Session.updateMany({
-        user: decoded.id,
-        revoked: false
-    }, {
-        revoked: true
-    })
+    await sessionRepository.revokeAllSessions(decoded.id)   
 }
 
 

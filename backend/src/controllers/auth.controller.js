@@ -1,8 +1,6 @@
 const asyncHandler = require("../middlewares/asyncHandler");
 const User = require("../models/user.model");
-const Session = require('../models/session.model')
 const { registerUser, verifyEmailOtp, loginUser, resendEmailOtp, refreshAccessToken, logoutUser, forgotPassword, resetPassrord, logoutAllDevices } = require("../services/auth.service")
-const crypto = require('crypto')
 
 const register = asyncHandler(async (req, res, next) => {
     await registerUser(req.body)
@@ -14,7 +12,7 @@ const register = asyncHandler(async (req, res, next) => {
 })
 
 const verifyEmail = asyncHandler(async (req, res, next) => {
-    const { user, accessToken, refreshToken } = await verifyEmailOtp(req.body)
+    const { user, accessToken, refreshToken } = await verifyEmailOtp(req.body, req)
 
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
@@ -64,7 +62,7 @@ const refreshAccessTokenController = asyncHandler(async (req, res) => {
 })
 
 const login = asyncHandler(async (req, res, next) => {
-    const { user, accessToken, refreshToken } = await loginUser(req.body)
+    const { user, accessToken, refreshToken } = await loginUser(req.body, req)
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
