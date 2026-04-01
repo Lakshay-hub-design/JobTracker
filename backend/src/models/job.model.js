@@ -4,22 +4,25 @@ const JobSchema = new mongoose.Schema(
   {
     company: { 
         type: String,
-        required: true,
-         trim: true
+        required: [true, "Company name is required"],
+        trim: true,
+        lowercase: true
     },
     position: { 
         type: String,
-        required: true,
+        required: [true, "Position title is required"],
         trim: true
     },
     status: {
       type: String,
-      enum: ["applied", "interview", "offer", "rejected"],
+      enum: ["applied", "interviewing", "offered", "rejected"],
       default: "applied",
     },
     location: {
       type: String,
       default: "Remote",
+      required: [true, "Location is required"],
+      trim: true,
     },
     jobType: {
       type: String,
@@ -35,26 +38,39 @@ const JobSchema = new mongoose.Schema(
     },
     notes: { 
         type: String,
-        default: ""
+        default: "",
+        trim: true,
+        maxLength: [1000, "Notes cannot exceed 1000 characters"]
     },
     description: { 
         type: String, 
-        default: "" 
+        default: "",
+        trim: true,
     },
     resume: { 
-        type: String, 
-        default: "" 
+        url: String,
+        fileId: String 
     },
     coverLetter: { 
-        type: String 
+        type: String,
+        trim: true,
+        maxLength: [2000, "Cover letter cannot exceed 2000 characters"]
     },
     createdBy: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
-      required: true,
+      required: [true, "Created by is required"],
     },
+    aiReport: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "aiReport"
+    }
   },
   { timestamps: true }
 );
+
+JobSchema.index({ createdBy: 1, status: 1 })
+JobSchema.index({ createdBy: 1, appliedDate: -1 })
+JobSchema.index({ createdBy: 1, status: 1, jobType: 1 })
 
 module.exports = mongoose.model("job", JobSchema);

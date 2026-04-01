@@ -1,4 +1,20 @@
 const jobModel = require('../models/job.model');
+const asyncHandler = require('../middlewares/asyncHandler');
+const { createJobService } = require('../services/job.service');
+
+const createJob = asyncHandler(async (req, res) => {
+    const job = await createJobService({
+        body: req.body,
+        file: req.file,
+        userId: req.user._id
+    });
+
+    res.status(201).json({
+        success: true,
+        message: "Job created successfully",
+        job
+    })
+})
 
 async function addJob(req, res){
     const { company, position, status, jobType, location, appliedDate, notes, description, resumeUrl, followUpDate } = req.body;
@@ -91,6 +107,7 @@ async function deleteJob(req, res){
 }
 
 module.exports = {
+    createJob,
     addJob,
     getJobs,
     updateJob,
