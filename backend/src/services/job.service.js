@@ -1,7 +1,10 @@
-const { uploadFile } = require('../providers/storage.service')
-const jobRepository = require('../repositories/job.repository')
+const uploadFile = require('../providers/storage.service')
+const aiQueue = require('../queues/queue')
 const aiReportRepository = require('../repositories/aiReport.repository')
+const jobRepository = require('../repositories/job.repository')
+
 const authRepository = require('../repositories/user.repository')
+const extractResumeText = require('./resume.service')
 
 
 const createJobService = async ({ body, file, userId }) => {
@@ -30,27 +33,28 @@ const createJobService = async ({ body, file, userId }) => {
         createdBy: userId,
     })
 
-    const aiReport = await AIReport.create({
-    job: job._id,
-    user: userId,
-    status: "pending"
-  })
+    const aiReport = await aiReportRepository.createAIReport({
+        job: job._id,
+        user: userId,
+        status: "pending"
+    })
 
-  // ✅ 5. Link AI report to job
-  job.aiReport = aiReport._id
-  await job.save()
+    await jobRepository.saveJob(job, {
+        aiReport: aiReport._id
+    })
 
-  // ✅ 6. Trigger AI async (🔥 IMPORTANT)
-  triggerAIProcessing({
-    job,
-    resumeText,
-    description,
-    aiReportId: aiReport._id,
-    userId
-  })
+    await aiQueue.add('process-job', {
+        jobId: job._id,
+        resumeText,
+        description,
+        aiReportId: aiReport._id,
+        userId
+    })
 
     return job
 }
+
+
 
 module.exports = {
     createJobService
