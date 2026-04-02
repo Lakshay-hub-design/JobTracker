@@ -78,6 +78,11 @@ const aiReportSchema = new mongoose.Schema({
         required: [true, 'User reference is required'],
         index: true
     },
+    status: {
+        type: String,
+        enum: ['pending', 'completed', 'failed'],
+        default: 'pending'
+    },
     matchScore:{
         type: Number,
         min: 0,
