@@ -7,12 +7,10 @@ const router = express.Router();
 
 router.post("/create-job", authMiddleware, upload.single("resume"), jobController.createJob)
 
+router.get('/',authMiddleware, jobController.getJobs)
+router.get('/:id', authMiddleware, jobController.getJobDetails)
 
-
-router.post('/add-job', authMiddleware, jobController.addJob)
-router.get('/jobs',authMiddleware, jobController.getJobs)
-
-router.put('/:id', authMiddleware, jobController.updateJob)
-router.post('/delete/:id', authMiddleware, jobController.deleteJob)
+// router.put('/:id', authMiddleware, jobController.updateJob)
+// router.post('/delete/:id', authMiddleware, jobController.deleteJob)
 
 module.exports = router

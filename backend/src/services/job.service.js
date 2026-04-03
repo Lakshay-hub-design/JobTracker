@@ -66,8 +66,49 @@ const createJobService = async ({ body, file, userId }) => {
     return job
 }
 
+const getJobsService = async ({ userId, query }) => {
 
+    const { status, search } = query
+    
+    const filter = { createdBy: userId }
+
+    if(status){
+        filter.status = status
+    }
+
+    if(search){
+        filter.$or = [
+            { company: { $regex: search, $options: 'i' } },
+            { position: { $regex: search, $options: 'i' } }
+        ]
+    }
+
+    const jobs = await jobRepository.getJobs(filter)
+
+    return jobs
+}
+
+const getJobDetailsService = async ({ jobId, userId }) => {
+    const job = await jobRepository.getJobDetails(jobId, userId)
+
+    if(!job){
+        throw new ApiError(404, 'Job not found')
+    }
+
+    let aiReport = null
+
+    if(job.aiReport){
+        aiReport = await aiReportRepository.getAIReport(job.aiReport)
+    }
+
+    return {
+        job,
+        aiReport
+    }
+}
 
 module.exports = {
-    createJobService
+    createJobService,
+    getJobsService,
+    getJobDetailsService
 }

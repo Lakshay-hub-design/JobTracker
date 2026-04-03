@@ -1,6 +1,6 @@
 const jobModel = require('../models/job.model');
 const asyncHandler = require('../middlewares/asyncHandler');
-const { createJobService } = require('../services/job.service');
+const { createJobService, getJobsService, getJobDetailsService } = require('../services/job.service');
 
 const createJob = asyncHandler(async (req, res) => {
     const job = await createJobService({
@@ -16,49 +16,33 @@ const createJob = asyncHandler(async (req, res) => {
     })
 })
 
-async function addJob(req, res){
-    const { company, position, status, jobType, location, appliedDate, notes, description, resumeUrl, followUpDate } = req.body;
-    try{
-        const job = await jobModel.create({
-            company,
-            position,
-            status,
-            jobType,
-            location,
-            appliedDate: appliedDate ? new Date(appliedDate) : undefined,
-            notes,
-            description,
-            resumeUrl,
-            followUpDate,
-            createdBy: req.user._id
-        })
-        return res.status(201).json({
-            message: "job created",
-            job
-        })
-    }
-    catch(err){
-        console.error("Created job error", err)
-        res.status(500).json({ success: false, message: 'Server error' });
-    }
-}
+const getJobs = asyncHandler(async (req, res) => {
 
-async function getJobs(req, res) {
-    try{
-        const jobs = await jobModel.find({ createdBy: req.user._id})
-        .sort({ createdAt: -1})
+    const jobs = await getJobsService({
+        userId: req.user.id,
+        query: req.query
+    })
 
-        res.status(200).json({
-            success: true,
-            count: jobs.length,
-            jobs
-        })
-    }
-    catch(err){
-        console.error("Get jobs error", err);
-        res.status(500).json({ success: false, message: "Server error" });
-    }
-}
+    res.status(200).json({
+        success: true,
+        message: 'Jobs fetched succesfully',
+        jobs
+    })
+})
+
+const getJobDetails = asyncHandler(async (req, res) => {
+
+    const data = await getJobDetailsService({
+        jobId: req.params.id,
+        userId: req.user.id
+    })
+
+    res.status(200).json({
+        success: true,
+        message: 'Job details fetched succesfully',
+        ...data
+    })
+})
 
 async function updateJob(req, res){
     try{
@@ -108,8 +92,8 @@ async function deleteJob(req, res){
 
 module.exports = {
     createJob,
-    addJob,
     getJobs,
+    getJobDetails,
     updateJob,
     deleteJob
 }
