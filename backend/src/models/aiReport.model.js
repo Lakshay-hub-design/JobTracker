@@ -92,6 +92,9 @@ const aiReportSchema = new mongoose.Schema({
     behaviouralQuestions: [behaviouralQuestionSchema],
     skillGaps: [skillGapSchema],
     preparationPlan: [preprationPlanSchema],
+    error: {
+        type: String
+    }
 }, {
     timestamps: true
 })

@@ -6,6 +6,7 @@ const morgan = require('morgan')
 const xss = require('xss-clean')
 const hpp = require('hpp')
 const { rateLimit } = require('express-rate-limit')
+const bullBoard = require('./config/bullBoard')
 
 
 const app = express();
@@ -43,6 +44,8 @@ app.get("/health", (req, res) => {
 const authRoutes = require('./routes/auth.routes');
 const jobRoutes = require('./routes/job.routes')
 const userRoutes = require('./routes/user.routes')
+
+app.use('/admin/queues', bullBoard.getRouter())
 
 app.use('/api/auth' , authRoutes)
 app.use('/api/job', jobRoutes)

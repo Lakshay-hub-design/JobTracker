@@ -3,7 +3,8 @@ require("dotenv").config({ path: "../.env" })
 const { Worker } = require('bullmq');
 const redis = require('../config/redis');
 const aiReportModel = require('../models/aiReport.model');
-const connectDB = require('../config/db')
+const connectDB = require('../config/db');
+const { generateAiReport } = require("../services/ai.service");
 
 connectDB()
 
@@ -13,25 +14,33 @@ const worker = new Worker(
 
         console.log("🔥 Processing job:", job.id)
         
-        const { jobId, resumeText, description, aiReportId   } = job.data
+        const { resumeText, description, aiReportId } = job.data
         
         try{
-            const result = {
-                score: 85,
-                suggestions: ["Improve keywords", "Add projects"]
-            }
+            const result = await generateAiReport({
+                resumeText,
+                jobDescription: description
+            })
+
             await aiReportModel.findByIdAndUpdate(aiReportId, {
                 status: 'completed',
-                result
+                ...result
             })
 
             console.log("✅ AI Report Updated")
         }catch(err){
             console.error("❌ Error:", err)
 
-            await aiReportModel.findByIdAndUpdate(aiReportId, {
-                status: "failed"
-            })
+            console.log( `Attempt ${job.attemptsMade + 1} failed out of ${job.opts.attempts}` )
+
+            if(job.attemptsMade === job.opts.attempts - 1){
+                await aiReportModel.findByIdAndUpdate(aiReportId, {
+                    status: "failed",
+                    error: err.message || "Unknown error occurred during AI report generation"
+                })
+            }
+
+            throw err
         }
     },
     {

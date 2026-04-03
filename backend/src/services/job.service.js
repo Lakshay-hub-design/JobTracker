@@ -3,12 +3,16 @@ const aiQueue = require('../queues/queue')
 const aiReportRepository = require('../repositories/aiReport.repository')
 const jobRepository = require('../repositories/job.repository')
 
-const authRepository = require('../repositories/user.repository')
+const { ApiError } = require('../utils/apiError')
 const extractResumeText = require('./resume.service')
 
 
 const createJobService = async ({ body, file, userId }) => {
     const { company, position, status, jobType, location, appliedDate, notes, description, coverLetter, followUpDate } = body
+
+    if (!company || !position) {
+        throw new ApiError("Company and position are required", 400)
+    }
 
     let resumeData = null
     let resumeText = ""
@@ -39,16 +43,24 @@ const createJobService = async ({ body, file, userId }) => {
         status: "pending"
     })
 
-    await jobRepository.saveJob(job, {
+    await jobRepository.updateJob(job, {
         aiReport: aiReport._id
     })
 
     await aiQueue.add('process-job', {
         jobId: job._id,
-        resumeText,
+        resumeText: resumeText || null,
         description,
         aiReportId: aiReport._id,
         userId
+    }, {
+        attempts: 3,
+        backoff: {
+            type: 'exponential',
+            delay: 5000
+        },
+        removeOnComplete: true,
+        removeOnFail: false
     })
 
     return job
