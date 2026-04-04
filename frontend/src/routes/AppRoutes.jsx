@@ -2,8 +2,10 @@ import React, { lazy, Suspense } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import Protected from '../features/auth/components/Protected'
 import PublicRoute from '../features/auth/components/PublicRoutes'
+import Layout from '../features/app/components/Layout'
+import { DashboardProvider } from '../features/dashboard/context/DashBoardContext'
 
-const Dashboard = lazy(() => import('../pages/general/Dashboard'))
+const Dashboard = lazy(() => import('../features/dashboard/pages/DashboardPage'))
 const Jobs = lazy(() => import('../pages/general/Jobs'))
 const Profile = lazy(() => import('../pages/general/Profile'))
 const JobDetails = lazy(() => import('../pages/general/JobDetails'))
@@ -31,23 +33,26 @@ const AppRoutes = () => {
         </Route>
         
         <Route element={<Protected />}>
+          <Route element={<Layout />}>
+          
+            <Route path='/dashboard' element={
+              <DashboardProvider>
+                <Dashboard />
+              </DashboardProvider>
+            } />
 
-          <Route path='/dashboard' element={
-            <Dashboard />
-          } />
+            <Route path='/jobs' element={
+                <Jobs />
+            } />
 
-          <Route path='/jobs' element={
-              <Jobs />
-          } />
+            <Route path='/profile' element={
+                <Profile />
+            } />
 
-          <Route path='/profile' element={
-              <Profile />
-          } />
-
-          <Route path='/jobs/:id' element={
-              <JobDetails />
-          } />
-
+            <Route path='/jobs/:id' element={
+                <JobDetails />
+            } />
+          </Route>
         </Route>
 
         <Route path="*" element={<h1>404 Not Found</h1>} />
