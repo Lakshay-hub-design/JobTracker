@@ -5,6 +5,13 @@ class aiReportRepository {
         return await AIReport.create(reportData)
     }
 
+    async getAIReportsByUser(userId){
+        return await AIReport.find({
+            user: userId,
+            status: "completed"
+        })
+    }
+
     async getAIReport(aiReportId){
         return await AIReport.findById(aiReportId).select('-_v').lean()
     }

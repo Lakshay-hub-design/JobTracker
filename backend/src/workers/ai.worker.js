@@ -1,7 +1,7 @@
 require("dotenv").config({ path: "../.env" })
 
 const { Worker } = require('bullmq');
-const redis = require('../config/redis');
+// const redis = require('../config/redis');
 const aiReportModel = require('../models/aiReport.model');
 const connectDB = require('../config/db');
 const { generateAiReport } = require("../services/ai.service");

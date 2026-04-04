@@ -107,8 +107,77 @@ const getJobDetailsService = async ({ jobId, userId }) => {
     }
 }
 
+const getDashboardStats = async (userId) => {
+
+    const totalJobs = await jobRepository.countJobs(userId)
+
+    const statusStatsRaw = await jobRepository.getStatusStats(userId)
+
+    const statusStats = {
+        applied: 0,
+        interviewing: 0,
+        offered: 0,
+        rejected: 0
+    }
+
+    statusStatsRaw.forEach(item => {
+        statusStats[item._id] = item.count
+    })
+
+    const monthlyStats =  await jobRepository.getMonthlyStats(userId)
+
+    return {
+        totalJobs,
+        statusStats,
+        monthlyStats
+    }
+}
+
+const generateDashboardInsight = async (userId) => {
+
+    const total = await jobRepository.countJobs(userId)
+    const offered = await jobRepository.countOfferedJobs(userId)
+
+    const successRate = total ? Math.round((offered / total) * 100) : 0
+
+    const reports = await aiReportRepository.getAIReportsByUser(userId)
+    
+    const skillMap = {}
+
+    reports.forEach(report => {
+        report.skillGaps.forEach(gap => {
+            skillMap[gap.skill] = (skillMap[gap.skill] || 0) + 1
+        })
+    })
+
+    const weakAreas = Object.entries(skillMap)
+        .sort((a, b) =>  b[1] - a[1])
+        .slice(0, 3)
+        .map(item => item[0])
+
+    return {
+        successRate,
+        weakAreas,
+        suggession: weakAreas.length
+            ? `Focus on improving: ${weakAreas.join(", ")}`
+            : "You're doing great! Keep applying."
+    }
+}
+
+const getFullDashboardService = async ({userId}) => {
+
+    const stats = await getDashboardStats(userId)
+    const aiInsight = await generateDashboardInsight(userId)
+
+    return{
+        ...stats,
+        aiInsight
+    }
+}
+
 module.exports = {
     createJobService,
     getJobsService,
-    getJobDetailsService
+    getJobDetailsService,
+    getFullDashboardService
 }

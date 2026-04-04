@@ -9,6 +9,7 @@ router.post("/create-job", authMiddleware, upload.single("resume"), jobControlle
 
 router.get('/',authMiddleware, jobController.getJobs)
 router.get('/:id', authMiddleware, jobController.getJobDetails)
+router.get('/dashboard/full', authMiddleware, jobController.getFullDashboard)
 
 // router.put('/:id', authMiddleware, jobController.updateJob)
 // router.post('/delete/:id', authMiddleware, jobController.deleteJob)
