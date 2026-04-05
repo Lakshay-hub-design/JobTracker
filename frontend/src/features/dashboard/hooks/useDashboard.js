@@ -6,7 +6,6 @@ import { useEffect } from "react"
 
 export const useDashboard = () => {
     const { dashboardData, loading, error, setDashboardData, setLoading, setError } = useContext(DashboardContext)
-
     const axiosPrivate = useAxiosPrivate()
 
     const fetchDashboardData = async () => {
@@ -15,7 +14,6 @@ export const useDashboard = () => {
             setError(null)
 
             const data = await getDashboardStats(axiosPrivate)
-            console.log("Fetched Dashboard Data:", data)
             setDashboardData(data)
         } catch (err) {
             setError(err.message || 'Failed to load dashboard')
@@ -25,6 +23,7 @@ export const useDashboard = () => {
     }
 
     useEffect(() => {
+        console.log("Fetching dashboard data on mount...")
       fetchDashboardData()
     }, [])
     

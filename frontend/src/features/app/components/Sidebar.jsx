@@ -9,6 +9,7 @@ import {
   LogOutIcon,
   Plus,
 } from "lucide-react";
+import { useAuth } from '../../auth/hooks/useAuth';
 
 const sidebarMenu = [
     {
@@ -34,6 +35,8 @@ const sidebarMenu = [
 ];
 
 const Sidebar = () => {
+
+    const { handleLogout } = useAuth()
     
   return (
     <div className='w-64 bg-gray-100 border-r border-orange-300 p-5 flex flex-col justify-between'>
@@ -72,7 +75,7 @@ const Sidebar = () => {
         </button>
       </div>
 
-      <button className='text-red-500 flex items-center gap-3'>
+      <button className='text-red-500 flex items-center gap-3 cursor-pointer hover:text-red-700' onClick={handleLogout}>
         <LogOutIcon  size={18}/>
         <span>Logout</span>
         </button>

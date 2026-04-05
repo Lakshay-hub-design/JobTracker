@@ -12,7 +12,7 @@ const Layout = () => {
 
         <Topbar />
 
-        <main className='p-6 overflow-y-auto'>
+        <main className='p-4 overflow-y-auto'>
             <Outlet />
         </main>
         
