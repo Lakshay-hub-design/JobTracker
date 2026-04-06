@@ -9,7 +9,7 @@ export const DashboardProvider = ({children}) => {
     const [error, setError] = useState(null)
 
     return (
-        <DashboardContext.Provider value={{ dashboardData, loading, error, setDashboardData, setLoading, setError }}>
+        <DashboardContext.Provider value={{ dashboardData, setDashboardData, loading, setLoading, error, setError}}>
             {children}
         </DashboardContext.Provider>
     )

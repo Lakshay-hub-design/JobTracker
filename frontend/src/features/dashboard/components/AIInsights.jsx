@@ -29,24 +29,24 @@ const AIInsights = ({ insights }) => {
 
       <div className="grid grid-cols-1 md:grid-cols-4 gap-5">
         <div className="bg-white/10 backdrop-blur-lg p-5 rounded-xl border border-white/20">
-          <p className="font-medium mb-1">
+          <div className="font-medium mb-1">
             <div className="flex items-center justify-center h-8 w-8 bg-blue-300/30 text-blue-200 rounded-full mb-2">
               <FaLightbulb />
             </div>
             <span className="text-sm">Insight</span>
-          </p>
+          </div>
           <p className="text-sm opacity-90">
             You’ve been applying consistently — great job!
           </p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg p-5 rounded-xl border border-white/20">
-            <p className="font-medium mb-1">
+            <div className="font-medium mb-1">
                 <div className="flex items-center justify-center h-8 w-8 bg-red-300/30 text-red-200 rounded-full mb-2">
                     <IoWarning />
                 </div>
                 <span className="text-sm">Weak Areas</span>
-            </p>
+            </div>
             <ul className="text-sm opacity-90 list-disc list-inside">
             {weakAreas?.map((skill, index) => (
                 <li key={index}>{skill}</li>
@@ -55,22 +55,22 @@ const AIInsights = ({ insights }) => {
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg p-5 rounded-xl border border-white/20">
-            <p className="font-medium mb-1">
+            <div className="font-medium mb-1">
                 <div className="flex items-center justify-center h-8 w-8 bg-green-300/30 text-green-200 rounded-full mb-2">
                     <BsFillRocketTakeoffFill />
                 </div>
                 <span className="text-sm">Recommendation</span>
-            </p>
+            </div>
             <p className="text-sm opacity-90">{suggession}</p>
         </div>
 
         <div className="bg-white/10 backdrop-blur-lg p-5 rounded-xl border border-white/20">
-            <p className="font-medium mb-1">
+            <div className="font-medium mb-1">
                 <div className="flex items-center justify-center h-8 w-8 bg-purple-300/30 text-purple-200 rounded-full mb-2">
                     <IoMdTrendingUp />
                 </div>
                 <span className="text-sm">Improvement Tips</span>
-            </p>
+            </div>
             <p className="text-sm opacity-90">
                 Try mock interviews focused on your weak areas to build confidence and improve.
             </p>

@@ -11,12 +11,10 @@ const userEmail = localStorage.getItem("userEmail");
 
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
-    <JobProvider>
       <AuthProvider>
         <ThemeProvider>
           <App />
         </ThemeProvider>
       </AuthProvider>
-    </JobProvider>
   </BrowserRouter>
 );

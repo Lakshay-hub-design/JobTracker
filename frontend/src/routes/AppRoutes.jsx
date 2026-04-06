@@ -4,11 +4,12 @@ import Protected from '../features/auth/components/Protected'
 import PublicRoute from '../features/auth/components/PublicRoutes'
 import Layout from '../features/app/components/Layout'
 import { DashboardProvider } from '../features/dashboard/context/DashBoardContext'
+import { JobProvider } from '../features/Jobs/context/JobContext'
 
 const Dashboard = lazy(() => import('../features/dashboard/pages/DashboardPage'))
-const Jobs = lazy(() => import('../pages/general/Jobs'))
+const Jobs = lazy(() => import('../features/Jobs/pages/JobsPage'))
 const Profile = lazy(() => import('../pages/general/Profile'))
-const JobDetails = lazy(() => import('../pages/general/JobDetails'))
+const JobDetails = lazy(() => import('../features/Jobs/pages/JobDetails'))
 const Landing = lazy(() => import('../pages/general/Landing'))
 
 
@@ -33,7 +34,9 @@ const AppRoutes = () => {
         </Route>
         
         <Route element={<Protected />}>
-          <Route element={<Layout />}>
+          <Route element={
+            <Layout />}  
+          >
           
             <Route path='/dashboard' element={
               <DashboardProvider>
@@ -42,16 +45,19 @@ const AppRoutes = () => {
             } />
 
             <Route path='/jobs' element={
+              <JobProvider>
                 <Jobs />
+              </JobProvider>
+            } />
+
+            <Route path='/job/:jobId' element={
+              <JobDetails />
             } />
 
             <Route path='/profile' element={
                 <Profile />
             } />
 
-            <Route path='/jobs/:id' element={
-                <JobDetails />
-            } />
           </Route>
         </Route>
 

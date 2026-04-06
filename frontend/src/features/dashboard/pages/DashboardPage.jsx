@@ -1,5 +1,6 @@
 import AIInsights from '../components/AIInsights'
 import Charts from '../components/Charts'
+import RecentJobs from '../components/RecentJobs'
 import SummaryCards from '../components/SummaryCards'
 import { useDashboard } from '../hooks/useDashboard'
 
@@ -22,6 +23,8 @@ const DashboardPage = () => {
         <Charts data={dashboardData} />
 
         <AIInsights insights={dashboardData?.aiInsight} />
+
+        <RecentJobs jobs={dashboardData?.recentJobs} />
     </div>
   )
 }

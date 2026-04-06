@@ -5,7 +5,9 @@ import { getDashboardStats } from "../services/dashBoardApi"
 import { useEffect } from "react"
 
 export const useDashboard = () => {
-    const { dashboardData, loading, error, setDashboardData, setLoading, setError } = useContext(DashboardContext)
+    
+    const context = useContext(DashboardContext)
+    const { dashboardData, loading, error, setDashboardData, setLoading, setError } = context
     const axiosPrivate = useAxiosPrivate()
 
     const fetchDashboardData = async () => {
