@@ -50,6 +50,14 @@ class JobRepository {
         ])
     }
 
+    async getRecentJobs(userId, limit = 5){
+        return await Job.find({ createdBy: userId })
+            .select('-description -notes -resume')
+            .sort({ createdAt: -1 })
+            .limit(limit)
+            .lean()
+    }
+
     async countJobs(userId){
         return await Job.countDocuments({ createdBy: userId })
     }
@@ -64,6 +72,21 @@ class JobRepository {
     async updateJob(job, data){
         Object.assign(job, data)
         return await job.save()
+    }
+
+    async updateJobById(jobId, userId, data){
+        return await Job.findOneAndUpdate(
+            { _id: jobId, createdBy: userId },
+            data,
+            { new: true, runValidators: true }
+        ).lean()
+    }
+
+    async deleteJob(jobId, userId){
+        return await Job.findOneAndDelete({
+            _id: jobId,
+            createdBy: userId
+        })
     }
 
     async saveJob(job){

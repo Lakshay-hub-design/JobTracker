@@ -88,6 +88,27 @@ const getJobsService = async ({ userId, query }) => {
     return jobs
 }
 
+const updateJobService = async ({ jobId, userId, data }) => {
+
+    const job = await jobRepository.getJobDetails(jobId, userId)
+console.log(data)
+    if(!job){
+        throw new ApiError(404, 'Job not found')
+    }
+
+    const updatedJob = await jobRepository.updateJobById(jobId, userId, data)
+
+    return updatedJob
+}
+
+const deleteJobService = async ({ jobId, userId }) => {
+    const job = await jobRepository.deleteJob(jobId, userId)
+
+    if(!job){
+        throw new ApiError(404, 'Job not found')
+    }
+}
+
 const getJobDetailsService = async ({ jobId, userId }) => {
     const job = await jobRepository.getJobDetails(jobId, userId)
 
@@ -126,10 +147,13 @@ const getDashboardStats = async (userId) => {
 
     const monthlyStats =  await jobRepository.getMonthlyStats(userId)
 
+    const recentJobs = await jobRepository.getRecentJobs(userId, 5)
+
     return {
         totalJobs,
         statusStats,
-        monthlyStats
+        monthlyStats,
+        recentJobs
     }
 }
 
@@ -179,5 +203,7 @@ module.exports = {
     createJobService,
     getJobsService,
     getJobDetailsService,
-    getFullDashboardService
+    getFullDashboardService,
+    updateJobService,
+    deleteJobService
 }

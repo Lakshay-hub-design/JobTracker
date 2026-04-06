@@ -11,7 +11,7 @@ router.get('/',authMiddleware, jobController.getJobs)
 router.get('/:id', authMiddleware, jobController.getJobDetails)
 router.get('/dashboard/full', authMiddleware, jobController.getFullDashboard)
 
-// router.put('/:id', authMiddleware, jobController.updateJob)
-// router.post('/delete/:id', authMiddleware, jobController.deleteJob)
+router.patch('/:id', authMiddleware, jobController.updateJob)
+router.delete('/:id', authMiddleware, jobController.deleteJob)
 
 module.exports = router

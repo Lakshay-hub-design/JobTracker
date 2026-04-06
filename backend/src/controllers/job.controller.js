@@ -1,6 +1,6 @@
 const jobModel = require('../models/job.model');
 const asyncHandler = require('../middlewares/asyncHandler');
-const { createJobService, getJobsService, getJobDetailsService, getFullDashboardService } = require('../services/job.service');
+const { createJobService, getJobsService, getJobDetailsService, getFullDashboardService, updateJobService, deleteJobService } = require('../services/job.service');
 
 const createJob = asyncHandler(async (req, res) => {
     const job = await createJobService({
@@ -56,51 +56,32 @@ const getFullDashboard = asyncHandler(async (req, res) => {
     })
 })
 
-async function updateJob(req, res){
-    try{
-    
-        const {company, position, status, location, jobType, notes, description, resumeUrl} = req.body
-        const job = await jobModel.findOneAndUpdate({ _id: req.params.id, createdBy: req.user._id},
-            {
-                company,
-                position,
-                status,
-                location,
-                jobType,
-                notes,
-                description,
-                resumeUrl
-            },
-            { new: true, runValidators: true}
-        );
-        if(!job){
-            return res.status(404).json({
-                message: 'job not found or not authorized'
-            })
-        }
-        res.status(200).json({
-            message: "Job updated succesfully",
-            job
-        })
-    } catch (err) {
-        res.status(500).json({ message: "Error updating job", error: err.message });
-    }
-}
+const updateJob = asyncHandler(async (req, res) => {
+    const updatedJob = await updateJobService({
+        jobId: req.params.id,
+        userId: req.user.id,
+        data: req.body
+    })
 
-async function deleteJob(req, res){
-    try {
-        const job = await jobModel.findOneAndDelete({ _id: req.params.id, createdBy: req.user._id})
-        if(!job){
-            return res.status(404).json({ success: false, message: 'Job not found' })
-        }
-        res.status(200).json({
-            message: "Job deleted succesfully"
-        })
-    } catch (error) {
-        res.status(500).json({ success: false, message: 'Server error' });
-        console.error("Delete job error", error);
-    }
-}
+    res.status(200).json({
+        success: true,
+        message: 'Job updated successfully',
+        job: updatedJob
+    })
+})
+
+
+const deleteJob = asyncHandler(async (req, res) => {
+    await deleteJobService({
+        jobId: req.params.id,
+        userId: req.user.id
+    })
+
+    res.status(200).json({
+        success: true,
+        message: 'Job deleted successfully'
+    })
+})
 
 module.exports = {
     createJob,
