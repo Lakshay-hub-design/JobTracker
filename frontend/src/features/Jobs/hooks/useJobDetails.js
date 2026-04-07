@@ -4,6 +4,7 @@ import { getJobDetails, updateJob } from "../service/jobsApi"
 
 export const useJobDetails = (jobId) => {
     const [job, setJob] = useState(null)
+    const [aiReport, setAIReport] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
 
@@ -15,8 +16,9 @@ export const useJobDetails = (jobId) => {
             setError(null)
 
             const data = await getJobDetails(axiosPrivate, jobId)
-            
-            setJob(data)
+            console.log("Fetched job details:", data)
+            setJob(data.job)
+            setAIReport(data.aiReport)
         } catch (err) {
             setError(err.message || 'Failed to fetch job details')
         } finally {
@@ -42,5 +44,5 @@ export const useJobDetails = (jobId) => {
         }
     }
 
-    return { job, loading, error, refetch: fetchJobDetails, handleUpdate }
+    return { job, aiReport, loading, error, refetch: fetchJobDetails, handleUpdate }
 }

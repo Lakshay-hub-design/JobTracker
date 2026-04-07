@@ -10,6 +10,7 @@ const Dashboard = lazy(() => import('../features/dashboard/pages/DashboardPage')
 const Jobs = lazy(() => import('../features/Jobs/pages/JobsPage'))
 const Profile = lazy(() => import('../pages/general/Profile'))
 const JobDetails = lazy(() => import('../features/Jobs/pages/JobDetails'))
+const AIReport = lazy(() => import('../features/Jobs/pages/AIReportPage'))
 const Landing = lazy(() => import('../pages/general/Landing'))
 
 
@@ -52,6 +53,10 @@ const AppRoutes = () => {
 
             <Route path='/job/:jobId' element={
               <JobDetails />
+            } />
+
+            <Route path='/job/:jobId/report' element={
+              <AIReport />
             } />
 
             <Route path='/profile' element={

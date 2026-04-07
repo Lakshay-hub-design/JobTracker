@@ -18,7 +18,7 @@ const sidebarMenu = [
         path: "/dashboard",
     },
     {
-        name: "Jobs",
+        name: "Applications",
         icon: BriefcaseBusiness,
         path: "/jobs",
     },

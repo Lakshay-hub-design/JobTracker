@@ -16,7 +16,7 @@ const JobsPage = () => {
 
         <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
             {jobs.map(job => (
-                <JobCards key={job.id} job={job } />
+                <JobCards key={job._id} job={job } />
             ))}
         </div>
       
