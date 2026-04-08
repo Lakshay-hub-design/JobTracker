@@ -1,0 +1,416 @@
+import React, { useRef, useState } from 'react'
+import { FileUp } from 'lucide-react'
+import { useAddJob } from '../hooks/useAddJob';
+import { useNavigate } from 'react-router-dom';
+
+const AddJobPage = () => {
+  const fileInputRef = useRef(null)
+  const navigate = useNavigate()
+  const [formData, setFormData] = useState({
+    company: "",
+    position: "",
+    status: "applied",
+    jobType: "full-time",
+    workplace: "onsite",
+    location: "",
+    appliedDate: "",
+    followUpDate: "",
+    description: "",
+    notes: "",
+  });
+
+  const { handleAddApplication, loading, error } = useAddJob()
+
+  const [errors, setErrors] = useState({})
+
+  const [showConfirm, setShowConfirm] = useState(false)
+
+  const [file, setFile] = useState(null);
+
+  const validate = () => {
+  const newErrors = {}
+
+  if (!formData.company.trim()) {
+    newErrors.company = "Company is required"
+  }
+
+  if (!formData.position.trim()) {
+    newErrors.position = "Position is required"
+  }
+
+  if (!formData.location.trim()) {
+    newErrors.location = "Location is required"
+  }
+
+  setErrors(newErrors)
+
+  return Object.keys(newErrors).length === 0
+}
+
+  const handleClick = () => {
+    fileInputRef.current.click()
+  }
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if(file){
+      setFile(file)
+    } 
+  };
+
+  const handleChange = (e) => {
+    const { id, value } = e.target;
+
+    setFormData((prev) => ({
+      ...prev,
+      [id]: value,
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    if (!validate()) return
+
+    if (!file || !formData.description) {
+      setShowConfirm(true)
+      return
+    }
+
+    proceedSubmit()
+  }
+
+  const proceedSubmit = () => {
+    const form = new FormData()
+
+    for (let key in formData) {
+      form.append(key, formData[key])
+    }
+
+    if (file) {
+      form.append("resume", file)
+    }
+    for (let pair of form.entries()) {
+      console.log(pair[0], pair[1])
+    }
+    handleAddApplication(form)
+  }
+
+  return (
+    <div className="ml-4">
+      <div className="mb-6">
+        <h2 className="text-xl font-bold mb-">Add New Application</h2>
+        <p className="text-gray-500 text-sm">
+          Fill in the details for the new job opportunity to keep your pipeline
+          organized.
+        </p>
+      </div>
+
+      <div className="flex gap-6">
+        <div className="bg-white w-3/5 col-span-3 p-6 rounded-2xl shadow-sm">
+          <div className="flex justify-between gap-6 space-y-4">
+            <div className="flex flex-col w-full">
+              <label htmlFor="company" className="font-bold text-gray-800 mb-2">
+                Company
+              </label>
+              <input
+                type="text"
+                id="company"
+                value={formData.company}
+                onChange={handleChange}
+                placeholder="e.g. Google, Stripe, Airbnb"
+                className={`border rounded-md bg-gray-100 py-2 px-4 ${
+                  errors.company ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.company && (
+                <p className="text-red-500 text-sm mt-1">{errors.company}</p>
+              )}
+            </div>
+            <div className="flex flex-col w-full">
+              <label
+                htmlFor="position"
+                className="font-bold text-gray-800 mb-2"
+              >
+                Position
+              </label>
+              <input
+                type="text"
+                id="position"
+                value={formData.position}
+                onChange={handleChange}
+                placeholder="e.g. Senior Product Designer"
+                className={`border rounded-md bg-gray-100 py-2 px-4 ${
+                  errors.company ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.location && (
+                <p className="text-red-500 text-sm mt-1">{errors.position}</p>
+              )}
+            </div>
+          </div>
+
+          <div className="flex justify-between gap-6 space-y-4">
+            <div className="flex flex-col w-full">
+              <label htmlFor="status" className="font-bold text-gray-800 mb-2">
+                Status
+              </label>
+              <select
+                name=""
+                id="status"
+                value={formData.status}
+                onChange={handleChange}
+                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] bg-gray-100 focus:outline-none"
+              >
+                <option value="applied">Applied</option>
+                <option value="interviewing">Interviewing</option>
+                <option value="offered">Offered</option>
+                <option value="rejected">Rejected</option>
+              </select>
+            </div>
+            <div className="flex flex-col w-full">
+              <label htmlFor="jobType" className="font-bold text-gray-800 mb-2">
+                Job Type
+              </label>
+              <select
+                id="jobType"
+                value={formData.jobType}
+                onChange={handleChange}
+                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] bg-gray-100 focus:outline-none"
+              >
+                <option value="full-time">Full-time</option>
+                <option value="part-time">Part-time</option>
+                <option value="internship">Internship</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex justify-between gap-6 space-y-4">
+            <div className="flex flex-col w-full">
+              <label
+                htmlFor="location"
+                className="font-bold text-gray-800 mb-2"
+              >
+                Location
+              </label>
+              <input
+                type="text"
+                id="location"
+                value={formData.location}
+                onChange={handleChange}
+                placeholder="Banglore, India"
+                className={`border rounded-md bg-gray-100 py-2 px-4 ${
+                  errors.company ? "border-red-500" : "border-gray-300"
+                }`}
+              />
+              {errors.location && (
+                <p className="text-red-500 text-sm mt-1">{errors.location}</p>
+              )}
+            </div>
+            <div className="flex flex-col w-full">
+              <label
+                htmlFor="workplace"
+                className="font-bold text-gray-800 mb-2"
+              >
+                Workplace
+              </label>
+              <select
+                id="workplace"
+                value={formData.workplace}
+                onChange={handleChange}
+                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] bg-gray-100 focus:outline-none"
+              >
+                <option value="onsite">Onsite</option>
+                <option value="remote">Remote</option>
+                <option value="hybrid">Hybrid</option>
+              </select>
+            </div>
+          </div>
+
+          <div className="flex justify-between gap-6 space-y-4">
+            <div className="flex flex-col w-full">
+              <label
+                htmlFor="appliedDate"
+                className="font-bold text-gray-800 mb-2"
+              >
+                Applied Date
+              </label>
+              <input
+                type="date"
+                id="appliedDate"
+                value={formData.appliedDate}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md bg-gray-100 py-2 px-4 focus:outline-none"
+              />
+            </div>
+            <div className="flex flex-col w-full">
+              <label
+                htmlFor="followUpDate"
+                className="font-bold text-gray-800 mb-2"
+              >
+                Follow-up Date
+              </label>
+              <input
+                type="date"
+                id="followUpDate"
+                value={formData.followUpDate}
+                onChange={handleChange}
+                className="border border-gray-300 rounded-md bg-gray-100 py-2 px-4 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          <div className="flex flex-col w-full">
+            <label
+              htmlFor="description"
+              className="font-bold text-gray-800 mb-2"
+            >
+              Description
+            </label>
+            <textarea
+              name=""
+              id="description"
+              value={formData.description}
+              onChange={handleChange}
+              placeholder="Enter job description..."
+              className={`border rounded-md bg-gray-100 py-2 px-4 resize-none h-32 `}
+            ></textarea>
+          </div>
+
+          <div className="flex gap-6 justify-end mt-6">
+            <button
+              onClick={() => navigate("/jobs")}
+              className="text-amber-800 font-medium cursor-pointer hover:underline"
+            >
+              Cancel
+            </button>
+            <button
+              disabled={loading}
+              onClick={handleSubmit}
+              className="px-6 py-3 bg-[#C03E0A] rounded-full text-white font-medium cursor-pointer active:scale-95 transition hover:bg-amber-600"
+            >
+              {loading ? "Adding..." : "Add Application"}
+            </button>
+          </div>
+        </div>
+
+        <div className="bg-white w-2/5 p-6 flex col-span-2 rounded-2xl shadow-sm flex-col">
+          <label htmlFor="" className="font-bold text-gray-800 mb-2">
+            Resume
+          </label>
+          <div className="border-2 border-dashed border-amber-800/20 p-4 rounded-md bg-gray-100 flex flex-col items-center justify-center">
+            <div className="h-16 w-16 bg-[#F8E0D8] rounded-full flex items-center justify-center mb-4">
+              <FileUp className="text-amber-800" />
+            </div>
+            {file ? (
+              <p className="text-sm text-green-600 mt-2">
+                Uploaded: {file.name}
+              </p>
+            ) : (
+              <div className="flex flex-col items-center justify-center">
+                <h3 className="font-medium text-lg text-gray-800">
+                  Upload your latest resume
+                </h3>
+                <p className="text-center mb-6 text-sm text-gray-700">
+                  PDF, DOCX up to 10MB. We'll automatically parse key <br />{" "}
+                  details for you.
+                </p>
+
+                <div
+                  onClick={handleClick}
+                  className="py-2 px-4 rounded-full bg-gray-200 hover:scale-105 transition cursor-pointer"
+                >
+                  <h3 className="font-medium">Choose File</h3>
+                </div>
+              </div>
+            )}
+          </div>
+          <input
+            ref={fileInputRef}
+            onChange={handleFileChange}
+            className="hidden"
+            type="file"
+          />
+          <div className="mt-4 p-4 rounded-xl bg-gradient-to-r from-orange-50 to-orange-100 border border-orange-200">
+            <div className="flex items-start gap-3">
+              <div className="text-xl">🤖</div>
+
+              <div>
+                <p className="font-semibold text-orange-700">
+                  Unlock AI Interview Insights
+                </p>
+                <p className="text-sm text-gray-700 mt-1">
+                  Add a job description and upload your resume to generate
+                  personalized interview questions, skill gaps, and preparation
+                  tips.
+                </p>
+                <p className="text-xs text-orange-600 mt-2">
+                  ⚡ AI report will be generated automatically after submission
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div className="flex flex-col w-full mt-6">
+            <label htmlFor="notes" className="font-bold text-gray-800 mb-2">
+              Notes
+            </label>
+            <textarea
+              name=""
+              id="notes"
+              value={formData.notes}
+              onChange={handleChange}
+              placeholder="Personal notes, research, networking contacts, etc."
+              className=" py-2 px-4 rounded-md bg-gray-100 resize-none h-30"
+            ></textarea>
+          </div>
+        </div>
+
+        {showConfirm && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+
+    <div className="bg-white rounded-xl p-6 w-[400px] shadow-lg">
+
+      <h3 className="text-lg font-semibold mb-2">
+        🤖 AI Insights Not Available
+      </h3>
+
+      <p className="text-sm text-gray-600 mb-4">
+        You haven’t added a job description or resume.  
+        AI report won’t be generated for this job.
+      </p>
+
+      <p className="text-sm text-orange-600 mb-6">
+        You can still add them later to generate insights.
+      </p>
+
+      <div className="flex justify-end gap-3">
+        
+        <button
+          onClick={() => setShowConfirm(false)}
+          className="px-4 py-2 border rounded-lg"
+        >
+          Go Back
+        </button>
+
+        <button
+          onClick={() => {
+            setShowConfirm(false)
+            proceedSubmit() // 👈 real submit function
+          }}
+          className="px-4 py-2 bg-orange-600 text-white rounded-lg"
+        >
+          Continue Anyway
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+)}
+      </div>
+    </div>
+  );
+}
+
+export default AddJobPage

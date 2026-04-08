@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard,
   BriefcaseBusiness,
@@ -35,6 +35,7 @@ const sidebarMenu = [
 ];
 
 const Sidebar = () => {
+    const navigate = useNavigate()
 
     const { handleLogout } = useAuth()
     
@@ -69,7 +70,9 @@ const Sidebar = () => {
                 )
             })}
         </nav>
-        <button className='mt-6 w-full bg-orange-700 text-white px-4 py-3 rounded-full flex justify-center gap-2 shadow-lg hover:bg-orange-600 transition active:scale-95'>
+        <button
+        onClick={() => navigate('/job/new')}
+         className='mt-6 w-full bg-orange-700 text-white px-4 py-3 rounded-full flex justify-center gap-2 shadow-lg hover:bg-orange-600 transition active:scale-95'>
             <Plus size={18} />
             <span className='text-sm'>Add New Job</span>
         </button>

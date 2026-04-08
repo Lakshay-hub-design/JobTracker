@@ -1,3 +1,12 @@
+export async function addJob(axiosPrivate, formData){
+    try {
+        const res = await axiosPrivate.post('/api/job/add-job', formData)
+        return res.data
+    } catch (error) {
+        throw error.response?.data || error
+    }
+}
+
 export async function getJobs(axiosPrivate, queryParams){
     try {
         const res = await axiosPrivate.get('/api/job', {
