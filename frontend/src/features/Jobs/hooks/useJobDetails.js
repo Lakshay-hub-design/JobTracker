@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
-import { getJobDetails, updateJob } from "../service/jobsApi"
+import { generateAIReport, getJobDetails, updateJob } from "../service/jobsApi"
 
 export const useJobDetails = (jobId) => {
     const [job, setJob] = useState(null)
@@ -19,6 +19,7 @@ export const useJobDetails = (jobId) => {
             console.log("Fetched job details:", data)
             setJob(data.job)
             setAIReport(data.aiReport)
+            console.log("AI STATUS AFTER FETCH:", data.aiReport?.status)
         } catch (err) {
             setError(err.message || 'Failed to fetch job details')
         } finally {
@@ -29,6 +30,19 @@ export const useJobDetails = (jobId) => {
     useEffect(() => {
         if (jobId) fetchJobDetails()
     }, [jobId])
+
+    const triggerAIReport = async (formData = null) => {
+        try {
+            setLoading(true)
+            setError(null)
+
+            await generateAIReport(axiosPrivate, jobId, formData)
+        } catch (err) {
+            setError(err.message || 'Failed to fetch job details')
+        } finally {
+            setLoading(false)
+        }
+    }
 
     const handleUpdate = async (updatedData) => {
         try {
@@ -44,5 +58,5 @@ export const useJobDetails = (jobId) => {
         }
     }
 
-    return { job, aiReport, loading, error, refetch: fetchJobDetails, handleUpdate }
+    return { job, aiReport, loading, error, refetch: fetchJobDetails, triggerAIReport, handleUpdate }
 }

@@ -18,8 +18,8 @@ class JobRepository {
         return await Job.findOne({
             _id: jobId,
             createdBy: userId,
-        }).lean()
-    }
+        })
+    }   
 
     async getStatusStats(userId){
         return await Job.aggregate([
@@ -79,7 +79,7 @@ class JobRepository {
             { _id: jobId, createdBy: userId },
             data,
             { new: true, runValidators: true }
-        ).lean()
+        )
     }
 
     async deleteJob(jobId, userId){

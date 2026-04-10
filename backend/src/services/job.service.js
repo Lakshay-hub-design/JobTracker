@@ -9,9 +9,10 @@ const extractResumeText = require('./resume.service')
 
 const createJobService = async ({ body, file, userId }) => {
     const { company, position, status, jobType, location, appliedDate, notes, description, coverLetter, followUpDate } = body
+    console.log(body)
 
     if (!company || !position) {
-        throw new ApiError("Company and position are required", 400)
+        throw new ApiError(400, "Company and position are required")
     }
 
     let resumeData = null
@@ -34,24 +35,100 @@ const createJobService = async ({ body, file, userId }) => {
         coverLetter,
         followUpDate,
         resume: resumeData,
+        resumeText,
         createdBy: userId,
     })
 
-    const aiReport = await aiReportRepository.createAIReport({
-        job: job._id,
-        user: userId,
-        status: "pending"
-    })
+    if(resumeText && description){
+        const aiReport = await aiReportRepository.createAIReport({
+            job: job._id,
+            user: userId,
+            status: "pending"
+        })
 
-    await jobRepository.updateJob(job, {
-        aiReport: aiReport._id
-    })
+        await jobRepository.updateJob(job, {
+            aiReport: aiReport._id
+        })
+
+        await aiQueue.add('process-job', {
+            jobId: job._id,
+            resumeText: resumeText || null,
+            description,
+            aiReportId: aiReport._id,
+            userId
+        }, {
+            attempts: 3,
+            backoff: {
+                type: 'exponential',
+                delay: 5000
+            },
+            removeOnComplete: true,
+            removeOnFail: false
+        })
+    }
+
+    return job
+}
+
+const generateAIReportService = async ({ jobId, file, body, userId }) => {
+    const { description } = body
+    let job = await jobRepository.getJobDetails(jobId, userId)
+
+    if(!job){
+        throw new ApiError(404, 'Job not found')
+    }
+
+    if (file) {
+        const resumeData = await uploadFile(file)
+        const resumeText = await extractResumeText(file.buffer)
+
+        job = await jobRepository.updateJobById(
+            job._id,
+            userId,
+            {
+            resume: resumeData,
+            resumeText: resumeText
+        })
+
+    }
+
+    if (description) {
+        job = await jobRepository.updateJobById(
+            job._id, 
+            userId,
+            { description }
+        )
+    }
+
+    if(!job.description || !job.resume?.url) {
+        throw new ApiError(400, 'Missing resume and job description')
+    }
+
+    let report = await aiReportRepository.getAIReport(job.aiReport)
+
+    if(!report){
+        report = await aiReportRepository.createAIReport({
+            job: jobId,
+            user: userId,
+            status: 'pending'
+        })
+
+        await jobRepository.updateJobById(
+            job._id,
+            userId,
+            { aiReport: report._id }
+        )
+    }else {
+        await aiReportRepository.updateAIReport(report._id, {
+            status: 'pending'
+        })
+    }
 
     await aiQueue.add('process-job', {
-        jobId: job._id,
-        resumeText: resumeText || null,
-        description,
-        aiReportId: aiReport._id,
+        jobId,
+        resumeText: job.resumeText,
+        description: job.description,
+        aiReportId: report._id,
         userId
     }, {
         attempts: 3,
@@ -63,7 +140,6 @@ const createJobService = async ({ body, file, userId }) => {
         removeOnFail: false
     })
 
-    return job
 }
 
 const getJobsService = async ({ userId, query }) => {
@@ -91,7 +167,7 @@ const getJobsService = async ({ userId, query }) => {
 const updateJobService = async ({ jobId, userId, data }) => {
 
     const job = await jobRepository.getJobDetails(jobId, userId)
-console.log(data)
+
     if(!job){
         throw new ApiError(404, 'Job not found')
     }
@@ -201,6 +277,7 @@ const getFullDashboardService = async ({userId}) => {
 
 module.exports = {
     createJobService,
+    generateAIReportService,
     getJobsService,
     getJobDetailsService,
     getFullDashboardService,

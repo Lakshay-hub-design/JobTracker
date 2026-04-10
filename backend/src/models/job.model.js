@@ -20,13 +20,17 @@ const JobSchema = new mongoose.Schema(
     },
     location: {
       type: String,
-      default: "Remote",
       required: [true, "Location is required"],
       trim: true,
     },
+    workplace: {
+      type: String,
+      enum: ["remote", "onsite", "hybrid"],
+      default: "onsite"
+    },
     jobType: {
       type: String,
-      enum: ["full-time", "part-time", "internship", "remote"],
+      enum: ["full-time", "part-time", "internship"],
       default: "full-time",
     },
     followUpDate: {
@@ -50,6 +54,10 @@ const JobSchema = new mongoose.Schema(
     resume: { 
         url: String,
         fileId: String 
+    },
+    resumeText: {
+      type: String,
+      default: ""
     },
     coverLetter: { 
         type: String,

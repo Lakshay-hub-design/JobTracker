@@ -15,6 +15,14 @@ class aiReportRepository {
     async getAIReport(aiReportId){
         return await AIReport.findById(aiReportId).select('-_v').lean()
     }
+
+    async updateAIReport(reportId, updateData) {
+        return await AIReport.findByIdAndUpdate(
+            reportId,
+            updateData,
+            { new: true }
+        )
+    }
 }
 
 module.exports = new aiReportRepository()

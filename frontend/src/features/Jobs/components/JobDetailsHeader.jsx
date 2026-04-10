@@ -3,7 +3,6 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdWatchLater } from "react-icons/md";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
-import { useNavigate } from "react-router-dom";
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -14,10 +13,9 @@ const formatDate = (dateString) => {
 }
 
 
-const JobDetailsHeader = ({ job }) => {
-    const navigate = useNavigate()
+const JobDetailsHeader = ({ job, aiReport, onAIAction }) => {
     if(!job) return null
-
+  
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="bg-white p-6 px-10 rounded-xl col-span-3 shadow-sm flex justify-between items-start">
@@ -55,10 +53,23 @@ const JobDetailsHeader = ({ job }) => {
 
           <div className="flex gap-2">
             <button
-            onClick={() => navigate(`/job/${job._id}/report`)}
-            className="px-6 py-3 border rounded-full bg-gray-200 text-blue-700 font-medium flex items-center gap-2 cursor-pointer hover:bg-gray-100">
-                <TbReportSearch />
-              View AI Report
+            onClick={onAIAction}
+            disabled={aiReport?.status === 'pending'}
+            className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition
+              ${aiReport?.status === "completed"
+                ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                : aiReport?.status === "pending"
+                ? "bg-gray-200 text-gray  -500 cursor-not-allowed"
+                : aiReport?.status === "failed"
+                ? "bg-red-100 text-red-600 hover:bg-red-200"
+                : "bg-gray-200 text-blue-700 hover:bg-gray-100"
+              }
+            `}>
+              <TbReportSearch />
+              {aiReport?.status === "pending" && "Generating..."}
+              {aiReport?.status === "completed" && "View AI Report"}
+              {aiReport?.status === "failed" && "Retry AI Report"}
+              {aiReport?.status === "not_ready" && "Generate AI Report"}
             </button>
 
             <button className="px-4 py-2 border rounded-full bg-gray-300 font-medium cursor-pointer hover:bg-gray-200">

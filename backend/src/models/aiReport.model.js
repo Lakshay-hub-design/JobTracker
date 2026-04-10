@@ -80,8 +80,8 @@ const aiReportSchema = new mongoose.Schema({
     },
     status: {
         type: String,
-        enum: ['pending', 'completed', 'failed'],
-        default: 'pending'
+        enum: ['pending', 'completed', 'failed', 'not_ready'],
+        default: 'not_ready'
     },
     matchScore:{
         type: Number,

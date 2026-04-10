@@ -1,11 +1,11 @@
 import React from 'react'
 
-const JobsHeader = () => {
+const JobsHeader = ({jobs}) => {
   return (
     <div className='flex justify-between items-center mb-8'>
       <div>
         <h2 className='text-3xl font-bold'>My Jobs</h2>
-        <p className='text-gray-700 mt-2'>You have <span className='text-orange-700 font-semibold'>10 active applications</span> in your pipeline.</p>
+        <p className='text-gray-700 mt-2'>You have <span className='text-orange-700 font-semibold'>{jobs.length} active applications</span> in your pipeline.</p>
       </div>
       <div className='flex gap-3'>
         <select className='px-4 py-2 rounded-full bg-orange-100/40 text-sm shadow-sm'>

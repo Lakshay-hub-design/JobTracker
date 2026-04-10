@@ -7,6 +7,20 @@ export async function addJob(axiosPrivate, formData){
     }
 }
 
+export async function generateAIReport(axiosPrivate, jobId, formData){
+    try {
+        if(formData){
+            const res = await axiosPrivate.post(`/api/job/generate/${jobId}`, formData)
+            return res.data
+        }else{
+            const res = await axiosPrivate.post(`/api/job/generate/${jobId}`)
+            return res.data
+        }
+    } catch (error) {
+        throw error.response?.data || error
+    }
+}
+
 export async function getJobs(axiosPrivate, queryParams){
     try {
         const res = await axiosPrivate.get('/api/job', {
