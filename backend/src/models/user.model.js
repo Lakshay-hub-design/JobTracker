@@ -4,49 +4,46 @@ const crypto = require('crypto')
 
 const personalInfoSchema = new mongoose.Schema({
     profileImage: {
-      type: String,
-      default: "",
+      url: String,
+      publicId: String
     },
 
-    phone: {
+    location: {
       type: String,
-      match: [/^\d{10}$/, "Phone must be 10 digits"],
-    },
-
-    dob: {
-      type: Date,
-    },
-
-    address: {
-      type: String,
+      default:"", 
       trim: true,
       maxlength: 200,
-    },
-
-    country: {
-      type: String,
-      trim: true,
-    },
-
-    nationality: {
-      type: String,
-      trim: true,
     },
 
     bio: {
       type: String,
       maxlength: 300,
+      trim: true,
+      default: ""
     },
 
-    position: {
+    preferredRole: {
       type: String,
       trim: true,
-    },  
-
-    workPermit: {
-      type: String,
-      enum: ["Yes", "No"],
+      default: ""
     },
+
+    preferredLocation: {
+      type: String,
+      trim: true,
+      default: ""
+    },
+
+    techStack: {
+      type: [String],
+      default: [],
+    },
+
+    experienceLevel: {
+      type: String,
+      enum: ["junior", "mid", "senior"],
+      default: 'junior'
+    }
 }, {
     _id: false
 })
@@ -97,7 +94,10 @@ const userSchema = new mongoose.Schema({
       type: Date,
       select: false,
     },
-    personalInfo: [personalInfoSchema]
+    personalInfo: {
+      type: personalInfoSchema,
+      default: {}
+    }
 },{
     timestamps: true
 })

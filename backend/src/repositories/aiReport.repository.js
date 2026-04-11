@@ -23,6 +23,13 @@ class aiReportRepository {
             { new: true }
         )
     }
+
+    async countAIReports(userId){
+        return await AIReport.countDocuments({
+            user: userId,
+            status: 'completed'
+        })
+    }
 }
 
 module.exports = new aiReportRepository()

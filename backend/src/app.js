@@ -49,7 +49,8 @@ app.use('/admin/queues', bullBoard.getRouter())
 
 app.use('/api/auth' , authRoutes)
 app.use('/api/job', jobRoutes)
-app.use('/api/profile', userRoutes)
+app.use('/api/user', userRoutes)
+
 
 
 module.exports = app

@@ -1,13 +1,16 @@
 const User = require('../models/user.model')
 
 class AuthRepository {
-
     async findByEmail(email) {
         return await User.findOne({ email })
     }
 
     async findById(id) {
         return await User.findById(id)
+    }
+
+    async findByIdWithPassword(userId){
+        return User.findById(userId).select("+password")
     }
 
     async findByEmailWithPassword(email) {
@@ -38,9 +41,17 @@ class AuthRepository {
         return await User.create(userData)
     }
 
+    async updateUserById(userId, data){
+        return User.findByIdAndUpdate(
+            userId,
+            data,
+            { new: true, runValidators: true }
+        )
+    }
+
     async updateUser(user, data) {
         Object.assign(user, data)
-        return await user.save()
+        return await user.save({ validateBeforeSave: false })
     }
 
     async save(user, options = {}) {

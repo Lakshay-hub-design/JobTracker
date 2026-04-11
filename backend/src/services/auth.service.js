@@ -199,7 +199,7 @@ const loginUser = async (data, req) => {
         throw error
     }
 
-    const isMatch = await bcrypt.compare(password, user.password)
+    const isMatch = await user.comparePassword(password)
 
     if(!isMatch){
         const error = new Error('Invalid credentials')

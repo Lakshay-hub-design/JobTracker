@@ -1,15 +1,13 @@
-const express = require('express');
-const router = express.Router();
-const userController = require('../controllers/user.controller')
+const express = require('express')
 const authMiddleware = require('../middlewares/auth.middleware')
-const multer = require('multer');
+const userController = require('../controllers/user.controller')
 
-const upload = multer({
-    storage: multer.memoryStorage(),
-})
+const upload = require('../middlewares/file.middleware')
+const router = express.Router()
 
-router.post('/user-info', authMiddleware, userController.updateUserProfile)
-router.post('/image', authMiddleware, upload.single("profileImage"),  userController.imageUpload)
-router.get('/me', authMiddleware, userController.getImage);
+router.get('/profile', authMiddleware, upload.single('profileImage'), userController.getProfile)
+router.patch('/profile', authMiddleware, userController.updateProfile)
+router.get('/stats', authMiddleware, userController.getStats)
+router.post('/change-password', authMiddleware, userController.changePassword)
 
 module.exports = router
