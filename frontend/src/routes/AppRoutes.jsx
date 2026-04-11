@@ -8,10 +8,10 @@ import { JobProvider } from '../features/Jobs/context/JobContext'
 
 const Dashboard = lazy(() => import('../features/dashboard/pages/DashboardPage'))
 const Jobs = lazy(() => import('../features/Jobs/pages/JobsPage'))
-const Profile = lazy(() => import('../pages/general/Profile'))
 const JobDetails = lazy(() => import('../features/Jobs/pages/JobDetails'))
 const AIReport = lazy(() => import('../features/Jobs/pages/AIReportPage'))
 const AddJob = lazy(() => import('../features/Jobs/pages/AddJobPage'))
+const Profile = lazy(() => import('../features/profile/pages/ProfilePage'))
 const Landing = lazy(() => import('../pages/general/Landing'))
 
 
@@ -64,7 +64,7 @@ const AppRoutes = () => {
               <AIReport />
             } />
 
-            <Route path='/profile' element={
+            <Route path='/settings' element={
                 <Profile />
             } />
 

@@ -15,29 +15,39 @@ const getProfileService = async (userId) => {
 }
 
 const updateProfileService = async (userId, body, file) => {
-  const updateFields = {}
+  const updateFields = {};
 
-  if (body.name) updateFields.name = body.name
+  if (body.username) updateFields.username = body.username;
 
-  if (body.personalInfo) {
-    Object.keys(body.personalInfo).forEach((key) => {
-      updateFields[`personalInfo.${key}`] = body.personalInfo[key]
-    })
-  }
+  let personalInfo = body.personalInfo;
 
-  if(file){
-    const uploaded = await uploadFile(file)
-
-    updateFields['personalInfo.profileImage'] = {
-        url: uploaded.url,
-        publicId: uploaded.fileId
+  if (typeof personalInfo === "string") {
+    try {
+      personalInfo = JSON.parse(personalInfo);
+    } catch (err) {
+      throw new Error("Invalid personalInfo JSON");
     }
   }
 
-  const updatedUser = await userRepository.updateUserById(userId, updateFields)
+  if (personalInfo) {
+    Object.keys(personalInfo).forEach((key) => {
+      updateFields[`personalInfo.${key}`] = personalInfo[key];
+    });
+  }
 
-  return updatedUser
-}
+  if (file) {
+    const uploaded = await uploadFile(file);
+
+    updateFields["personalInfo.profileImage"] = {
+      url: uploaded.url,
+      publicId: uploaded.fileId,
+    };
+  }
+
+  const updatedUser = await userRepository.updateUserById(userId, updateFields);
+
+  return updatedUser;
+};
 
 const getStatsService = async (userId) => {
     const totalApplications = await jobRepository.countJobs(userId)

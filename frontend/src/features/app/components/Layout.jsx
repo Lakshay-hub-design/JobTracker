@@ -1,9 +1,9 @@
-import React from 'react'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 import { Outlet } from 'react-router-dom'
 
 const Layout = () => {
+
   return (
     <div className='flex h-screen bg-gray-50'>
       <Sidebar />
