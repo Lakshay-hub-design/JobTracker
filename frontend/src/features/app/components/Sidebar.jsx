@@ -37,7 +37,7 @@ const Sidebar = () => {
   return (
     <div className='w-64 bg-gray-100 border-r border-orange-300 p-5 flex flex-col justify-between'>
       <div>
-        <h1 className='text-xl font-bold text-orange-600 mb-10'>
+        <h1 className='text-xl font-bold text-orange-600 mb-15'>
             JobTracker
         </h1>
 

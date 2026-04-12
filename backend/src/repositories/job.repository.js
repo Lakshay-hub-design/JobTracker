@@ -54,10 +54,17 @@ class JobRepository {
 
     async getRecentJobs(userId, limit = 5){
         return await Job.find({ createdBy: userId })
-            .select('-description -notes -resume')
+            .select('-description -notes -resume -resumeText')
             .sort({ createdAt: -1 })
             .limit(limit)
             .lean()
+    }
+
+    async getFollowUpJobs(userId) {
+        return await Job.find({
+            createdBy: userId,
+            followUpDate: { $ne: null }
+        }).select('-description -notes -resume')
     }
 
     async countJobs(userId){

@@ -9,6 +9,7 @@ router.post("/add-job", authMiddleware, upload.single("resume"), jobController.c
 router.post('/generate/:id', authMiddleware, upload.single('resume'), jobController.generateAIReport)
 
 router.get('/',authMiddleware, jobController.getJobs)
+router.get('/followups', authMiddleware, jobController.getFollowUps)
 router.get('/:id', authMiddleware, jobController.getJobDetails)
 router.get('/dashboard/full', authMiddleware, jobController.getFullDashboard)
 

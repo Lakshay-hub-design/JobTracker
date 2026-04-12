@@ -58,3 +58,12 @@ export async function updateJob(axiosPrivate, jobId, data){
         throw error.response?.data || error
     }
 }
+
+export async function getNotifications(axiosPrivate){
+    try {
+        const res = await axiosPrivate.get('/api/job/followups')
+        return res.data
+    } catch (error) {
+        throw error.response?.data || error
+    }
+}

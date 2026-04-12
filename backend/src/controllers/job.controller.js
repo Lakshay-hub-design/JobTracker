@@ -1,6 +1,6 @@
 const jobModel = require('../models/job.model');
 const asyncHandler = require('../middlewares/asyncHandler');
-const { createJobService, getJobsService, getJobDetailsService, getFullDashboardService, updateJobService, deleteJobService, generateAIReportService } = require('../services/job.service');
+const { createJobService, getJobsService, getJobDetailsService, getFullDashboardService, updateJobService, deleteJobService, generateAIReportService, getFollowUpsService } = require('../services/job.service');
 
 const createJob = asyncHandler(async (req, res) => {
     const job = await createJobService({
@@ -97,6 +97,18 @@ const deleteJob = asyncHandler(async (req, res) => {
     })
 })
 
+const getFollowUps = asyncHandler(async (req, res) => {
+  const userId = req.user.id
+
+  const notifications = await getFollowUpsService({ userId })
+
+  res.status(200).json({
+    success: true,
+    count: notifications.length,
+    data: notifications
+  })
+})
+
 module.exports = {
     createJob,
     generateAIReport,
@@ -104,5 +116,6 @@ module.exports = {
     getJobDetails,
     getFullDashboard,
     updateJob,
-    deleteJob
+    deleteJob,
+    getFollowUps
 }

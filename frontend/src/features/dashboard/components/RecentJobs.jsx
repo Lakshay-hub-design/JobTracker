@@ -1,5 +1,6 @@
 import { ArrowRight } from 'lucide-react'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const getStatusStyle = (status) => {
     switch(status){
@@ -23,6 +24,8 @@ const formatDate = (dateString) => {
 }
 
 const RecentJobs = ({jobs}) => {
+    const navigate = useNavigate()
+
     if (!jobs || jobs.length === 0) {
         return (
         <div className="bg-white p-6 rounded-xl shadow-sm">
@@ -30,13 +33,16 @@ const RecentJobs = ({jobs}) => {
         </div>
         )
     }
+
   return (
     <div className='bg-white rounded-3xl p-5 shadow-md'>
       <div className='flex justify-between items-center mb-6'>
         <h2 className='text-lg font-semibold text-gray-800'>
             Recent Applications
         </h2>
-        <button className='text-orange-600 font-medium hover:underline'>
+        <button
+        onClick={() => navigate('/jobs')}
+        className='text-orange-600 font-medium hover:underline cursor-pointer'>
             View All
         </button>
       </div>
@@ -79,8 +85,10 @@ const RecentJobs = ({jobs}) => {
                 <div className='text-gray-500 flex justify-between'>
                     {formatDate(job.appliedDate)}
 
-                    <div className='text-gray-400 text-right text-lg'>
-                        <ArrowRight />
+                    <div
+                    onClick={() => navigate(`/job/${job._id}`)}
+                    className='text-gray-400 text-right text-lg hover:scale-110 cursor-pointer hover:text-gray-600'>
+                        <ArrowRight className='hover:scale-105' />
                     </div>
                 </div>
 

@@ -291,6 +291,41 @@ const getFullDashboardService = async ({userId}) => {
     }
 }
 
+const getFollowUpsService  = async ({userId}) => {
+    const today = new Date()
+
+    const next5Days = new Date()
+    next5Days.setDate(today.getDate() + 5)
+
+    const jobs = await jobRepository.getFollowUpJobs(userId)
+
+    const notifications = jobs.map(job => {
+        const followDate = new Date(job.followUpDate)
+
+        return {
+        _id: job._id,
+        jobId: job._id,
+        company: job.company,
+        position: job.position,
+        followUpDate: followDate,
+        type: followDate < today ? "overdue" : "upcoming"
+        }
+    })
+
+    const filtered = notifications.filter(n => {
+        return (
+        n.type === "overdue" ||
+        (n.type === "upcoming" && n.followUpDate <= next5Days)
+        )
+    })
+
+    filtered.sort((a, b) => {
+        return new Date(a.followUpDate) - new Date(b.followUpDate)
+    })
+
+    return filtered
+}
+
 module.exports = {
     createJobService,
     generateAIReportService,
@@ -298,5 +333,6 @@ module.exports = {
     getJobDetailsService,
     getFullDashboardService,
     updateJobService,
-    deleteJobService
+    deleteJobService,
+    getFollowUpsService
 }

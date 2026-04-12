@@ -1,4 +1,6 @@
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
+import useAxiosPrivate from "../../../shared/api/axiosPrivate";
+import { getNotifications } from "../service/jobsApi";
 
 export const JobContext = createContext()
 
@@ -14,9 +16,28 @@ export const JobProvider = ({ children }) => {
     const [status, setStatus] = useState("")
     const [search, setSearch] = useState("")
 
+    const [notifications, setNotifications] = useState({})
+
+    const axiosPrivate = useAxiosPrivate()
+
+    const fetchNotifications = async() => {
+        try {
+            setError(null)
+            const res = await getNotifications(axiosPrivate)
+            console.log(res.data)
+            setNotifications(res.data)
+        } catch (err) {
+            setError(err.message || 'Failed to fetch notifications')
+        }
+    }
+
+    useEffect(() => {
+        fetchNotifications()
+    }, [])
+
 
     return (
-        <JobContext.Provider value={{ jobs, loading, error, page, status, search, pagination, setPagination, setJobs, setLoading, setError, setPage, setStatus, setSearch}}>
+        <JobContext.Provider value={{ jobs, loading, error, page, status, search, pagination, notifications, setNotifications, setPagination, setJobs, setLoading, setError, setPage, setStatus, setSearch}}>
             {children}
         </JobContext.Provider>
     )

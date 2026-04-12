@@ -12,7 +12,7 @@ const DashboardPage = () => {
     if(error) return <p className='text-red-500'>Error: {error}</p>
 
   return (
-    <div>
+    <div className='-mt-6'>
         <h1 className='text-2xl font-semibold'>Overview</h1>
         <p className="text-gray-500 mb-6">
           Welcome back. Here’s your job search progress.
