@@ -40,7 +40,7 @@ const getJobs = asyncHandler(async (req, res) => {
     res.status(200).json({
         success: true,
         message: 'Jobs fetched succesfully',
-        jobs
+        data: jobs
     })
 })
 

@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavLink, useNavigate } from 'react-router-dom'
+import { NavLink, useLocation } from 'react-router-dom'
 import {
   LayoutDashboard,
   BriefcaseBusiness,
@@ -23,11 +23,6 @@ const sidebarMenu = [
         path: "/jobs",
     },
     {
-        name: "Analytics",
-        icon: ChartNoAxesCombined,
-        path: "/analytics",
-    },
-    {
         name: "Settings",
         icon: Settings,
         path: "/settings",
@@ -35,8 +30,8 @@ const sidebarMenu = [
 ];
 
 const Sidebar = () => {
-    const navigate = useNavigate()
 
+    const location = useLocation()
     const { handleLogout } = useAuth()
     
   return (
@@ -54,15 +49,21 @@ const Sidebar = () => {
                     <NavLink
                         key={index}
                         to={item.path}
-                        className={({isActive}) => 
-                            `flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 font-semibold transition
+                        className={({isActive}) => {
+                            const path = location.pathname
+                            let active = isActive
+
+                            if (item.path === "/jobs") {
+                            active = path === "/jobs" || path.startsWith("/job")
+                            }
+                            return `flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 font-semibold transition
                                 ${
-                                    isActive
+                                    active
                                     ? 'bg-white text-orange-600 backdrop-blur-2xl font-bold shadow-sm'
                                     : 'hover:bg-orange-100'
                                 }
                             `
-                        }
+                        }}
                     >
                         <Icon size={18} />
                         <span className='text-sm'>{item.name}</span>
@@ -70,12 +71,6 @@ const Sidebar = () => {
                 )
             })}
         </nav>
-        <button
-        onClick={() => navigate('/job/new')}
-         className='mt-6 w-full bg-orange-700 text-white px-4 py-3 rounded-full flex justify-center gap-2 shadow-lg hover:bg-orange-600 transition active:scale-95'>
-            <Plus size={18} />
-            <span className='text-sm'>Add New Job</span>
-        </button>
       </div>
 
       <button className='text-red-500 flex items-center gap-3 cursor-pointer hover:text-red-700' onClick={handleLogout}>

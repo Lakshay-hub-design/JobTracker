@@ -16,10 +16,8 @@ export const useJobDetails = (jobId) => {
             setError(null)
 
             const data = await getJobDetails(axiosPrivate, jobId)
-            console.log("Fetched job details:", data)
             setJob(data.job)
             setAIReport(data.aiReport)
-            console.log("AI STATUS AFTER FETCH:", data.aiReport?.status)
         } catch (err) {
             setError(err.message || 'Failed to fetch job details')
         } finally {

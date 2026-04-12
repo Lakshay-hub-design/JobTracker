@@ -7,10 +7,12 @@ class JobRepository {
         return await Job.create(jobData)
     }
 
-    async getJobs(filter){
+    async getJobs(filter, skip, limit){
         return await Job.find(filter)
             .select('-description -notes -resume')
             .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
             .lean()
     }
 
@@ -60,6 +62,10 @@ class JobRepository {
 
     async countJobs(userId){
         return await Job.countDocuments({ createdBy: userId })
+    }
+
+    async countJobsByFilter(filter){
+        return await Job.countDocuments(filter)
     }
 
     async countOfferedJobs(userId){

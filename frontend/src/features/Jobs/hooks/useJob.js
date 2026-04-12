@@ -1,42 +1,45 @@
-import { useContext, useEffect } from "react"
+import { useContext, useEffect, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { deleteJob, getJobs } from "../service/jobsApi"
 import { JobContext } from "../context/JobContext"
 
-export const useJobs = () => {
+export const useJobs = (page, filters) => {
     const context = useContext(JobContext)
-    const { jobs, setJobs, loading, setLoading, error, setError, page, setPage, totalPages, setTotalPages, status, setStatus, search, setSearch } = context
+    const { jobs, setJobs, loading, pagination, setPagination, setLoading, error, setError, status, setStatus, search, setSearch } = context
+    const [debouncedSearch, setDebouncedSearch] = useState(search)
 
     const axiosPrivate = useAxiosPrivate()
 
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setDebouncedSearch(search)
+        }, 500)
+
+        return () => clearTimeout(timer)
+    }, [search])
+
     const fetchJobs = async () => {
         try {
-            setLoading(true)
             setError(null)
 
-            const data = await getJobs(axiosPrivate, {
+            const res = await getJobs(axiosPrivate, {
                 page,
-                status,
-                search
+                status: filters.status,
+                jobType: filters.jobType,
+                search: debouncedSearch
             })
-            console.log("Fetched jobs data:", data)
-            setJobs(data.jobs)
-            setTotalPages(data.totalPages)
+            console.log("Fetched jobs data:", res)
+            setJobs(res.data.jobs)
+            setPagination(res.data.pagination)
 
         } catch (err) {
             setError(err.message || 'Failed to fetch jobs')
-        } finally {
-            setLoading(false)
         }
     }
 
     useEffect(() => {
         fetchJobs()
-    }, [page, status, search])
-
-    useEffect(() => {
-        setPage(1)
-    }, [status, search])
+    }, [page, filters, debouncedSearch])
 
     const handleDelete = async (jobId) => {
         try {
@@ -54,6 +57,6 @@ export const useJobs = () => {
     }
 
     return {
-        jobs, loading, error, page, totalPages, status, setStatus, search, setSearch, refetch: fetchJobs, handleDelete
+        jobs, loading, error, pagination, status, setStatus, search, setSearch, refetch: fetchJobs, handleDelete
     }
 }

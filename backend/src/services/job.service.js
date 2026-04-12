@@ -144,12 +144,16 @@ const generateAIReportService = async ({ jobId, file, body, userId }) => {
 
 const getJobsService = async ({ userId, query }) => {
 
-    const { status, search } = query
+    const { status, jobType, search, page = 1, limit = 9 } = query
     
     const filter = { createdBy: userId }
 
     if(status){
         filter.status = status
+    }
+
+    if(jobType){
+        filter.jobType = jobType
     }
 
     if(search){
@@ -159,9 +163,21 @@ const getJobsService = async ({ userId, query }) => {
         ]
     }
 
-    const jobs = await jobRepository.getJobs(filter)
+    const skip = (page - 1) * limit
 
-    return jobs
+    const jobs = await jobRepository.getJobs(filter, skip, limit)
+
+    const totalJobs = await jobRepository.countJobsByFilter(filter)
+
+    return {
+        jobs,
+        pagination: {
+            totalJobs,
+            currentPage: Number(page),
+            totalPages: Math.ceil(totalJobs / limit),
+            limit: Number(limit)
+        }
+    }
 }
 
 const updateJobService = async ({ jobId, userId, data }) => {

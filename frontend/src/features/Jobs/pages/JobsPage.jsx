@@ -1,25 +1,61 @@
-import React from 'react'
+import React, { useState } from 'react'
 import JobsHeader from '../components/JobsHeader'
 import JobCards from '../components/JobCards'
 import { useJobs } from '../hooks/useJob'
+import JobsFooter from '../components/JobsFooter'
+import DeleteModal from '../components/DeleteModal'
 
 const JobsPage = () => {
-    const { jobs, loading, error } = useJobs()
+    const [page, setPage] = useState(1)
+    const [filters, setFilters] = useState({
+        status: "",
+        jobType: ""
+    })
+    const [showModal, setShowModal] = useState(false)
+    const [selectedJobId, setSelectedJobId] = useState(null)
+
+    const { jobs, pagination, handleDelete, loading, error } = useJobs(page, filters)
 
     if(loading) return <p>Loading jobs...</p>
     if(error) return <p className='text-red-500'>Error: {error}</p>
 
+    const handleConfirmDelete = async () => {
+        await handleDelete(selectedJobId)
+        setShowModal(false)
+    }
+
   return (
-    <div className='h'>
+    <div className=''>
 
-        <JobsHeader jobs={jobs} />
+        <JobsHeader 
+            jobs={jobs}
+            filters={filters}
+            setFilters={setFilters}
+         />
 
-        <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+        <div className='grid grid-cols-1 items-stretch sm:grid-cols-2 lg:grid-cols-4 gap-6'>
             {jobs.map(job => (
-                <JobCards key={job._id} job={job } />
+                <JobCards 
+                    key={job._id} 
+                    job={job}
+                    setShowModal={setShowModal} 
+                    setSelectedJobId={setSelectedJobId}
+                />
             ))}
         </div>
-      
+            
+        <JobsFooter 
+            currentPage={pagination.currentPage}
+            totalPages={pagination.totalPages}
+            onPageChange={(newPage) => setPage(newPage)}
+        />
+
+        <DeleteModal
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            onConfirm={handleConfirmDelete}
+            loading={loading}
+        />
     </div>
   )
 }

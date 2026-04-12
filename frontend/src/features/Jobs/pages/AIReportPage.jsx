@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import { useJobDetails } from '../hooks/useJobDetails'
 import { useParams } from 'react-router-dom'
-import BreadCrums from '../components/BreadCrums'
 
 const NAV_ITEMS = [
     { id: 'technical', label: 'Technical Questions', icon: (<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="16 18 22 12 16 6" /><polyline points="8 6 2 12 8 18" /></svg>) },
@@ -75,14 +74,6 @@ const AIReportPage = () => {
 
   return (
     <div className="space-y-6">
-      <BreadCrums
-        items={[
-          { label: "Applications", link: "/jobs" },
-          { label: "Job Details", link: `/job/${jobId}` },
-          { label: "AI Report" },
-        ]}
-      />
-
       
         <div className="flex w-full max-w-7xl mx-auto min-h-screen bg-[#FBF9F8] ">
           {/* ── Left Nav ── */}

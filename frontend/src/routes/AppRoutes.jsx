@@ -37,8 +37,10 @@ const AppRoutes = () => {
         
         <Route element={<Protected />}>
           <Route element={
-            <Layout />}  
-          >
+            <JobProvider>
+              <Layout />
+            </JobProvider>
+            } >
           
             <Route path='/dashboard' element={
               <DashboardProvider>
@@ -47,9 +49,9 @@ const AppRoutes = () => {
             } />
 
             <Route path='/jobs' element={
-              <JobProvider>
+              
                 <Jobs />
-              </JobProvider>
+              
             } />
 
             <Route path='/job/new' element={

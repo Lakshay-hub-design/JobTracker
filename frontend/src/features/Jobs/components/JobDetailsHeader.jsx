@@ -3,6 +3,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { MdWatchLater } from "react-icons/md";
 import { FaRegCalendarAlt } from "react-icons/fa";
 import { TbReportSearch } from "react-icons/tb";
+import { useEffect, useRef, useState } from "react";
 
 const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString("en-US", {
@@ -13,9 +14,28 @@ const formatDate = (dateString) => {
 }
 
 
-const JobDetailsHeader = ({ job, aiReport, onAIAction }) => {
+const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
+  const [showStatusMenu, setShowStatusMenu] = useState(false)
+
+  const menuRef = useRef()
+
+  useEffect(() => {
+    const handleClickOutside = (e) => {
+      if (menuRef.current && !menuRef.current.contains(e.target)) {
+        setShowStatusMenu(false)
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside)
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [])
     if(!job) return null
   
+  const handleStatusUpdate = async (status) => {
+    await handleUpdate({status})
+    setShowStatusMenu(false)
+  }
+
   return (
     <div className="grid grid-cols-4 gap-4">
       <div className="bg-white p-6 px-10 rounded-xl col-span-3 shadow-sm flex justify-between items-start">
@@ -72,9 +92,30 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction }) => {
               {aiReport?.status === "not_ready" && "Generate AI Report"}
             </button>
 
-            <button className="px-4 py-2 border rounded-full bg-gray-300 font-medium cursor-pointer hover:bg-gray-200">
-              Update Status
-            </button>
+            <div ref={menuRef} className="relative">
+              <button
+              onClick={() => setShowStatusMenu(prev => !prev)}
+              className="relative px-6 py-3 border rounded-full bg-gray-300 font-medium cursor-pointer hover:bg-gray-200">
+                Update Status
+              </button>
+              {showStatusMenu && (
+                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+
+                  {["applied", "interviewing", "offered", "rejected"].map((status) => (
+                    <div
+                      key={status}
+                      onClick={() => handleStatusUpdate(status)}
+                      className={`px-4 py-2 text-sm cursor-pointer capitalize
+                        ${job.status === status ? "bg-orange-100 text-orange-600" : "hover:bg-gray-100"}
+                      `}
+                    >
+                      {status}
+                    </div>
+                  ))}
+
+                </div>
+              )}
+            </div>
           </div>
         </div>
       </div>

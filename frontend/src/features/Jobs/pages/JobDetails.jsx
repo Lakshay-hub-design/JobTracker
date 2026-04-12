@@ -4,6 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import BreadCrums from '../components/BreadCrums'
 import JobDetailsHeader from '../components/JobDetailsHeader'
 import JobDetailsMain from '../components/JobDetailsMain'
+import EditJobDrawer from '../components/EditJobDrawer'
 
 const JobDetails = () => {
   const [showAIModal, setShowAIModal] = useState(false)
@@ -11,11 +12,13 @@ const JobDetails = () => {
     description: "",
   })
 
+  const [showDrawer, setShowDrawer] = useState(false)
+
   const [modalFile, setModalFile] = useState(null)
 
   const navigate = useNavigate()
   const { jobId } = useParams()
-  const { job, aiReport, triggerAIReport, refetch, loading, error } = useJobDetails(jobId)
+  const { job, aiReport, triggerAIReport, refetch, loading, error, handleUpdate } = useJobDetails(jobId)
 
   useEffect(() => {
     if (aiReport?.status !== "pending") return
@@ -99,17 +102,12 @@ const JobDetails = () => {
 
   return (
     <div className="space-y-6">
-      <BreadCrums
-        items={[
-          { label: "Applications", link: "/jobs" },
-          { label: "Job Details" },
-        ]}
-      />
 
       <JobDetailsHeader
         job={job}
         aiReport={aiReport}
         onAIAction={handleAIAction}
+        handleUpdate={handleUpdate}
       />
 
       <div className="bg-white p-5 rounded-xl shadow-sm">
@@ -119,7 +117,18 @@ const JobDetails = () => {
         </p>
       </div>
 
-      <JobDetailsMain job={job} />
+      <JobDetailsMain 
+        job={job}
+        setShowDrawer={setShowDrawer}
+       />
+
+      {showDrawer && (
+        <EditJobDrawer
+          job={job}
+          onClose={() => setShowDrawer(false)}
+          onSave={handleUpdate}
+        />
+      )}
 
       {showAIModal && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">

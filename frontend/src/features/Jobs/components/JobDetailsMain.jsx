@@ -3,7 +3,7 @@ import { MdEdit } from "react-icons/md";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { Download, FileText, Upload } from 'lucide-react';
 
-const JobDetailsMain = ({ job }) => {
+const JobDetailsMain = ({ job, setShowDrawer }) => {
   return (
     <div className="grid grid-cols-3 gap-6">
       <div className="col-span-2 space-y-6">
@@ -82,7 +82,9 @@ const JobDetailsMain = ({ job }) => {
           <h3 className="text-lg font-semibold mb-3 uppercase">Quick Actions</h3>
 
           <div className="flex flex-col gap-2">
-            <button className="px-3 py-2 border rounded-sm bg-white hover:bg-gray-100 text-sm flex items-center gap-2 justify-center font-bold">
+            <button
+            onClick={() => setShowDrawer(true)}
+            className="px-3 py-2 border rounded-sm bg-white hover:bg-gray-100 text-sm flex items-center gap-2 justify-center font-bold">
                 <MdEdit size={16} />
               Edit Job Details
             </button>

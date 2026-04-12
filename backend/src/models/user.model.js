@@ -49,7 +49,7 @@ const personalInfoSchema = new mongoose.Schema({
 })
 
 const userSchema = new mongoose.Schema({
-    name: {
+    username: {
       type: String,
       required: [true, "Name is required"],
       trim: true,
