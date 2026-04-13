@@ -35,19 +35,19 @@ const RecentJobs = ({jobs}) => {
     }
 
   return (
-    <div className='bg-white rounded-3xl p-5 shadow-md'>
+    <div className='bg-white dark:bg-[#151312]  rounded-3xl p-5 shadow-md'>
       <div className='flex justify-between items-center mb-6'>
-        <h2 className='text-lg font-semibold text-gray-800'>
+        <h2 className='text-lg font-semibold text-gray-800 dark:text-[#B1ABA9]'>
             Recent Applications
         </h2>
         <button
         onClick={() => navigate('/jobs')}
-        className='text-orange-600 font-medium hover:underline cursor-pointer'>
+        className='text-orange-600 dark:text-[#A27567] font-medium hover:underline cursor-pointer'>
             View All
         </button>
       </div>
 
-      <div className='grid grid-cols-4 text-sm bg-gray-100 text-gray-500 px-4 py-2 border-b font-semibold'>
+      <div className='grid grid-cols-4 -ml-5 -mr-5 text-sm bg-gray-100 dark:bg-[#1D1B1A] text-gray-500 dark:text-[#A27567] px-4 py-2 font-semibold'>
         <span>COMPANY</span>
         <span>POSITION</span>
         <span>STATUS</span>
@@ -65,12 +65,12 @@ const RecentJobs = ({jobs}) => {
                         alt={job.company}
                         className='w-10 h-10 rounded-lg bg-black p-2'
                     />
-                    <span className='font-medium capitalize text-gray-800'>
+                    <span className='font-medium capitalize text-gray-800 dark:text-[#797878]'>
                         {job.company}
                     </span>
                 </div>
 
-                <div className='text-gray-700'>
+                <div className='text-gray-700 dark:text-[#797878]'>
                     {job.position}
                 </div>
 
@@ -82,7 +82,7 @@ const RecentJobs = ({jobs}) => {
                     </span>
                 </div>
 
-                <div className='text-gray-500 flex justify-between'>
+                <div className='text-gray-500 dark:text-[#797878] flex justify-between'>
                     {formatDate(job.appliedDate)}
 
                     <div

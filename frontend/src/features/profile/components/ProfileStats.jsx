@@ -16,12 +16,12 @@ const ProfileStats = ({ stats }) => {
       {statsData.map((item, index) => (
         <div
           key={index}
-          className="bg-white p-5 rounded-xl shadow-sm flex flex-col items-center justify-center gap-1 hover:shadow-md transition"
+          className="bg-white dark:bg-[#221F1E] p-5 rounded-xl shadow-sm flex flex-col items-center justify-center gap-1 hover:shadow-md transition"
         >
           <h3 style={{ color: item.color }} className={`text-3xl font-medium text-gray-800`}>
             {item.value || 0}
           </h3>
-          <p className="text-sm font-bold text-gray-500">{item.label}</p>
+          <p className="text-sm font-bold text-gray-500 dark:text-[#aba8a8]">{item.label}</p>
 
         </div>
       ))}

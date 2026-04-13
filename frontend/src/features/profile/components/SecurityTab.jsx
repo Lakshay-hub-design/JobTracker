@@ -52,31 +52,31 @@ const SecurityTab = ({ handleChangePassword, handleLogoutAll}) => {
       <div className="space-y-4">
         <div className="flex gap-6 justify-between mb-8">
           <div>
-            <label className='text-[#614942] font-medium' htmlFor="">Current Password</label>
+            <label className='text-[#614942] dark:text-[#be856f] font-medium' htmlFor="">Current Password</label>
             <input
               type="password"
               name="currentPassword"
               placeholder="Current Password"
               value={formData.currentPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-white text-gray-600 mt-2 rounded-md"
+              className="w-full px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] mt-2 rounded-md"
             />
           </div>
 
           <div>
-            <label className='text-[#614942] font-medium' htmlFor="">New Password</label>
+            <label className='text-[#614942] dark:text-[#be856f] font-medium' htmlFor="">New Password</label>
             <input
               type="password"
               name="newPassword"
               placeholder="New Password"
               value={formData.newPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-white text-gray-600 mt-2 rounded-md"
+              className="w-full px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] mt-2 rounded-md"
             />
           </div>
 
           <div>
-            <label className="text-[#614942] font-medium" htmlFor="">
+            <label className="text-[#614942] dark:text-[#be856f] font-medium" htmlFor="">
               Confirm New
             </label>
             <input
@@ -85,21 +85,21 @@ const SecurityTab = ({ handleChangePassword, handleLogoutAll}) => {
               placeholder="Confirm Password"
               value={formData.confirmPassword}
               onChange={handleChange}
-              className="w-full px-4 py-2 bg-white text-gray-600 mt-2 rounded-md"
+              className="w-full px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] mt-2 rounded-md"
             />
           </div>
         </div>
 
         <button
           onClick={handleSubmit}
-          className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700"
+          className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 cursor-pointer"
         >
           Update Password
         </button>
 
         <button
           onClick={handleLogoutAllClick}
-          className="px-6 py-2 text-[#BF2D2D] font-medium ml-10"
+          className="px-6 py-2 text-[#BF2D2D] font-medium ml-10 cursor-pointer"
         >
           Logout All Devices
         </button>

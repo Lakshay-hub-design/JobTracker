@@ -10,4 +10,6 @@ router.patch('/profile', authMiddleware, upload.single('profileImage'), userCont
 router.get('/stats', authMiddleware, userController.getStats)
 router.post('/change-password', authMiddleware, userController.changePassword)
 
+router.patch('/theme', authMiddleware, userController.updateTheme)
+
 module.exports = router

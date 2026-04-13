@@ -97,6 +97,11 @@ const userSchema = new mongoose.Schema({
     personalInfo: {
       type: personalInfoSchema,
       default: {}
+    },
+    theme: {
+      type: String,
+      enum: ["light", "dark"],
+      default: "light"
     }
 },{
     timestamps: true

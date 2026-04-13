@@ -102,9 +102,25 @@ const changePasswordService = async (userId, body) => {
     })
 }
 
+const updateThemeService = async (userId, body) => {
+  
+  const { theme } = body
+
+  console.log(theme)
+
+  const user = await userRepository.updateUserById(
+    userId,
+    {theme}
+  )
+
+
+  return user.theme
+}
+
 module.exports = {
     getProfileService,
     updateProfileService,
     getStatsService,
-    changePasswordService
+    changePasswordService,
+    updateThemeService
 }

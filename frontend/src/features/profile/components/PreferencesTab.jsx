@@ -57,28 +57,28 @@ const PreferencesTab = ({ profile, handleUpdateProfile }) => {
       <h3 className="text-2xl font-medium">Career Preferences</h3>
       <div className="flex gap-6 justify-between">
         <div className="w-1/2">
-          <label className="text-[#614942] font-medium">Preferred Role</label>
+          <label className="text-[#614942] dark:text-[#be856f] font-medium">Preferred Role</label>
           <input
             name="preferredRole"
             value={formData.preferredRole}
             onChange={handleChange}
-            className="w-full mt-1 px-4 py-2 bg-white text-gray-600 rounded-md"
+            className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md"
           />
         </div>
 
         <div className="w-1/2">
-          <label className="text-[#614942] font-medium">Preferred Location</label>
+          <label className="text-[#614942] dark:text-[#be856f] font-medium">Preferred Location</label>
           <input
             name="preferredLocation"
             value={formData.preferredLocation}
             onChange={handleChange}
-            className="w-full mt-1 px-4 py-2 bg-white text-gray-600 rounded-md"
+            className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md"
           />
         </div>
       </div>
 
       <div>
-        <label className="text-[#614942] font-medium">Tech Stack</label>
+        <label className="text-[#614942] dark:text-[#be856f] font-medium">Tech Stack</label>
 
         <div className="flex flex-wrap gap-2 mt-2">
           {techOptions.map((tech) => (
@@ -86,10 +86,10 @@ const PreferencesTab = ({ profile, handleUpdateProfile }) => {
               key={tech}
               onClick={() => handleTechToggle(tech)}
               type="button"
-              className={`px-4 py-2 rounded-full text-sm border transition ${
+              className={`px-4 py-2 rounded-full text-sm border dark:border-none transition ${
                 formData.techStack.includes(tech)
                   ? "bg-[#fb8962] text-white"
-                  : "bg-gray-100 text-gray-700"
+                  : "bg-gray-100 dark:bg-[#605c5c] text-gray-700 dark:text-[#d4c9c9]"
               }`}
             >
               {tech}
@@ -99,12 +99,12 @@ const PreferencesTab = ({ profile, handleUpdateProfile }) => {
       </div>
 
       <div>
-        <label className="text-[#614942] font-medium">Experience Level</label>
+        <label className="text-[#614942] dark:text-[#be856f] font-medium">Experience Level</label>
         <select
           name="experienceLevel"
           value={formData.experienceLevel}
           onChange={handleChange}
-          className="w-full mt-1 px-4 py-2 bg-white text-gray-600 rounded-md"
+          className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md"
         >
           <option value="junior">Junior</option>
           <option value="mid">Mid</option>
@@ -114,7 +114,7 @@ const PreferencesTab = ({ profile, handleUpdateProfile }) => {
 
       <button
         onClick={handleSubmit}
-        className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition"
+        className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition cursor-pointer"
       >
         Save Preferences
       </button>

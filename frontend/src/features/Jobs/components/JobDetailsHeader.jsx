@@ -38,20 +38,20 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
 
   return (
     <div className="grid grid-cols-4 gap-4">
-      <div className="bg-white p-6 px-10 rounded-xl col-span-3 shadow-sm flex justify-between items-start">
+      <div className="bg-white dark:bg-[#221F1E] p-6 px-10 rounded-xl col-span-3 shadow-sm flex justify-between items-start">
         <div>
           <h2 className="text-2xl font-bold">{job.position}</h2>
-          <p className="text-gray-700 mt-1 text-lg capitalize font-semibold flex items-center gap-2">
+          <p className="text-gray-700 dark:text-[#FFB59D] mt-1 text-lg capitalize font-semibold flex items-center gap-2">
             <PiBuildingApartmentFill className="text-orange-600" />
             {job.company}
           </p>
 
-          <div className="flex items-center gap-4 mt-3 text-md text-gray-500">
+          <div className="flex items-center gap-4 mt-3 text-md text-gray-500 dark:text-[#fcbea9]">
             <span className="flex items-center gap-3">
-              <FaLocationDot className="text-amber-900/80" /> {job.location}
+              <FaLocationDot className="text-amber-900/80 dark:text-amber-600" /> {job.location}
             </span>
             <span className="flex items-center gap-3">
-              <MdWatchLater className="text-amber-900/80"/> {job.jobType}
+              <MdWatchLater className="text-amber-900/80 dark:text-amber-600"/> {job.jobType}
             </span>
           </div>
         </div>
@@ -95,18 +95,18 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
             <div ref={menuRef} className="relative">
               <button
               onClick={() => setShowStatusMenu(prev => !prev)}
-              className="relative px-6 py-3 border rounded-full bg-gray-300 font-medium cursor-pointer hover:bg-gray-200">
+              className="relative px-6 py-3 rounded-full bg-gray-300 dark:bg-[#FC9D7D] dark:text-[#212121] font-medium cursor-pointer hover:scale-105 transition hover:bg-gray-200 dark:hover:bg-[#f8b29a]">
                 Update Status
               </button>
               {showStatusMenu && (
-                <div className="absolute right-0 mt-2 w-40 bg-white border rounded-lg shadow-lg z-50">
+                <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-[#221F1E] border dark:border-gray-500 rounded-lg shadow-lg z-50">
 
                   {["applied", "interviewing", "offered", "rejected"].map((status) => (
                     <div
                       key={status}
                       onClick={() => handleStatusUpdate(status)}
                       className={`px-4 py-2 text-sm cursor-pointer capitalize
-                        ${job.status === status ? "bg-orange-100 text-orange-600" : "hover:bg-gray-100"}
+                        ${job.status === status ? "bg-orange-100 dark:bg-orange-300 text-orange-600 dark:text-black" : "hover:bg-gray-100 dark:hover:bg-[#3c3c3c] "}
                       `}
                     >
                       {status}
@@ -119,8 +119,8 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
           </div>
         </div>
       </div>
-      <div className="bg-gray-100 p-6 rounded-xl shadow-sm flex flex-col justify-between">
-        <h3 className="uppercase font-medium text-sm text-gray-700">Applied Date</h3>
+      <div className="bg-gray-100 dark:bg-[#33302f] p-6 rounded-xl shadow-sm flex flex-col justify-between">
+        <h3 className="uppercase font-medium text-sm text-gray-700 dark:text-[#faa082]">Applied Date</h3>
         <div className="flex items-center justify-between">
             <p className="text-2xl font-medium">{formatDate(job.appliedDate)}</p>
             <FaRegCalendarAlt size={20} className="text-orange-400" />

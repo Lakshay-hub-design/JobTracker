@@ -106,10 +106,10 @@ const AddJobPage = () => {
       </div>
 
       <div className="flex gap-6">
-        <div className="bg-white w-3/5 col-span-3 p-6 rounded-2xl shadow-sm">
+        <div className="bg-white dark:bg-[#1e1b1a] w-3/5 col-span-3 p-6 rounded-2xl shadow-sm">
           <div className="flex justify-between gap-6 space-y-4">
             <div className="flex flex-col w-full">
-              <label htmlFor="company" className="font-bold text-gray-800 mb-2">
+              <label htmlFor="company" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
                 Company
               </label>
               <input
@@ -118,7 +118,7 @@ const AddJobPage = () => {
                 value={formData.company}
                 onChange={handleChange}
                 placeholder="e.g. Google, Stripe, Airbnb"
-                className={`border rounded-md bg-gray-100 py-2 px-4 ${
+                className={`border rounded-md bg-gray-100 dark:border-none dark:bg-[#2f2929] py-2 px-4 ${
                   errors.company ? "border-red-500" : "border-gray-300"
                 }`}
               />
@@ -129,7 +129,7 @@ const AddJobPage = () => {
             <div className="flex flex-col w-full">
               <label
                 htmlFor="position"
-                className="font-bold text-gray-800 mb-2"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
               >
                 Position
               </label>
@@ -139,7 +139,7 @@ const AddJobPage = () => {
                 value={formData.position}
                 onChange={handleChange}
                 placeholder="e.g. Senior Product Designer"
-                className={`border rounded-md bg-gray-100 py-2 px-4 ${
+                className={`border rounded-md bg-gray-100 dark:border-none dark:bg-[#2f2929] py-2 px-4 ${
                   errors.company ? "border-red-500" : "border-gray-300"
                 }`}
               />
@@ -151,7 +151,7 @@ const AddJobPage = () => {
 
           <div className="flex justify-between gap-6 space-y-4">
             <div className="flex flex-col w-full">
-              <label htmlFor="status" className="font-bold text-gray-800 mb-2">
+              <label htmlFor="status" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
                 Status
               </label>
               <select
@@ -159,7 +159,7 @@ const AddJobPage = () => {
                 id="status"
                 value={formData.status}
                 onChange={handleChange}
-                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] bg-gray-100 focus:outline-none"
+                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] dark:text-[#8e8989] bg-gray-100 dark:border-none dark:bg-[#2f2929] focus:outline-none"
               >
                 <option value="applied">Applied</option>
                 <option value="interviewing">Interviewing</option>
@@ -168,14 +168,14 @@ const AddJobPage = () => {
               </select>
             </div>
             <div className="flex flex-col w-full">
-              <label htmlFor="jobType" className="font-bold text-gray-800 mb-2">
+              <label htmlFor="jobType" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
                 Job Type
               </label>
               <select
                 id="jobType"
                 value={formData.jobType}
                 onChange={handleChange}
-                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] bg-gray-100 focus:outline-none"
+                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] dark:text-[#8e8989] bg-gray-100 dark:border-none dark:bg-[#2f2929] focus:outline-none"
               >
                 <option value="full-time">Full-time</option>
                 <option value="part-time">Part-time</option>
@@ -188,7 +188,7 @@ const AddJobPage = () => {
             <div className="flex flex-col w-full">
               <label
                 htmlFor="location"
-                className="font-bold text-gray-800 mb-2"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
               >
                 Location
               </label>
@@ -198,7 +198,7 @@ const AddJobPage = () => {
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="Banglore, India"
-                className={`border rounded-md bg-gray-100 py-2 px-4 ${
+                className={`border rounded-md bg-gray-100 py-2 dark:border-none dark:bg-[#2f2929] px-4 ${
                   errors.company ? "border-red-500" : "border-gray-300"
                 }`}
               />
@@ -209,7 +209,7 @@ const AddJobPage = () => {
             <div className="flex flex-col w-full">
               <label
                 htmlFor="workplace"
-                className="font-bold text-gray-800 mb-2"
+                className="font-bold text-gray-800  dark:text-[#95756a] mb-2"
               >
                 Workplace
               </label>
@@ -217,7 +217,7 @@ const AddJobPage = () => {
                 id="workplace"
                 value={formData.workplace}
                 onChange={handleChange}
-                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] bg-gray-100 focus:outline-none"
+                className="py-2 px-4 border border-gray-300 rounded-md font-medium text-[#424241] dark:text-[#8e8989] bg-gray-100 dark:border-none dark:bg-[#2f2929] focus:outline-none"
               >
                 <option value="onsite">Onsite</option>
                 <option value="remote">Remote</option>
@@ -230,7 +230,7 @@ const AddJobPage = () => {
             <div className="flex flex-col w-full">
               <label
                 htmlFor="appliedDate"
-                className="font-bold text-gray-800 mb-2"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
               >
                 Applied Date
               </label>
@@ -239,13 +239,13 @@ const AddJobPage = () => {
                 id="appliedDate"
                 value={formData.appliedDate}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-md bg-gray-100 py-2 px-4 focus:outline-none"
+                className="border border-gray-300 rounded-md bg-gray-100 dark:border-none dark:bg-[#2f2929] py-2 px-4 focus:outline-none"
               />
             </div>
             <div className="flex flex-col w-full">
               <label
                 htmlFor="followUpDate"
-                className="font-bold text-gray-800 mb-2"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
               >
                 Follow-up Date
               </label>
@@ -254,7 +254,7 @@ const AddJobPage = () => {
                 id="followUpDate"
                 value={formData.followUpDate}
                 onChange={handleChange}
-                className="border border-gray-300 rounded-md bg-gray-100 py-2 px-4 focus:outline-none"
+                className="border border-gray-300 rounded-md bg-gray-100 dark:border-none dark:bg-[#2f2929] py-2 px-4 focus:outline-none"
               />
             </div>
           </div>
@@ -262,7 +262,7 @@ const AddJobPage = () => {
           <div className="flex flex-col w-full">
             <label
               htmlFor="description"
-              className="font-bold text-gray-800 mb-2"
+              className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
             >
               Description
             </label>
@@ -272,7 +272,7 @@ const AddJobPage = () => {
               value={formData.description}
               onChange={handleChange}
               placeholder="Enter job description..."
-              className={`border rounded-md bg-gray-100 py-2 px-4 resize-none h-32 `}
+              className={`border dark:border-none rounded-md bg-gray-100 dark:bg-[#2f2929] py-2 px-4 resize-none h-32 `}
             ></textarea>
           </div>
 
@@ -293,11 +293,11 @@ const AddJobPage = () => {
           </div>
         </div>
 
-        <div className="bg-white w-2/5 p-6 flex col-span-2 rounded-2xl shadow-sm flex-col">
-          <label htmlFor="" className="font-bold text-gray-800 mb-2">
+        <div className="bg-white dark:bg-[#1e1b1a] w-2/5 p-6 flex col-span-2 rounded-2xl shadow-sm flex-col">
+          <label htmlFor="" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
             Resume
           </label>
-          <div className="border-2 border-dashed border-amber-800/20 p-4 rounded-md bg-gray-100 flex flex-col items-center justify-center">
+          <div className="border-2 border-dashed border-amber-800/20 p-4 rounded-md bg-gray-100 dark:bg-[#2F2929] flex flex-col items-center justify-center">
             <div className="h-16 w-16 bg-[#F8E0D8] rounded-full flex items-center justify-center mb-4">
               <FileUp className="text-amber-800" />
             </div>
@@ -307,19 +307,19 @@ const AddJobPage = () => {
               </p>
             ) : (
               <div className="flex flex-col items-center justify-center">
-                <h3 className="font-medium text-lg text-gray-800">
+                <h3 className="font-medium text-lg text-gray-800 dark:text-[#a78989]">
                   Upload your latest resume
                 </h3>
-                <p className="text-center mb-6 text-sm text-gray-700">
+                <p className="text-center mb-6 text-sm text-gray-700 dark:text-[#787171]">
                   PDF, DOCX up to 10MB. We'll automatically parse key <br />{" "}
                   details for you.
                 </p>
 
                 <div
                   onClick={handleClick}
-                  className="py-2 px-4 rounded-full bg-gray-200 hover:scale-105 transition cursor-pointer"
+                  className="py-2 px-4 rounded-full bg-gray-200 dark:bg-orange-100 hover:scale-105 transition cursor-pointer"
                 >
-                  <h3 className="font-medium">Choose File</h3>
+                  <h3 className="font-medium dark:text-[#474242]">Choose File</h3>
                 </div>
               </div>
             )}
@@ -351,7 +351,7 @@ const AddJobPage = () => {
           </div>
 
           <div className="flex flex-col w-full mt-6">
-            <label htmlFor="notes" className="font-bold text-gray-800 mb-2">
+            <label htmlFor="notes" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
               Notes
             </label>
             <textarea
@@ -360,7 +360,7 @@ const AddJobPage = () => {
               value={formData.notes}
               onChange={handleChange}
               placeholder="Personal notes, research, networking contacts, etc."
-              className=" py-2 px-4 rounded-md bg-gray-100 resize-none h-30"
+              className=" py-2 px-4 rounded-md bg-gray-100 dark:bg-[#2F2929] resize-none h-30"
             ></textarea>
           </div>
         </div>

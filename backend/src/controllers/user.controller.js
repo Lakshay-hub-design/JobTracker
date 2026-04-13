@@ -1,5 +1,5 @@
 const asyncHandler = require("../middlewares/asyncHandler");
-const { getProfileService, updateProfileService, getStatsService, changePasswordService } = require("../services/user.service");
+const { getProfileService, updateProfileService, getStatsService, changePasswordService, updateThemeService } = require("../services/user.service");
 
 const getProfile = asyncHandler(async( req, res) => {
     const profile = await getProfileService(req.user.id)
@@ -47,9 +47,22 @@ const changePassword = asyncHandler(async(req, res) => {
     })
 })
 
+const updateTheme = asyncHandler(async(req, res) => {
+    const theme = await updateThemeService(
+        req.user.id,
+        req.body
+    )
+
+    res.status(200).json({
+        success: true,
+        theme
+    })
+})
+
 module.exports = {
     getProfile,
     updateProfile,
     getStats,
-    changePassword
+    changePassword,
+    updateTheme
 }

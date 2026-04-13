@@ -28,7 +28,7 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
   }
 
   return (
-    <div className="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-between">
+    <div className="bg-white dark:bg-[#1D1B1A] p-6 rounded-2xl shadow-sm flex items-center justify-between">
 
       <div className="flex items-center gap-5">
 
@@ -55,9 +55,9 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
         </div>
 
         <div>
-          <h2 className="text-2xl font-bold">{username}</h2>
+          <h2 className="text-2xl dark:text-[#C99380] font-bold">{username}</h2>
           <div className="flex items-center gap-2">
-            <p className="text-[#6D5750] font-medium">{email}</p>
+            <p className="text-[#6D5750] dark:text-[#8b6d62] font-medium">{email}</p>
             <div className="bg-[#222222] w-1 h-1 rounded-full mt-1"></div>
             <p className=" text-[#A46650] font-medium text-lg mt-1">
                 Joined {joinedDate}
@@ -65,7 +65,7 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
           </div>
 
           {personalInfo?.bio && (
-            <p className="text-sm text-gray-600 mt-2 max-w-md">
+            <p className="text-sm text-gray-600 dark:text-[#c7bebe] mt-2 max-w-md">
               {personalInfo.bio}
             </p>
           )}

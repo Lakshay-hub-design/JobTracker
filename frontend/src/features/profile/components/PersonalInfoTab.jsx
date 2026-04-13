@@ -35,17 +35,17 @@ const PersonalInfoTab = ({ profile, handleUpdateProfile }) => {
       <div className='flex justify-between gap-6'>
 
         <div className='w-1/2'>
-          <label className="text-[#614942] font-medium">Full Name</label>
+          <label className="text-[#614942] dark:text-[#be856f] font-medium">Full Name</label>
           <input
             name="username"
             value={formData.username}
             onChange={handleChange}
-            className="w-full mt-1 px-4 py-2 bg-white text-gray-600 rounded-md"
+            className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md"
           />
         </div>
         <div className='w-1/2'>
-          <label className="text-[#614942] font-medium">Email Address (Read-only)</label>
-          <h3 className="w-full mt-1 p-2 bg-[#EDEBEA] text-gray-500 rounded-md">
+          <label className="text-[#614942] dark:text-[#be856f] font-medium">Email Address (Read-only)</label>
+          <h3 className="w-full mt-1 p-2 bg-[#EDEBEA] dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md">
             {formData.email}
           </h3>
         </div>
@@ -53,29 +53,29 @@ const PersonalInfoTab = ({ profile, handleUpdateProfile }) => {
       </div>
 
       <div>
-        <label className="text-[#614942] font-medium">Location</label>
+        <label className="text-[#614942] dark:text-[#be856f] font-medium">Location</label>
         <input
           name="location"
           value={formData.location}
           onChange={handleChange}
-          className="w-full mt-1 px-4 py-2 bg-white text-gray-600 rounded-md"
+          className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md"
         />
       </div>
 
       <div>
-        <label className="text-[#614942] font-medium">Bio</label>
+        <label className="text-[#614942] dark:text-[#be856f] font-medium">Bio</label>
         <textarea
           name="bio"
           value={formData.bio}
           onChange={handleChange}
-          className="w-full mt-1 px-4 py-2 bg-white text-gray-600 rounded-md resize-none"
+          className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md resize-none"
           rows={4}
         />
       </div>
 
       <button
         onClick={handleSubmit}
-        className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition"
+        className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 transition cursor-pointer"
       >
         Save Changes
       </button>

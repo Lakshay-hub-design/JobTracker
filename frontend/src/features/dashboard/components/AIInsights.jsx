@@ -22,7 +22,7 @@ const AIInsights = ({ insights }) => {
           </span>
         </div>
 
-        <button className="mt-2 bg-white text-orange-600 px-4 py-3 rounded-full font-medium shadow-md hover:bg-gray-100">
+        <button className="mt-2 bg-white dark:bg-[#2f2c2b] text-orange-600 dark:text-[#e5cccc] px-4 py-3 rounded-full font-medium shadow-md hover:bg-gray-100">
           View Full AI Report →
         </button>
       </div>

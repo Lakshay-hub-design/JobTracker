@@ -1,7 +1,6 @@
 import { ArrowRight, Calendar1, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { MdDeleteForever } from "react-icons/md";
-import { useState } from 'react';
 
 const statusColor = {
     applied: "bg-gray-200 text-gray-700",
@@ -44,7 +43,7 @@ const JobCards = ({ job, setShowModal, setSelectedJobId }) => {
     const bgColor = getColorById(job._id);
 
   return (
-    <div className="bg-white p-2 h-full rounded-2xl shadow-sm hover:shadow-md transition flex flex-col">
+    <div className="bg-white dark:bg-[#221F1E] p-2 h-full rounded-2xl shadow-sm hover:shadow-md transition flex flex-col">
       <div className={`rounded-2xl p-5 ${bgColor} flex flex-col flex-1`}>
         <div className=" flex justify-between items-center mb-3">
           <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center">

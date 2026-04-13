@@ -78,11 +78,11 @@ const Card = ({ title, value, change, icon, color }) => {
     const colorStyle = colorMap[color]
     const isPositive = change >= 0
     return (
-        <div className='flex flex-col justify-between bg-white rounded-4xl shadow-sm p-4 w-full max-w-sm border border-gray-100'>
+        <div className='flex flex-col justify-between bg-white dark:bg-[#221F1E] rounded-4xl shadow-sm p-4 w-full max-w-sm border border-gray-100 dark:border-none'>
             
 
             <div className="flex justify-between gap-2">
-                <div className={`w-10 h-10 flex items-center justify-center rounded-xl ${colorStyle.bg}`}>
+                <div className={`w-10 h-10 flex items-center justify-center rounded-xl ${colorStyle.bg} dark:bg-[#373433]`}>
                     <Icon className={`${colorStyle.icon}`} />
                 </div>
         
@@ -98,8 +98,8 @@ const Card = ({ title, value, change, icon, color }) => {
             </div>
 
             <div className=''>
-                <p className='text-sm text-gray-500 font-medium tracking-wide'>{title}</p>
-                <h2 className='text-2xl font-bold text-gray-900 mt-1'>{value}</h2>
+                <p className='text-sm text-gray-500 dark:text-[#9F8880] font-medium tracking-wide'>{title}</p>
+                <h2 className='text-2xl font-bold text-gray-900 dark:text-[#DED7D5] mt-1'>{value}</h2>
             </div>
 
         </div>

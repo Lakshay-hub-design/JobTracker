@@ -4,6 +4,8 @@ import { BiSolidBell } from "react-icons/bi";
 import { AuthContext } from "../../auth/context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { JobContext } from "../../Jobs/context/JobContext";
+import { useTheme } from "../context/ThemeContext";
+import { IoSunnyOutline, IoMoonSharp } from "react-icons/io5"
 
 const Topbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
@@ -14,7 +16,7 @@ const Topbar = () => {
   const { user } = context;
   const { search, setSearch, notifications } = jobContext;
 
-  console.log(notifications);
+  const { theme, toggleTheme } = useTheme()
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -36,7 +38,7 @@ const Topbar = () => {
   };
 
   return (
-    <div className="bg-white border-b px-6 py-2 flex  items-center justify-between">
+    <div className="bg-white border-b dark:border-black px-6 py-2 flex dark:bg-[#151312] dark:text-gray-100  items-center justify-between">
       <div></div>
       {location.pathname === "/jobs" && (
         <div className="relative w-full max-w-md">
@@ -55,8 +57,8 @@ const Topbar = () => {
           w-full 
           pl-12 pr-4 py-2.5 
           rounded-full 
-          bg-white 
-          border border-gray-200 
+          bg-white dark:bg-[#1D1B1A]
+          border border-gray-200 dark:border-none
           text-sm 
           focus:outline-none 
           focus:ring-1 focus:ring-orange-500 
@@ -73,9 +75,12 @@ const Topbar = () => {
         >
           + Add Job
         </button>
+        <button onClick={toggleTheme}>
+          {theme === "dark" ? <IoMoonSharp /> : <IoSunnyOutline />}
+        </button>
         <div className="relative">
           <button onClick={() => setShowNotifications(true)}>
-            <BiSolidBell className="text-gray-600 cursor-pointer" size={22} />
+            <BiSolidBell className="text-gray-600 dark:text-[#94A3B8] cursor-pointer" size={22} />
           </button>
           {notifications.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
@@ -84,10 +89,10 @@ const Topbar = () => {
           )}
 
           {showNotifications && (
-            <div className="absolute right-0 mt-3 w-[380px] max-h-[500px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden animate-fadeIn flex flex-col">
+            <div className="absolute right-0 mt-3 w-[380px] max-h-[500px] bg-white dark:bg-[#2e2929] rounded-2xl shadow-2xl border border-gray-100 dark:border-[#484242] z-50 overflow-hidden animate-fadeIn flex flex-col">
               {/* HEADER */}
-              <div className="p-4 border-b flex justify-between items-center">
-                <h2 className="text-sm font-semibold text-gray-800">
+              <div className="p-4 border-b dark:border-[#413d3d] flex justify-between items-center">
+                <h2 className="text-sm font-semibold text-gray-800 dark:text-[#ad8383]">
                   Notifications
                 </h2>
 
@@ -173,7 +178,7 @@ const Topbar = () => {
                                   navigate(`/job/${item.jobId}`);
                                   setShowNotifications(false);
                                 }}
-                                className="group flex items-start gap-3 p-3 rounded-xl bg-white border hover:shadow-sm transition cursor-pointer"
+                                className="group flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-[#231e1e] border dark:border-[#4b4545] hover:shadow-sm transition cursor-pointer"
                               >
                                 {/* ICON */}
                                 <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-xs">
@@ -182,10 +187,10 @@ const Topbar = () => {
 
                                 {/* TEXT */}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-800 truncate">
+                                  <p className="text-sm font-medium text-gray-800 dark:text-[#c2afaf] truncate">
                                     {item.company}
                                   </p>
-                                  <p className="text-xs text-gray-500 truncate">
+                                  <p className="text-xs text-gray-500 dark:text-[#beb7b7] truncate">
                                     {item.position}
                                   </p>
                                   <p className="text-xs text-gray-400 mt-1">

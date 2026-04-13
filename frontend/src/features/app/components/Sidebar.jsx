@@ -35,7 +35,7 @@ const Sidebar = () => {
     const { handleLogout } = useAuth()
     
   return (
-    <div className='w-64 bg-gray-100 border-r border-orange-300 p-5 flex flex-col justify-between'>
+    <div className='w-64 bg-gray-100 dark:bg-[#151312] p-5 flex flex-col justify-between'>
       <div>
         <h1 className='text-xl font-bold text-orange-600 mb-15'>
             JobTracker
@@ -56,11 +56,11 @@ const Sidebar = () => {
                             if (item.path === "/jobs") {
                             active = path === "/jobs" || path.startsWith("/job")
                             }
-                            return `flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600 font-semibold transition
+                            return `flex items-center gap-3 px-4 py-3 rounded-lg text-gray-600  font-semibold transition
                                 ${
                                     active
-                                    ? 'bg-white text-orange-600 backdrop-blur-2xl font-bold shadow-sm'
-                                    : 'hover:bg-orange-100'
+                                    ? 'bg-white dark:bg-[#221F1E] text-orange-600 backdrop-blur-2xl font-bold shadow-sm'
+                                    : 'hover:bg-orange-100 dark:hover:bg-[#343130] dark:text-[#94A3B8]'
                                 }
                             `
                         }}

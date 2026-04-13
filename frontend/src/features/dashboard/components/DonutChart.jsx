@@ -26,9 +26,9 @@ const DonutChart = ({ statusStats }) => {
     );
     const total = Object.values(statusStats).reduce((acc, value) => acc + value, 0)
   return (
-    <div className="bg-orange-100/40 p-5 rounded-4xl shadow-sm w-full">
+    <div className="bg-orange-100/40 dark:bg-[#221F1E] p-5 rounded-4xl shadow-sm w-full">
         
-        <h2 className="font-semibold text-gray-700 mb-4">
+        <h2 className="font-semibold text-gray-700 dark:text-[#D2CBC9] mb-4">
             Status Breakdown
         </h2>
 
@@ -53,8 +53,8 @@ const DonutChart = ({ statusStats }) => {
             </ResponsiveContainer>
 
             <div className="absolute text-center">
-            <h2 className="text-xl font-bold">{total}</h2>
-            <p className="text-xs text-gray-500">TOTAL</p>
+            <h2 className="text-xl  font-bold">{total}</h2>
+            <p className="text-xs text-gray-500 dark:text-[#D2CBC9]">TOTAL</p>
             </div>
         </div>
 

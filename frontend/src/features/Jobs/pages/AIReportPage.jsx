@@ -12,10 +12,10 @@ const NAV_ITEMS = [
 const QuestionCard  = ({ item, index }) => {
     const [ open, setOpen ] = useState(false)
     return (
-        <div className='bg-white rounded-4xl overflow-hidden hover:border-[#3a455e] transition'>
+        <div className='bg-white dark:bg-[#221F1E] rounded-4xl overflow-hidden hover:border-[#3a455e] transition'>
             <div className='flex gap-3 p-4 py-6 cursor-pointer' onClick={() => setOpen(o => !o)}>
                 <span className='self-start text-[13px] font-bold text-[#AE4113] bg-[#F6E6E0] border border-pink-500/20 px-2 py-[2px] rounded'>Q{index + 1}</span>
-                <p className='flex-1 text-md font-medium text-[#644D46] leading-relaxed'>{item.question}</p>
+                <p className='flex-1 text-md font-medium text-[#644D46] dark:text-[#E2DBD9] leading-relaxed'>{item.question}</p>
                 <span className={`transition ${open ? "rotate-180 text-[#AE4113]" : "text-[#644D46]"}`}>
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9" /></svg>
                 </span>
@@ -24,11 +24,11 @@ const QuestionCard  = ({ item, index }) => {
                 <div className='px-4 pb-4 border-t border-[#2a3348] pt-3 flex flex-col gap-3'>
                     <div className='q-card__section'>
                         <span className='text-[10px] uppercase font-bold text-[#AE4113] bg-[#F6E6E0] border border-pink-500/20 px-2 py-[2px] rounded'>Intention</span>
-                        <p className='text-normal text-[#644D46] mt-1'>{item.intention}</p>
+                        <p className='text-normal text-[#644D46] dark:text-[#b59d95] mt-1'>{item.intention}</p>
                     </div>
                     <div className='q-card__section'>
                         <span className='text-[10px] uppercase font-bold text-[#16A34A] bg-[#DCFCE6] border border-green-400/20 px-2 py-[2px] rounded'>Model Answer</span>
-                        <p className='text-normal text-[#644D46] mt-1'>{item.answer}</p>
+                        <p className='text-normal text-[#644D46] dark:text-[#b59d95] mt-1'>{item.answer}</p>
                     </div>
                 </div>
             )}
@@ -44,7 +44,7 @@ const RoadMapDay = ({ day }) => (
         </div>
         <ul className='mt-2 flex flex-col gap-1'>
             {day.tasks.map((task, i) => (
-                <li key={i} className='flex gap-2 text-sm text-[#644D46]'>
+                <li key={i} className='flex gap-2 text-sm text-[#644D46] dark:text-[#b19292]'>
                     <span className='w-[5px] h-[5px] bg-[#AE4113] rounded-full mt-2' />
                     {task}
                 </li>
@@ -75,7 +75,7 @@ const AIReportPage = () => {
   return (
     <div className="space-y-6">
       
-        <div className="flex w-full max-w-7xl mx-auto min-h-screen bg-[#FBF9F8] ">
+        <div className="flex w-full max-w-7xl mx-auto min-h-screen bg-[#FBF9F8] dark:bg-[#121110]">
           {/* ── Left Nav ── */}
           <nav className="w-[220px] py-4 flex flex-col justify-between">
             <div className="nav-content flex flex-col flex-1  px-4 pb-6 gap-4 overflow-y-auto">
@@ -150,8 +150,8 @@ const AIReportPage = () => {
           {/* ── Right Sidebar ── */}
           <aside className="w-[280px] p-4 flex flex-col gap-6">
             {/* Match Score */}
-            <div className="flex bg-white rounded-4xl p-4 flex-col items-center gap-2">
-              <p className="text-normal uppercase text-[#2a3348]">Match Score</p>
+            <div className="flex bg-white dark:bg-[#221F1E] rounded-4xl p-4 flex-col items-center gap-2">
+              <p className="text-normal uppercase text-[#2a3348] dark:text-[#5c5a5a]">Match Score</p>
               <div className={`w-[90px] h-[90px] rounded-full border-4 flex items-center justify-center flex-col ${scoreColor}`}>
                 <span className="text-2xl font-bold">
                   {aiReport.matchScore}
@@ -162,7 +162,7 @@ const AIReportPage = () => {
             </div>
 
             {/* Skill Gaps */}
-            <div className="skill-gaps bg-[#F5F3F2] rounded-4xl p-6 flex flex-col">
+            <div className="skill-gaps bg-[#F5F3F2] dark:bg-[#221F1E] rounded-4xl p-6 flex flex-col">
               <p className="text-normal uppercase text-gray-500 mb-2">Skill Gaps</p>
               <div className="flex flex-wrap gap-2">
                 {aiReport.skillGaps.map((gap, i) => (

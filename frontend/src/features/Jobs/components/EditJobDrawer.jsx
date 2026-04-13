@@ -42,23 +42,23 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
       >
 
         {/* HEADER (STICKY) */}
-        <div className="sticky top-0 bg-white z-10 border-b p-5 flex justify-between items-center">
+        <div className="sticky top-0 bg-white dark:bg-[#1c1a1a] z-10 border-b dark:border-[#363535] p-5 flex justify-between items-center">
           <h2 className="text-lg font-semibold">Edit Job</h2>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full hover:bg-gray-100"
+            className="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-[#4d4a4a]"
           >
             <X size={18} />
           </button>
         </div>
 
         {/* CONTENT */}
-        <div className="flex-1 overflow-y-auto p-5 space-y-8">
+        <div className="flex-1 dark:bg-[#221F1E] overflow-y-auto p-5 space-y-8">
 
           {/* SECTION 1 */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-[#d8a6a6] mb-4 uppercase tracking-wide">
               Basic Info
             </h3>
 
@@ -69,7 +69,7 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
                 value={formData.position}
                 onChange={handleChange}
                 placeholder="Position"
-                className="w-full p-3 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full p-3 dark:text-[#cdc4c4] bg-white dark:bg-[#33302f] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
 
               <input
@@ -77,7 +77,7 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
                 value={formData.company}
                 onChange={handleChange}
                 placeholder="Company"
-                className="w-full p-3 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full p-3 dark:text-[#cdc4c4] bg-white dark:bg-[#33302f] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
 
               <input
@@ -85,14 +85,14 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
                 value={formData.location}
                 onChange={handleChange}
                 placeholder="Location"
-                className="w-full p-3 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+                className="w-full p-3 dark:text-[#cdc4c4] bg-white dark:bg-[#33302f] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               />
 
               <select
                 name="jobType"
                 value={formData.jobType}
                 onChange={handleChange}
-                className="w-full p-3 bg-white rounded-lg focus:outline-none"
+                className="w-full p-3 dark:text-[#cdc4c4] bg-white dark:bg-[#33302f] rounded-lg focus:outline-none"
               >
                 <option value="full-time">Full-time</option>
                 <option value="internship">Internship</option>
@@ -104,7 +104,7 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
 
           {/* SECTION 2 */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-[#d8a6a6] mb-4 uppercase tracking-wide">
               Description
             </h3>
 
@@ -113,14 +113,14 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
               value={formData.description}
               onChange={handleChange}
               rows={6}
-              className="w-full p-3 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full p-3 dark:text-[#cdc4c4] bg-white dark:bg-[#33302f] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Job description..."
             />
           </div>
 
           {/* SECTION 3 */}
           <div>
-            <h3 className="text-sm font-semibold text-gray-500 mb-4 uppercase tracking-wide">
+            <h3 className="text-sm font-semibold text-gray-500 dark:text-[#d8a6a6] mb-4 uppercase tracking-wide">
               Notes
             </h3>
 
@@ -129,7 +129,7 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
               value={formData.notes}
               onChange={handleChange}
               rows={4}
-              className="w-full p-3 bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
+              className="w-full p-3 dark:text-[#cdc4c4] bg-white dark:bg-[#33302f] rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500"
               placeholder="Your notes..."
             />
           </div>
@@ -137,11 +137,11 @@ const EditJobDrawer = ({ job, onClose, onSave }) => {
         </div>
 
         {/* FOOTER (STICKY SAVE BAR) */}
-        <div className="border-t p-4 flex justify-end gap-3 bg-white">
+        <div className="border-t dark:border-[#3d3939] p-4 flex justify-end gap-3 bg-white dark:bg-[#191716]">
 
           <button
             onClick={onClose}
-            className="px-4 py-2 rounded-lg border"
+            className="px-4 py-2 rounded-lg border dark:border-[#3c3939]"
           >
             Cancel
           </button>
