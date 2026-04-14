@@ -45,9 +45,7 @@ export async function login({ email, password }) {
 
 export async function forgotPassword(email) {
     try {
-        await api.post('/api/auth/forgot-password', {
-            email
-        })
+        await api.post('/api/auth/forgot-password', {email})
     
     } catch (error) {
         throw error.response?.data || error

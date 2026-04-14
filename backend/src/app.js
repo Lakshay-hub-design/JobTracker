@@ -3,11 +3,8 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const helmet = require('helmet')
 const morgan = require('morgan')
-const xss = require('xss-clean')
-const hpp = require('hpp')
 const { rateLimit } = require('express-rate-limit')
 const bullBoard = require('./config/bullBoard')
-
 
 const app = express();
 
@@ -16,7 +13,7 @@ app.use(morgan('dev'))
 
 app.use(cors({
     origin: [ 
-        'http://localhost:5173',
+        process.env.FRONTEND_URL,
         `https://job-tracker-indol.vercel.app`
         ],
     credentials: true
@@ -30,7 +27,7 @@ const limiter = rateLimit({
 });
 app.use("/api", limiter)
 
-app.use(express.json());
+app.use(express.json({ limit: "10kb" }));
 app.use(cookieParser());
 
 app.get("/health", (req, res) => {
@@ -50,7 +47,5 @@ app.use('/admin/queues', bullBoard.getRouter())
 app.use('/api/auth' , authRoutes)
 app.use('/api/job', jobRoutes)
 app.use('/api/user', userRoutes)
-
-
 
 module.exports = app

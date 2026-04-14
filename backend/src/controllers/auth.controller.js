@@ -83,7 +83,10 @@ const login = asyncHandler(async (req, res, next) => {
 })
 
 const forgotPasswordController = asyncHandler(async (req, res) => {
+console.log(req.body);
+
     const { email } = req.body
+console.log(email);
 
     await forgotPassword(email)
 

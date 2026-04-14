@@ -106,8 +106,6 @@ const updateThemeService = async (userId, body) => {
   
   const { theme } = body
 
-  console.log(theme)
-
   const user = await userRepository.updateUserById(
     userId,
     {theme}

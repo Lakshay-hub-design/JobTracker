@@ -9,7 +9,6 @@ const extractResumeText = require('./resume.service')
 
 const createJobService = async ({ body, file, userId }) => {
     const { company, position, status, jobType, location, appliedDate, notes, description, coverLetter, followUpDate } = body
-    console.log(body)
 
     if (!company || !position) {
         throw new ApiError(400, "Company and position are required")

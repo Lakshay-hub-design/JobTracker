@@ -1,39 +1,30 @@
 require('dotenv').config();
-const nodemailer = require('nodemailer');
 
-const transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    type: 'OAuth2',
-    user: process.env.EMAIL_USER,
-    clientId: process.env.CLIENT_ID,
-    clientSecret: process.env.CLIENT_SECRET,
-    refreshToken: process.env.REFRESH_TOKEN,
-  },
-});
+const sgMail = require('@sendgrid/mail');
 
-transporter.verify((error, success) => {
-  if (error) {
-    console.error('Error connecting to email server:', error);
-  } else {
-    console.log('Email server is ready to send messages');
-  }
-});
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
+const isDev = process.env.NODE_ENV !== "production"
 
 const sendEmail = async (to, subject, text, html) => {
   try {
-    const info = await transporter.sendMail({
-      from: `"Your Name" <${process.env.EMAIL_USER}>`, // sender address
-      to, // list of receivers
-      subject, // Subject line
-      text, // plain text body
-      html, // html body
-    });
+    const msg = {
+      to,
+      from: process.env.EMAIL_USER,
+      subject,
+      text,
+      html,
+    };
 
-    console.log('Message sent: %s', info.messageId);
-    console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+    const response = await sgMail.send(msg);
+
+    if (isDev) {
+      console.log("Email sent:", response[0].statusCode);
+    }
+
   } catch (error) {
-    console.error('Error sending email:', error);
+    console.error("SendGrid Error:", error.response?.body || error.message);
+    throw error;
   }
 };
 
@@ -86,9 +77,9 @@ async function sendOtpEmail(userEmail, otp) {
         This OTP is valid for <strong>10 minutes</strong>.
       </p>
 
-      <p style="font-size: 14px; color: #999;">
-        If you did not request this email, you can safely ignore it.
-      </p>
+     <p style="font-size: 13px; color: #888;">
+      This email was sent from JobTracker. If you did not request this, you can ignore it.
+     </p>
 
       <hr style="margin: 25px 0;" />
 
@@ -116,7 +107,9 @@ ${resetLink}
 
 This link is valid for 15 minutes.
 
-If you did not request this, please ignore this email.
+
+This email was sent from JobTracker. If you did not request this, you can ignore it.
+
 
 Thank you,
 JobTracker Team
@@ -155,8 +148,8 @@ JobTracker Team
         This link will expire in <strong>15 minutes</strong>.
       </p>
 
-      <p style="font-size: 14px; color: #999;">
-        If you did not request a password reset, you can safely ignore this email.
+      <p style="font-size: 13px; color: #888;">
+        This email was sent from JobTracker. If you did not request this, you can ignore it.
       </p>
 
       <hr style="margin: 25px 0;" />

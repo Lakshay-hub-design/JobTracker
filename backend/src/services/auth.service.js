@@ -54,7 +54,6 @@ const verifyEmailOtp = async ({ email, otp }, req) => {
     const hashedOtp = hashOtp(otp)
 
     const user = await authRepository.findByEmailAndOtp(email, hashedOtp)
-    console.log(user)
     if(!user){
         const error = new Error("Invalid or expired OTP")
         error.statusCode = 400
@@ -88,6 +87,7 @@ const verifyEmailOtp = async ({ email, otp }, req) => {
 }
 
 const resendEmailOtp = async (email) => {
+    
     const user = await authRepository.findByEmail(email)
 
     if(!user){
@@ -112,7 +112,7 @@ const resendEmailOtp = async (email) => {
 }
 
 const forgotPassword = async (email) => {
-    const user = await authRepository.findByEmail({ email })
+    const user = await authRepository.findByEmail( email )
 
     if(!user){
         const error = new Error('User not found')

@@ -37,7 +37,6 @@ class AuthRepository {
     }
 
     async createUser(userData){
-        console.log("Creating user with data:", userData)
         return await User.create(userData)
     }
 

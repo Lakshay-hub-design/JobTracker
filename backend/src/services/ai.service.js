@@ -74,7 +74,6 @@ async function generateAiReport({resumeText, jobDescription}) {
     const result = interviewReportSchema.safeParse(response)
 
     if (!result.success) {
-        console.error("❌ Schema validation failed:", result.error)
         throw new Error("Failed to generate AI report")
     }
 
