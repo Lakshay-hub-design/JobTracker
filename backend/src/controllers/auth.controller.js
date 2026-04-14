@@ -17,7 +17,7 @@ const verifyEmail = asyncHandler(async (req, res, next) => {
     res.cookie("refreshToken", refreshToken, {
         httpOnly: true,
         secure: true, 
-        sameSite: "strict",
+        sameSite: "None",
     });
 
     res.status(200).json({
@@ -52,7 +52,7 @@ const refreshAccessTokenController = asyncHandler(async (req, res) => {
     res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: 'strict'
+        sameSite: 'None'
     })
 
     res.status(200).json({
@@ -67,7 +67,7 @@ const login = asyncHandler(async (req, res, next) => {
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true,
-        sameSite: 'strict'
+        sameSite: 'None'
     })
 
     res.status(200).json({
@@ -83,10 +83,8 @@ const login = asyncHandler(async (req, res, next) => {
 })
 
 const forgotPasswordController = asyncHandler(async (req, res) => {
-console.log(req.body);
 
     const { email } = req.body
-console.log(email);
 
     await forgotPassword(email)
 
