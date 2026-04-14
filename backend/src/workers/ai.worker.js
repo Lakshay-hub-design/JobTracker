@@ -3,13 +3,10 @@ require("dotenv").config()
 const { Worker } = require("bullmq")
 const redis = require("../config/redis")
 const aiReportModel = require("../models/aiReport.model")
-const connectDB = require("../config/db")
 const { generateAiReport } = require("../services/ai.service")
 
 const startWorker = async () => {
-  await connectDB()
-  console.log("🟢 Worker DB connected")
-
+console.log("🟢 Worker started")
   const worker = new Worker(
     "ai-processing",
     async (job) => {
@@ -49,16 +46,16 @@ const startWorker = async () => {
     }
   )
 
-  worker.on("completed", job => {
-    console.log(`✅ Job ${job.id} completed`)
-  })
+  if(process.env.NODE_ENV !== 'production'){
+    worker.on("completed", job => {
+        console.log(`✅ Job ${job.id} completed`)
+    })
+  }
 
   worker.on("failed", (job, err) => {
     console.error(`❌ Job ${job.id} failed:`, err.message)
   })
 }
-
-startWorker()
 
 process.on("uncaughtException", err => {
   console.error("Uncaught Exception:", err)
@@ -67,3 +64,5 @@ process.on("uncaughtException", err => {
 process.on("unhandledRejection", err => {
   console.error("Unhandled Rejection:", err)
 })
+
+module.exports = startWorker
