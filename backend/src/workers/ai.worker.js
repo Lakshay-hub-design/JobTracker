@@ -1,51 +1,69 @@
-require("dotenv").config({ path: "../.env" })
+require("dotenv").config()
 
-const { Worker } = require('bullmq');
-const redis = require('../config/redis');
-const aiReportModel = require('../models/aiReport.model');
-const connectDB = require('../config/db');
-const { generateAiReport } = require("../services/ai.service");
+const { Worker } = require("bullmq")
+const redis = require("../config/redis")
+const aiReportModel = require("../models/aiReport.model")
+const connectDB = require("../config/db")
+const { generateAiReport } = require("../services/ai.service")
 
-connectDB()
+const startWorker = async () => {
+  await connectDB()
+  console.log("🟢 Worker DB connected")
 
-const worker = new Worker(
-    'ai-processing',
+  const worker = new Worker(
+    "ai-processing",
     async (job) => {
 
+      if (process.env.NODE_ENV !== "production") {
         console.log("🔥 Processing job:", job.id)
-        
-        const { resumeText, description, aiReportId } = job.data
-        
-        try{
-            const result = await generateAiReport({
-                resumeText,
-                jobDescription: description
-            })
+      }
 
-            await aiReportModel.findByIdAndUpdate(aiReportId, {
-                status: 'completed',
-                ...result
-            })
+      const { resumeText, description, aiReportId } = job.data
 
-            console.log("✅ AI Report Updated")
-        }catch(err){
-            console.error("❌ Error:", err)
+      try {
+        const result = await generateAiReport({
+          resumeText,
+          jobDescription: description
+        })
 
-            console.log( `Attempt ${job.attemptsMade + 1} failed out of ${job.opts.attempts}` )
+        await aiReportModel.findByIdAndUpdate(aiReportId, {
+          status: "completed",
+          ...result
+        })
 
-            if(job.attemptsMade === job.opts.attempts - 1){
-                await aiReportModel.findByIdAndUpdate(aiReportId, {
-                    status: "failed",
-                    error: err.message || "Unknown error occurred during AI report generation"
-                })
-            }
+      } catch (err) {
+        console.error("❌ Error:", err.message)
 
-            throw err
+        if (job.attemptsMade === job.opts.attempts - 1) {
+          await aiReportModel.findByIdAndUpdate(aiReportId, {
+            status: "failed",
+            error: err.message || "AI generation failed"
+          })
         }
+
+        throw err
+      }
     },
     {
-        connection: redis
+      connection: redis
     }
-)
+  )
 
-module.exports = worker
+  worker.on("completed", job => {
+    console.log(`✅ Job ${job.id} completed`)
+  })
+
+  worker.on("failed", (job, err) => {
+    console.error(`❌ Job ${job.id} failed:`, err.message)
+  })
+}
+
+startWorker()
+
+process.on("uncaughtException", err => {
+  console.error("Uncaught Exception:", err)
+})
+
+process.on("unhandledRejection", err => {
+  console.error("Unhandled Rejection:", err)
+})
