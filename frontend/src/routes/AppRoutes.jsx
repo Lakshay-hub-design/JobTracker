@@ -3,7 +3,7 @@ import { Route, Routes } from 'react-router-dom'
 import Protected from '../features/auth/components/Protected'
 import PublicRoute from '../features/auth/components/PublicRoutes'
 import Layout from '../features/app/components/Layout'
-import { DashboardProvider } from '../features/dashboard/context/DashBoardContext'
+import { DashboardProvider } from '../features/dashboard/context/DashboardContext'
 import { JobProvider } from '../features/Jobs/context/JobContext'
 
 const Dashboard = lazy(() => import('../features/dashboard/pages/DashboardPage'))
