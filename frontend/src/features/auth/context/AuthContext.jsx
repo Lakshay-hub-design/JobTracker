@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useRef } from "react";
 import api from "../../../shared/api/axios";
 
 export const AuthContext = createContext()
@@ -9,7 +9,11 @@ export const AuthProvider = ({children}) => {
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
 
+    const hasRefreshed = useRef(false)
+
     useEffect(() => {
+        if (hasRefreshed.current) return
+        hasRefreshed.current = true
       const refresh = async () => {
         try {
             setLoading(true)

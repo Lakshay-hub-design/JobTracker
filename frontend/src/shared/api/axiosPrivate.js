@@ -1,4 +1,4 @@
-import { useContext } from 'react'
+import { useContext, useRef } from 'react'
 import { AuthContext } from '../../features/auth/context/AuthContext'
 import { useEffect } from 'react'
 import api from './axios'
@@ -6,12 +6,17 @@ import api from './axios'
 const useAxiosPrivate = () => {
     const context = useContext(AuthContext)
     const { accessToken, setAccessToken } = context
+    const tokenRef = useRef(accessToken)
+
+    useEffect(() => {
+      tokenRef.current = accessToken
+    }, [accessToken])
 
     useEffect(() => {
       const requestInterceptor = api.interceptors.request.use(
         (config) => {
             if(!config.headers.Authorization){
-                config.headers.Authorization = `Bearer ${accessToken}`
+                config.headers.Authorization = `Bearer ${tokenRef.current}`
             }
             return config
         },
@@ -25,13 +30,14 @@ const useAxiosPrivate = () => {
 
             if(
                 error?.response?.status === 401 &&
-                !prevRequest._retry
+                !prevRequest._retry &&
+                !prevRequest.url.includes("/api/auth/refresh-token") 
             ){
                 prevRequest._retry = true;
 
                 try {
                     const res = await api.get(
-                    "/api/auth/refresh-token",
+                        "/api/auth/refresh-token",
                     );
 
                     setAccessToken(res.data.accessToken);
@@ -51,7 +57,7 @@ const useAxiosPrivate = () => {
         api.interceptors.request.eject(requestInterceptor)
         api.interceptors.response.eject(responseInterceptor)
       }
-    }, [accessToken, setAccessToken])
+    }, [])
     return api
 }
 

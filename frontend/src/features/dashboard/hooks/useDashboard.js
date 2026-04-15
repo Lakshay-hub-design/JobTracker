@@ -25,7 +25,6 @@ export const useDashboard = () => {
     }
 
     useEffect(() => {
-        console.log("Fetching dashboard data on mount...")
       fetchDashboardData()
     }, [])
     

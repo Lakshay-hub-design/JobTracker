@@ -130,7 +130,7 @@ const Topbar = () => {
                                   navigate(`/job/${item.jobId}`);
                                   setShowNotifications(false);
                                 }}
-                                className="group flex items-start gap-3 p-3 rounded-xl bg-red-50 border border-red-100 hover:shadow-sm transition cursor-pointer"
+                                className="group flex items-start gap-3 p-3 rounded-xl bg-red-50 dark:bg-[#231e1e] border dark:border-[#4b4545] border-red-100 hover:shadow-sm transition cursor-pointer"
                               >
                                 {/* ICON */}
                                 <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xs font-bold">
@@ -139,10 +139,10 @@ const Topbar = () => {
 
                                 {/* TEXT */}
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-800 truncate">
+                                  <p className="text-sm font-medium text-gray-800 dark:text-[#c2afaf] truncate">
                                     {item.company}
                                   </p>
-                                  <p className="text-xs text-gray-500 truncate">
+                                  <p className="text-xs text-gray-500 dark:text-[#beb7b7] truncate">
                                     {item.position}
                                   </p>
                                   <p className="text-xs text-red-500 mt-1">

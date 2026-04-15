@@ -5,8 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import { AuthProvider } from "./features/auth/context/AuthContext.jsx";
 import { ThemeProvider } from "./features/app/context/ThemeContext.jsx";
 
-
-
 createRoot(document.getElementById("root")).render(
   <BrowserRouter>
       <AuthProvider>

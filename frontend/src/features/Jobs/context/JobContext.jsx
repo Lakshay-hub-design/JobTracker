@@ -24,7 +24,6 @@ export const JobProvider = ({ children }) => {
         try {
             setError(null)
             const res = await getNotifications(axiosPrivate)
-            console.log(res.data)
             setNotifications(res.data)
         } catch (err) {
             setError(err.message || 'Failed to fetch notifications')

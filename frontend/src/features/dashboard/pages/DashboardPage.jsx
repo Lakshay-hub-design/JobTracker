@@ -6,7 +6,6 @@ import { useDashboard } from '../hooks/useDashboard'
 
 const DashboardPage = () => {
     const { dashboardData, loading, error } = useDashboard()
-    console.log("Dashboard Page Data:", dashboardData) // Debugging line to check the data received in the page
 
     if(loading) return <p>Loading dashboard...</p>
     if(error) return <p className='text-red-500'>Error: {error}</p>

@@ -28,7 +28,6 @@ export const useJobs = (page, filters) => {
                 jobType: filters.jobType,
                 search: debouncedSearch
             })
-            console.log("Fetched jobs data:", res)
             setJobs(res.data.jobs)
             setPagination(res.data.pagination)
 
