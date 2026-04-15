@@ -14,7 +14,6 @@ app.use(morgan('dev'))
 app.use(cors({
     origin: [ 
         process.env.FRONTEND_URL,
-        `https://job-tracker-indol.vercel.app`
         ],
     credentials: true
 }))
