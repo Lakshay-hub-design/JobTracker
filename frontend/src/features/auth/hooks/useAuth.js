@@ -3,13 +3,18 @@ import { AuthContext } from "../context/AuthContext"
 import { forgotPassword, getMe, login, logout, register, resendOtp, resetPassword, verifyEmail } from "../services/authApi"
 import { useNavigate } from "react-router-dom"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
+import { AppLoadingContext } from "../../app/context/AppLoadingContext"
 
 
 export const useAuth = () => {
+
     const context = useContext(AuthContext)
+
+    const { setLoading: setAppLoading, setProgress, progress } = useContext(AppLoadingContext);
+    console.log(progress)
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
-
+    const delay = (ms) => new Promise(res => setTimeout(res, ms));
     const { user, setUser, accessToken, setAccessToken, loading, setLoading, error, setError } = context
 
     const handleRegister = async({name, email, password}) => {
@@ -32,7 +37,7 @@ export const useAuth = () => {
 
     const handleVerifyEmail = async({ email, otp }) => {
         try {
-            setLoading(false)
+            setLoading(true)
             setError(null)
 
             const data = await verifyEmail({ email, otp }) 
@@ -62,18 +67,25 @@ export const useAuth = () => {
 
     const handleLogin = async({email, password}) => {
         try {
-            setLoading(true)
+            setAppLoading(true)
+            setProgress(20)
             setError(null)
+            await delay(200)
 
             const data = await login({email, password})
+            setProgress(40)
+            await delay(200)
             setAccessToken(data.accessToken)
             setUser(data.user)
+
+            setProgress(70)
+            await delay(200)
 
             navigate('/dashboard')
         } catch (err) {
             setError(err.message || 'Something went wrong')
         } finally {
-            setLoading(false)
+            setAppLoading(false)
         }
     }
 

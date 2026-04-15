@@ -5,10 +5,14 @@ import SummaryCards from '../components/SummaryCards'
 import { useDashboard } from '../hooks/useDashboard'
 
 const DashboardPage = () => {
-    const { dashboardData, loading, error } = useDashboard()
+    const { dashboardData, error } = useDashboard()
 
-    if(loading) return <p>Loading dashboard...</p>
     if(error) return <p className='text-red-500'>Error: {error}</p>
+
+    if (!dashboardData) {
+      return null; 
+    }
+
 
   return (
     <div className='-mt-6'>
