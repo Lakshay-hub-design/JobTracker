@@ -13,7 +13,7 @@ import {
 const SummaryCards = ({data}) => {
     const { totalJobs, statusStats } = data || {}
   return (
-    <div className='grid grid-cols-4 gap-5 mb-8'>
+    <div className='grid grid-cols-2 md:grid-cols-4 gap-5 mt-4 mb-8'>
 
         <Card 
             title="Total Applications" 

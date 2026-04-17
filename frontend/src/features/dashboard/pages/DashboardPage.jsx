@@ -16,8 +16,8 @@ const DashboardPage = () => {
 
   return (
     <div className='-mt-6'>
-        <h1 className='text-2xl font-semibold'>Overview</h1>
-        <p className="text-gray-500 mb-6">
+        <h1 className='text-4xl md:text-2xl font-semibold'>Overview</h1>
+        <p className="text-gray-500 mb-6 hidden md:block">
           Welcome back. Here’s your job search progress.
         </p>
 

@@ -5,6 +5,7 @@ import Topbar from './Topbar'
 import { Outlet, useLocation } from 'react-router-dom'
 import { useTheme } from '../context/ThemeContext'
 import { AuthContext } from '../../auth/context/AuthContext'
+import BottomNav from './BottomNav'
 
 const Layout = () => {
   const location = useLocation()
@@ -46,7 +47,9 @@ const Layout = () => {
 
   return (
     <div className='flex h-screen bg-gray-50 dark:bg-[#121110] dark:text-gray-100  transition-colors duration-300'>
-      <Sidebar />
+      <div className="hidden md:block">
+        <Sidebar />
+      </div>
 
       <div className='flex-1 flex flex-col'>
 
@@ -56,11 +59,16 @@ const Layout = () => {
           <BreadCrums items={getBreadcrumbs()} />
         </div>
 
-        <main className='p-4 overflow-y-auto'>
+        <main className='flex-1 p-4 overflow-y-auto pb-22 md:pb-4'>
             <Outlet />
         </main>
         
       </div>
+
+      <div className="fixed bottom-0 left-0 w-full md:hidden z-50">
+        <BottomNav />
+      </div>
+
     </div>
   )
 }

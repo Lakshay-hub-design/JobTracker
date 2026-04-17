@@ -38,8 +38,11 @@ const Topbar = () => {
   };
 
   return (
-    <div className="bg-white border-b dark:border-black px-6 py-2 flex dark:bg-[#151312] dark:text-gray-100  items-center justify-between">
-      <div></div>
+    <div className="bg-white border-b dark:border-black px-5 py-2 flex dark:bg-[#151312] dark:text-gray-100  items-center justify-between">
+      <div className="hidden md:block"></div>
+      <div className=" md:hidden">
+        <h1 className="font-semibold text-lg text-orange-500">JobTracker</h1>
+      </div>
       {location.pathname === "/jobs" && (
         <div className="relative w-full max-w-md">
           {/* Icon */}
@@ -68,19 +71,19 @@ const Topbar = () => {
           />
         </div>
       )}
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-3 md:gap-4">
         <button
           onClick={() => navigate("/job/new")}
-          className="bg-orange-600 text-white px-4 py-2 hover:scale-105 transition cursor-pointer active:scale-95 rounded-full shadow-lg"
+          className=" hidden md:block bg-orange-600 text-white px-4 py-2 hover:scale-105 transition cursor-pointer active:scale-95 rounded-full shadow-lg"
         >
           + Add Job
         </button>
-        <button onClick={toggleTheme}>
+        <button className="hidden md:block" onClick={toggleTheme}>
           {theme === "dark" ? <IoMoonSharp /> : <IoSunnyOutline />}
         </button>
         <div className="relative">
           <button onClick={() => setShowNotifications(true)}>
-            <BiSolidBell className="text-gray-600 dark:text-[#94A3B8] cursor-pointer" size={22} />
+            <BiSolidBell className="text-gray-600 dark:text-[#94A3B8] cursor-pointer" size={20} />
           </button>
           {notifications.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
@@ -213,7 +216,7 @@ const Topbar = () => {
             </div>
           )}
         </div>
-        <div className="border h-8"></div>
+        <div className="border dark:border-[#222222] h-8"></div>
         <div
         onClick={() => navigate('/settings')}
         className="w-8 h-8 bg-gray-300 rounded-full overflow-hidden hover:scale-105 transition cursor-pointer">
@@ -223,7 +226,7 @@ const Topbar = () => {
             alt=""
           />
         </div>
-        <h3 className="font-medium text-sm ">{user.username}</h3>
+        <h3 className="hidden md:block font-medium text-sm ">{user.username}</h3>
       </div>
     </div>
   );

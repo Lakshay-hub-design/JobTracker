@@ -15,7 +15,7 @@ const LoadingScreen = ({progress}) => {
     }, [progress]);
 
   return (
-    <div className="h-screen w-full bg-gradient-to-br from-[#0F0C29] via-[#1B1635] to-[#0B0B1F] flex items-center justify-center text-white">
+    <div className="fixed inset-0 z-[9999] bg-gradient-to-br from-[#0F0C29] via-[#1B1635] to-[#0B0B1F] flex items-center justify-center text-white">
       
       <div className="text-center space-y-6">
 

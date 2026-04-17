@@ -6,6 +6,7 @@ import Layout from '../features/app/components/Layout'
 import { DashboardProvider } from '../features/dashboard/context/DashboardContext'
 import { JobProvider } from '../features/Jobs/context/JobContext'
 import LoadingScreen from '../components/LoadingScreen'
+import NotFoundPage from '../features/app/pages/NotFoundPage'
 
 const Dashboard = lazy(() => import('../features/dashboard/pages/DashboardPage'))
 const Jobs = lazy(() => import('../features/Jobs/pages/JobsPage'))
@@ -74,7 +75,7 @@ const AppRoutes = () => {
           </Route>
         </Route>
 
-        <Route path="*" element={<h1>404 Not Found</h1>} />
+        <Route path="*" element={<NotFoundPage />} />
 
       </Routes>
     </Suspense>

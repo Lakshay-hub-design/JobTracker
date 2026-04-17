@@ -36,7 +36,7 @@ const CustomTooltip = ({ active, payload, label }) => {
 };
 
   return (
-    <div className='bg-orange-100/40 dark:bg-[#221F1E] p-5 rounded-4xl shadow-sm col-span-2'>
+    <div className='bg-orange-100/40 dark:bg-[#221F1E] p-5 rounded-4xl shadow-sm md:col-span-2'>
         <h2 className='text-lg font-semibold dark:text-[#D2CBC9] mb-4'>Application Over Time</h2>
 
         <ResponsiveContainer width="100%" height={200} >

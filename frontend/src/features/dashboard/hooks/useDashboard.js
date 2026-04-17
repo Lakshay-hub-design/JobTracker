@@ -26,8 +26,8 @@ const delay = (ms) => new Promise(res => setTimeout(res, ms));
             await delay(200)
 
 
-            const data = await getDashboardStats(axiosPrivate)
             setProgress(100)
+            const data = await getDashboardStats(axiosPrivate)
             setDashboardData(data)
 
         } catch (err) {

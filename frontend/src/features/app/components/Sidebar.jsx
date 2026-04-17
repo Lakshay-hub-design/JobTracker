@@ -35,7 +35,7 @@ const Sidebar = () => {
     const { handleLogout } = useAuth()
     
   return (
-    <div className='w-64 bg-gray-100 dark:bg-[#151312] p-5 flex flex-col justify-between'>
+    <div className='w-64 h-screen bg-gray-100 dark:bg-[#151312] p-5 flex flex-col justify-between'>
       <div>
         <h1 className='text-xl font-bold text-orange-600 mb-15'>
             JobTracker

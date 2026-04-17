@@ -7,7 +7,7 @@ const Charts = ({data}) => {
         return <div>Loading charts...</div>
     }
   return (
-    <div className='grid grid-cols-3 gap-5 mb-6'>
+    <div className='grid md:grid-cols-3 gap-5 mb-6'>
       <LineChartComponent  monthlyStats={data?.monthlyStats} />
       <DonutChart statusStats={data?.statusStats} />
     </div>
