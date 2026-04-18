@@ -1,44 +1,126 @@
-const JobsHeader = ({jobs, filters, setFilters}) => {
+import { useState } from "react";
+import { Search } from "lucide-react";
+import { FiFilter } from "react-icons/fi";
 
-
-  const handleChange = (e) => {
-    setFilters((prev) => ({
-      ...prev,
-      [e.target.id]: e.target.value
-    }))
-  }
+const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
+  const [showFilters, setShowFilters] = useState(false);
 
   return (
-    <div className='flex justify-between items-center mb-4'>
-      <div>
-        <h2 className='text-3xl font-bold'>My Jobs</h2>
-        <p className='text-gray-700 dark:text-[#9B837C] mt-2'>You have <span className='text-orange-700 font-semibold'>{jobs.length} active applications</span> in your pipeline.</p>
+    <div className="mb-4 relative md:flex justify-between items-center">
+      <div className="mb-4">
+        <h2 className="text-2xl md:text-3xl font-bold">My Jobs</h2>
+        <p className="text-gray-700  dark:text-[#9B837C] mt-2">
+          You have{" "}
+          <span className="text-orange-700 font-semibold">
+            {jobs.length} active applications
+          </span>{" "}
+          in your pipeline.
+        </p>
       </div>
-      <div className='flex gap-3'>
-        <select
-        id='status'
-        value={filters.status}
-        onChange={handleChange}
-        className='px-4 py-2 rounded-full bg-orange-100/40 text-sm shadow-sm checked:bg-orange-500'>
-            <option className="dark:bg-[#585454] dark:text-white" value="">Status: All</option>
-            <option className="dark:bg-[#585454] dark:text-white" value="applied">Status: Applied</option>
-            <option className="dark:bg-[#585454] dark:text-white" value="interviewing">Status: Interviewing</option>
-            <option className="dark:bg-[#585454] dark:text-white" value="offered">Status: Offered</option>
-            <option className="dark:bg-[#585454] dark:text-white" value="rejected">Status: Rejected</option>
-        </select>
-        <select
-        id='jobType'
-        value={filters.jobType}
-        onChange={handleChange}
-        className="px-4 py-2 rounded-full bg-orange-100/40 text-sm shadow-sm">
-          <option className="dark:bg-[#585454] dark:text-white" value="">Type: All</option>
-          <option className="dark:bg-[#585454] dark:text-white" value='full-time'>Type: Full-time</option>
-          <option className="dark:bg-[#585454] dark:text-white" value='part-time'>Type: Part-time</option>
-          <option className="dark:bg-[#585454] dark:text-white" value='internship'>Type: Internship</option>
-        </select>
-      </div>
-    </div>
-  )
-}
+      
+        <div className="relative flex  items-center gap-3">
+          <div className="flex md:hidden items-center flex-1 bg-[#2a2726] rounded-xl px-3 py-2">
+            <Search size={16} className="text-gray-400" />
 
-export default JobsHeader
+            <input
+              type="text"
+              placeholder="Search applications..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="bg-transparent outline-none text-sm ml-2 w-full text-white placeholder-gray-400"
+            />
+          </div>
+
+          <button
+            onClick={() => setShowFilters((prev) => !prev)}
+            className="bg-[#2a2726] p-2.5 rounded-xl"
+          >
+            <FiFilter className="text-white" size={18} />
+          </button>
+          {showFilters && (
+            <div className="absolute right-0 top-14 z-50 w-[260px]">
+              <div
+                className="
+        bg-[#1f1d1c]/85 backdrop-blur-xl
+        border border-white/10
+        rounded-2xl p-4 shadow-2xl
+      "
+              >
+                {/* 🔥 STATUS FILTER */}
+                <p className="text-xs text-gray-400 mb-2 tracking-wide">
+                  STATUS FILTER
+                </p>
+
+                <div className="flex flex-wrap gap-2 mb-4">
+                  {["", "applied", "interviewing", "offered", "rejected"].map(
+                    (status) => (
+                      <button
+                        key={status}
+                        onClick={() => setFilters({ ...filters, status })}
+                        className={`
+                px-3 py-1 rounded-full text-xs capitalize
+                transition
+                ${
+                  filters.status === status
+                    ? "bg-orange-500 text-white"
+                    : "bg-[#2a2726] text-gray-300 hover:bg-[#333]"
+                }
+              `}
+                      >
+                        {status === "" ? "All" : status}
+                      </button>
+                    ),
+                  )}
+                </div>
+
+                {/* 🔥 JOB TYPE FILTER */}
+                <p className="text-xs text-gray-400 mb-2 tracking-wide">
+                  JOB TYPE FILTER
+                </p>
+
+                <div className="flex flex-wrap gap-2">
+                  {["", "full-time", "part-time", "internship"].map((type) => (
+                    <button
+                      key={type}
+                      onClick={() => setFilters({ ...filters, jobType: type })}
+                      className={`
+                px-3 py-1 rounded-full text-xs capitalize
+                transition
+                ${
+                  filters.jobType === type
+                    ? "bg-orange-500 text-white"
+                    : "bg-[#2a2726] text-gray-300 hover:bg-[#333]"
+                }
+              `}
+                    >
+                      {type === "" ? "All" : type}
+                    </button>
+                  ))}
+                </div>
+
+                <div className="flex justify-between mt-4 pt-3 border-t border-white/10">
+                  <button
+                    onClick={() =>
+                      setFilters({ status: "", jobType: "", search: "" })
+                    }
+                    className="text-xs text-gray-400 hover:text-white"
+                  >
+                    Clear All
+                  </button>
+
+                  <button
+                    onClick={() => setShowFilters(false)}
+                    className="text-xs bg-orange-500 px-3 py-1 rounded-full"
+                  >
+                    Done
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+    </div>
+  );
+};
+
+export default JobsHeader;

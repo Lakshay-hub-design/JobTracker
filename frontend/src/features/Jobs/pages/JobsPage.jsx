@@ -14,7 +14,7 @@ const JobsPage = () => {
     const [showModal, setShowModal] = useState(false)
     const [selectedJobId, setSelectedJobId] = useState(null)
 
-    const { jobs, pagination, handleDelete, loading, error } = useJobs(page, filters)
+    const { jobs, search, setSearch, pagination, handleDelete, loading, error } = useJobs(page, filters)
 
     if(loading) return <p>Loading jobs...</p>
     if(error) return <p className='text-red-500'>Error: {error}</p>
@@ -31,6 +31,8 @@ const JobsPage = () => {
             jobs={jobs}
             filters={filters}
             setFilters={setFilters}
+            search={search}
+            setSearch={setSearch}
          />
 
         <div className='grid grid-cols-1 items-stretch sm:grid-cols-2 lg:grid-cols-4 gap-6'>

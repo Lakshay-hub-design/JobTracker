@@ -44,7 +44,7 @@ const Topbar = () => {
         <h1 className="font-semibold text-lg text-orange-500">JobTracker</h1>
       </div>
       {location.pathname === "/jobs" && (
-        <div className="relative w-full max-w-md">
+        <div className="hidden md:block relative w-full max-w-md">
           {/* Icon */}
           <div className="absolute left-2 top-1/2 -translate-y-1/2 bg-orange-100 hover:bg-orange-200 transition p-2 rounded-full">
             <Search size={16} className="text-orange-600" />

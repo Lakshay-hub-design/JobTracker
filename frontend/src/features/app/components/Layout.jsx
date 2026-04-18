@@ -59,8 +59,10 @@ const Layout = () => {
           <BreadCrums items={getBreadcrumbs()} />
         </div>
 
-        <main className='flex-1 p-4 overflow-y-auto pb-22 md:pb-4'>
+        <main className='flex-1 overflow-y-auto pb-22 md:pb-4'>
+          <div className="p-4">
             <Outlet />
+          </div>
         </main>
         
       </div>
