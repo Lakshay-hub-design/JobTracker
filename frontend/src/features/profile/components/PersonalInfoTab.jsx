@@ -32,9 +32,9 @@ const PersonalInfoTab = ({ profile, handleUpdateProfile }) => {
 
       <h2 className='text-2xl font-medium'>Personal Details</h2>
 
-      <div className='flex justify-between gap-6'>
+      <div className='flex flex-col md:flex-row justify-between gap-6 w-full'>
 
-        <div className='w-1/2'>
+        <div className='md:w-1/2'>
           <label className="text-[#614942] dark:text-[#be856f] font-medium">Full Name</label>
           <input
             name="username"
@@ -43,7 +43,7 @@ const PersonalInfoTab = ({ profile, handleUpdateProfile }) => {
             className="w-full mt-1 px-4 py-2 bg-white dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md"
           />
         </div>
-        <div className='w-1/2'>
+        <div className='md:w-1/2'>
           <label className="text-[#614942] dark:text-[#be856f] font-medium">Email Address (Read-only)</label>
           <h3 className="w-full mt-1 p-2 bg-[#EDEBEA] dark:bg-[#3b3634] text-gray-600 dark:text-[#ada5a5] rounded-md">
             {formData.email}

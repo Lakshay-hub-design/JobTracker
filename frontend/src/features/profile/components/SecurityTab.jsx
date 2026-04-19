@@ -50,7 +50,7 @@ const SecurityTab = ({ handleChangePassword, handleLogoutAll}) => {
     <div className="space-y-6">
       <h3 className="text-2xl font-medium">Security & Access</h3>
       <div className="space-y-4">
-        <div className="flex gap-6 justify-between mb-8">
+        <div className="flex flex-col md:flex-row gap-6 justify-between mb-8">
           <div>
             <label className='text-[#614942] dark:text-[#be856f] font-medium' htmlFor="">Current Password</label>
             <input

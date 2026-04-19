@@ -53,10 +53,10 @@ const PreferencesTab = ({ profile, handleUpdateProfile }) => {
   }
   
   return (
-    <div className="space-y-6">
-      <h3 className="text-2xl font-medium">Career Preferences</h3>
-      <div className="flex gap-6 justify-between">
-        <div className="w-1/2">
+    <div className="space-y-5 md:space-y-6">
+      <h3 className="text-xl md:text-2xl font-medium">Career Preferences</h3>
+      <div className="flex flex-col md:flex-row gap-6 justify-between">
+        <div className="md:w-1/2">
           <label className="text-[#614942] dark:text-[#be856f] font-medium">Preferred Role</label>
           <input
             name="preferredRole"
@@ -66,7 +66,7 @@ const PreferencesTab = ({ profile, handleUpdateProfile }) => {
           />
         </div>
 
-        <div className="w-1/2">
+        <div className="md:w-1/2">
           <label className="text-[#614942] dark:text-[#be856f] font-medium">Preferred Location</label>
           <input
             name="preferredLocation"

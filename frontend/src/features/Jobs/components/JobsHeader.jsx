@@ -19,7 +19,7 @@ const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
       </div>
       
         <div className="relative flex  items-center gap-3">
-          <div className="flex md:hidden items-center flex-1 bg-[#2a2726] rounded-xl px-3 py-2">
+          <div className="flex md:hidden items-center flex-1 border-2 dark:bg-[#2a2726] rounded-xl px-3 py-2">
             <Search size={16} className="text-gray-400" />
 
             <input
@@ -33,21 +33,21 @@ const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
 
           <button
             onClick={() => setShowFilters((prev) => !prev)}
-            className="bg-[#2a2726] p-2.5 rounded-xl"
+            className="bg-[#f2f2f2] dark:bg-[#2a2726] p-2.5 rounded-xl"
           >
-            <FiFilter className="text-white" size={18} />
+            <FiFilter className="dark:text-white" size={18} />
           </button>
           {showFilters && (
             <div className="absolute right-0 top-14 z-50 w-[260px]">
               <div
                 className="
-        bg-[#1f1d1c]/85 backdrop-blur-xl
+        dark:bg-[#1f1d1c]/85 backdrop-blur-xl
         border border-white/10
         rounded-2xl p-4 shadow-2xl
       "
               >
                 {/* 🔥 STATUS FILTER */}
-                <p className="text-xs text-gray-400 mb-2 tracking-wide">
+                <p className="text-xs dark:text-gray-400 mb-2 tracking-wide">
                   STATUS FILTER
                 </p>
 
@@ -63,7 +63,7 @@ const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
                 ${
                   filters.status === status
                     ? "bg-orange-500 text-white"
-                    : "bg-[#2a2726] text-gray-300 hover:bg-[#333]"
+                    : "dark:bg-[#2a2726] bg-[#ededed] dark:text-gray-300 hover:bg-[#d8d8d8] dark:hover:bg-[#333]"
                 }
               `}
                       >
@@ -74,7 +74,7 @@ const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
                 </div>
 
                 {/* 🔥 JOB TYPE FILTER */}
-                <p className="text-xs text-gray-400 mb-2 tracking-wide">
+                <p className="text-xs dark:text-gray-400 mb-2 tracking-wide">
                   JOB TYPE FILTER
                 </p>
 
@@ -89,7 +89,7 @@ const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
                 ${
                   filters.jobType === type
                     ? "bg-orange-500 text-white"
-                    : "bg-[#2a2726] text-gray-300 hover:bg-[#333]"
+                    : "dark:bg-[#2a2726] bg-[#ededed] dark:text-gray-300 hover:bg-[#d8d8d8] dark:hover:bg-[#333]"
                 }
               `}
                     >
@@ -103,14 +103,14 @@ const JobsHeader = ({ jobs, filters, setFilters, search, setSearch }) => {
                     onClick={() =>
                       setFilters({ status: "", jobType: "", search: "" })
                     }
-                    className="text-xs text-gray-400 hover:text-white"
+                    className="text-xs dark:text-gray-400 hover:text-[#5f5c5c] dark:hover:text-white"
                   >
                     Clear All
                   </button>
 
                   <button
                     onClick={() => setShowFilters(false)}
-                    className="text-xs bg-orange-500 px-3 py-1 rounded-full"
+                    className="text-xs bg-orange-500 text-white dark:text-black px-3 py-1 rounded-full"
                   >
                     Done
                   </button>

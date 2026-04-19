@@ -13,7 +13,7 @@ const ProfilePage = () => {
     if (!profile) return null
 
   return (
-    <div className='space-y-6 px-6'>
+    <div className='space-y-6'>
         <ProfileHeader 
           profile={profile}
           handleUpdateProfile={handleUpdateProfile}

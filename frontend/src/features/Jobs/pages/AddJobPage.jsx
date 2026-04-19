@@ -1,11 +1,11 @@
-import React, { useRef, useState } from 'react'
-import { FileUp } from 'lucide-react'
-import { useAddJob } from '../hooks/useAddJob';
-import { useNavigate } from 'react-router-dom';
+import React, { useRef, useState } from "react";
+import { FileUp } from "lucide-react";
+import { useAddJob } from "../hooks/useAddJob";
+import { useNavigate } from "react-router-dom";
 
 const AddJobPage = () => {
-  const fileInputRef = useRef(null)
-  const navigate = useNavigate()
+  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     company: "",
     position: "",
@@ -19,43 +19,43 @@ const AddJobPage = () => {
     notes: "",
   });
 
-  const { handleAddApplication, loading, error } = useAddJob()
+  const { handleAddApplication, loading } = useAddJob();
 
-  const [errors, setErrors] = useState({})
+  const [errors, setErrors] = useState({});
 
-  const [showConfirm, setShowConfirm] = useState(false)
+  const [showConfirm, setShowConfirm] = useState(false);
 
   const [file, setFile] = useState(null);
 
   const validate = () => {
-  const newErrors = {}
+    const newErrors = {};
 
-  if (!formData.company.trim()) {
-    newErrors.company = "Company is required"
-  }
+    if (!formData.company.trim()) {
+      newErrors.company = "Company is required";
+    }
 
-  if (!formData.position.trim()) {
-    newErrors.position = "Position is required"
-  }
+    if (!formData.position.trim()) {
+      newErrors.position = "Position is required";
+    }
 
-  if (!formData.location.trim()) {
-    newErrors.location = "Location is required"
-  }
+    if (!formData.location.trim()) {
+      newErrors.location = "Location is required";
+    }
 
-  setErrors(newErrors)
+    setErrors(newErrors);
 
-  return Object.keys(newErrors).length === 0
-}
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleClick = () => {
-    fileInputRef.current.click()
-  }
+    fileInputRef.current.click();
+  };
 
   const handleFileChange = (e) => {
     const file = e.target.files[0];
-    if(file){
-      setFile(file)
-    } 
+    if (file) {
+      setFile(file);
+    }
   };
 
   const handleChange = (e) => {
@@ -68,35 +68,35 @@ const AddJobPage = () => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault()
-    if (!validate()) return
+    e.preventDefault();
+    if (!validate()) return;
 
     if (!file || !formData.description) {
-      setShowConfirm(true)
-      return
+      setShowConfirm(true);
+      return;
     }
 
-    proceedSubmit()
-  }
+    proceedSubmit();
+  };
 
   const proceedSubmit = () => {
-    const form = new FormData()
+    const form = new FormData();
 
     for (let key in formData) {
-      form.append(key, formData[key])
+      form.append(key, formData[key]);
     }
 
     if (file) {
-      form.append("resume", file)
+      form.append("resume", file);
     }
     for (let pair of form.entries()) {
-      console.log(pair[0], pair[1])
+      console.log(pair[0], pair[1]);
     }
-    handleAddApplication(form)
-  }
+    handleAddApplication(form);
+  };
 
   return (
-    <div className="ml-4">
+    <div className="w-full">
       <div className="mb-6">
         <h2 className="text-xl font-bold mb-">Add New Application</h2>
         <p className="text-gray-500 text-sm">
@@ -105,11 +105,14 @@ const AddJobPage = () => {
         </p>
       </div>
 
-      <div className="flex gap-6">
-        <div className="bg-white dark:bg-[#1e1b1a] w-3/5 col-span-3 p-6 rounded-2xl shadow-sm">
-          <div className="flex justify-between gap-6 space-y-4">
+      <div className="flex flex-col lg:flex-row gap-4 md:gap-6">
+        <div className="bg-white dark:bg-[#1e1b1a] flex flex-col justify-between w-full md:w-3/5 col-span-3 p-4 rounded-2xl shadow-sm">
+          <div className="flex flex-col md:flex-row justify-between md:gap-6 space-y-4">
             <div className="flex flex-col w-full">
-              <label htmlFor="company" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
+              <label
+                htmlFor="company"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
+              >
                 Company
               </label>
               <input
@@ -149,9 +152,12 @@ const AddJobPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 space-y-4 mt-4 md:mt-0">
             <div className="flex flex-col w-full">
-              <label htmlFor="status" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
+              <label
+                htmlFor="status"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
+              >
                 Status
               </label>
               <select
@@ -168,7 +174,10 @@ const AddJobPage = () => {
               </select>
             </div>
             <div className="flex flex-col w-full">
-              <label htmlFor="jobType" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
+              <label
+                htmlFor="jobType"
+                className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
+              >
                 Job Type
               </label>
               <select
@@ -184,7 +193,7 @@ const AddJobPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 space-y-4">
             <div className="flex flex-col w-full">
               <label
                 htmlFor="location"
@@ -226,7 +235,7 @@ const AddJobPage = () => {
             </div>
           </div>
 
-          <div className="flex justify-between gap-6 space-y-4">
+          <div className="grid grid-cols-2 gap-4 md:gap-6 space-y-4">
             <div className="flex flex-col w-full">
               <label
                 htmlFor="appliedDate"
@@ -276,7 +285,7 @@ const AddJobPage = () => {
             ></textarea>
           </div>
 
-          <div className="flex gap-6 justify-end mt-6">
+          <div className="hidden md:flex gap-6 justify-end mt-6">
             <button
               onClick={() => navigate("/jobs")}
               className="text-amber-800 font-medium cursor-pointer hover:underline"
@@ -293,8 +302,11 @@ const AddJobPage = () => {
           </div>
         </div>
 
-        <div className="bg-white dark:bg-[#1e1b1a] w-2/5 p-6 flex col-span-2 rounded-2xl shadow-sm flex-col">
-          <label htmlFor="" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
+        <div className="bg-white dark:bg-[#1e1b1a] w-full md:w-2/5 p-6 flex col-span-2 rounded-2xl shadow-sm flex-col">
+          <label
+            htmlFor=""
+            className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
+          >
             Resume
           </label>
           <div className="border-2 border-dashed border-amber-800/20 p-4 rounded-md bg-gray-100 dark:bg-[#2F2929] flex flex-col items-center justify-center">
@@ -319,7 +331,9 @@ const AddJobPage = () => {
                   onClick={handleClick}
                   className="py-2 px-4 rounded-full bg-gray-200 dark:bg-orange-100 hover:scale-105 transition cursor-pointer"
                 >
-                  <h3 className="font-medium dark:text-[#474242]">Choose File</h3>
+                  <h3 className="font-medium dark:text-[#474242]">
+                    Choose File
+                  </h3>
                 </div>
               </div>
             )}
@@ -351,7 +365,10 @@ const AddJobPage = () => {
           </div>
 
           <div className="flex flex-col w-full mt-6">
-            <label htmlFor="notes" className="font-bold text-gray-800 dark:text-[#95756a] mb-2">
+            <label
+              htmlFor="notes"
+              className="font-bold text-gray-800 dark:text-[#95756a] mb-2"
+            >
               Notes
             </label>
             <textarea
@@ -363,54 +380,65 @@ const AddJobPage = () => {
               className=" py-2 px-4 rounded-md bg-gray-100 dark:bg-[#2F2929] resize-none h-30"
             ></textarea>
           </div>
+
+          <div className="w-full md:hidden mt-4 flex  gap-3">
+            <button
+              onClick={() => navigate("/jobs")}
+              className="flex-1 py-3 rounded-full border border-orange-600 text-orange-600 font-medium"
+            >
+              Cancel
+            </button>
+
+            <button
+              disabled={loading}
+              onClick={handleSubmit}
+              className="flex-1 py-3 rounded-full bg-orange-600 text-white font-medium"
+            >
+              {loading ? "Adding..." : "Add"}
+            </button>
+          </div>
         </div>
 
         {showConfirm && (
-  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+          <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50">
+            <div className="bg-white rounded-xl p-6 w-[400px] shadow-lg">
+              <h3 className="text-lg font-semibold mb-2">
+                🤖 AI Insights Not Available
+              </h3>
 
-    <div className="bg-white rounded-xl p-6 w-[400px] shadow-lg">
+              <p className="text-sm text-gray-600 mb-4">
+                You haven’t added a job description or resume. AI report won’t
+                be generated for this job.
+              </p>
 
-      <h3 className="text-lg font-semibold mb-2">
-        🤖 AI Insights Not Available
-      </h3>
+              <p className="text-sm text-orange-600 mb-6">
+                You can still add them later to generate insights.
+              </p>
 
-      <p className="text-sm text-gray-600 mb-4">
-        You haven’t added a job description or resume.  
-        AI report won’t be generated for this job.
-      </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={() => setShowConfirm(false)}
+                  className="px-4 py-2 border rounded-lg"
+                >
+                  Go Back
+                </button>
 
-      <p className="text-sm text-orange-600 mb-6">
-        You can still add them later to generate insights.
-      </p>
-
-      <div className="flex justify-end gap-3">
-        
-        <button
-          onClick={() => setShowConfirm(false)}
-          className="px-4 py-2 border rounded-lg"
-        >
-          Go Back
-        </button>
-
-        <button
-          onClick={() => {
-            setShowConfirm(false)
-            proceedSubmit() // 👈 real submit function
-          }}
-          className="px-4 py-2 bg-orange-600 text-white rounded-lg"
-        >
-          Continue Anyway
-        </button>
-
-      </div>
-
-    </div>
-
-  </div>
-)}
+                <button
+                  onClick={() => {
+                    setShowConfirm(false);
+                    proceedSubmit(); // 👈 real submit function
+                  }}
+                  className="px-4 py-2 bg-orange-600 text-white rounded-lg"
+                >
+                  Continue Anyway
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
 
-export default AddJobPage
+export default AddJobPage;
