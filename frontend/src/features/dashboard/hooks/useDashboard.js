@@ -25,10 +25,9 @@ const delay = (ms) => new Promise(res => setTimeout(res, ms));
             setProgress(80)
             await delay(200)
 
-
-            setProgress(100)
             const data = await getDashboardStats(axiosPrivate)
             setDashboardData(data)
+            setProgress(100)
 
         } catch (err) {
             setError(err.message || 'Failed to load dashboard')

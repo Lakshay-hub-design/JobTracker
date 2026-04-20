@@ -5,8 +5,8 @@ import { Download, FileText, Upload } from 'lucide-react';
 
 const JobDetailsMain = ({ job, setShowDrawer }) => {
   return (
-    <div className="grid grid-cols-3 gap-6">
-      <div className="col-span-2 space-y-6">
+    <div className="grid md:grid-cols-3 gap-6">
+      <div className="md:col-span-2 space-y-6">
         <div className="bg-white dark:bg-[#221F1E] p-6 rounded-2xl shadow-sm">
           <div className="text-md font-semibold dark:text-[#b08173] mb-3">
             <span className='bg-amber-800 p-1 rounded-full mr-2'></span>

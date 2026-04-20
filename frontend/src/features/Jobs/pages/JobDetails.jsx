@@ -111,7 +111,7 @@ const JobDetails = () => {
       />
 
       <div className="bg-white dark:bg-[#221F1E] p-5 rounded-xl shadow-sm">
-        <p className="text-sm text-gray-500 dark:text-[#A27567] mb-2">Quick Summary</p>
+        <p className="md:text-sm font-medium text-gray-500 dark:text-[#A27567] mb-2">Quick Summary</p>
         <p className="text-sm text-gray-700 dark:text-[#d1cece]">
           {job.description?.slice(0, 150) || "No summary available..."}...
         </p>
