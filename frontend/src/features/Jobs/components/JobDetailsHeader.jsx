@@ -192,14 +192,32 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
                   ? "Retry AI Report"
                   : "Generate AI Report"}
           </button>
-
+          <div ref={menuRef} className="relative flex-1">
           <button
             onClick={() => setShowStatusMenu((prev) => !prev)}
-            className="flex-1 flex items-center gap-2 justify-center py-3 rounded-full bg-gray-200 dark:bg-[#2a2726]  font-medium"
+            className=" w-full flex items-center gap-2 justify-center py-3 rounded-full bg-gray-200 dark:bg-[#2a2726]  font-medium"
           >
             <MdOutlineUpdate size={20}/>
             Update Status
           </button>
+          {showStatusMenu && (
+                  <div className="absolute right-0 mt-2 w-40 bg-white dark:bg-[#221F1E] border dark:border-gray-500 rounded-lg shadow-lg z-50">
+                    {["applied", "interviewing", "offered", "rejected"].map(
+                      (status) => (
+                        <div
+                          key={status}
+                          onClick={() => handleStatusUpdate(status)}
+                          className={`px-4 py-2 text-sm cursor-pointer capitalize
+                        ${job.status === status ? "bg-orange-100 dark:bg-orange-300 text-orange-600 dark:text-black" : "hover:bg-gray-100 dark:hover:bg-[#3c3c3c] "}
+                      `}
+                        >
+                          {status}
+                        </div>
+                      ),
+                    )}
+                  </div>
+                )}
+          </div>
         </div>
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { ArrowRight } from 'lucide-react'
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import { IoBusiness } from "react-icons/io5";
 
 const getStatusStyle = (status) => {
     switch(status){
@@ -72,10 +73,9 @@ const RecentJobs = ({jobs}) => {
           {/* Top */}
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <img
-                alt={job.company}
-                className="w-10 h-10 rounded-lg bg-black p-2"
-              />
+              <div className='w-10 h-10 rounded-lg bg-black p-2 flex items-center justify-center'>
+                <IoBusiness />
+              </div>
               <div>
                 <p className="font-medium text-gray-800 dark:text-[#ccc] capitalize">
                   {job.company}
@@ -107,14 +107,13 @@ const RecentJobs = ({jobs}) => {
         </div>
 
         {/* 💻 Desktop Row */}
-        <div className="hidden md:grid grid-cols-4 items-center px-4 py-3 hover:bg-gray-50 transition rounded-lg">
+        <div className="hidden md:grid grid-cols-4 items-center px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#1e1d1d] transition rounded-lg">
 
           {/* Company */}
           <div className="flex items-center gap-3">
-            <img
-              alt={job.company}
-              className="w-10 h-10 rounded-lg bg-black p-2"
-            />
+            <div className='w-10 h-10 rounded-lg bg-black p-2 flex items-center justify-center'>
+                <IoBusiness />
+            </div>
             <span className="font-medium capitalize text-gray-800 dark:text-[#797878]">
               {job.company}
             </span>
