@@ -4,6 +4,7 @@ const { Worker } = require("bullmq")
 const redis = require("../config/redis")
 const aiReportModel = require("../models/aiReport.model")
 const { generateAiReport } = require("../services/ai.service")
+const jobRepository = require("../repositories/job.repository")
 
 const startWorker = async () => {
 console.log("🟢 Worker started")
@@ -15,7 +16,7 @@ console.log("🟢 Worker started")
         console.log("🔥 Processing job:", job.id)
       }
 
-      const { resumeText, description, aiReportId } = job.data
+      const { resumeText, description, aiReportId, jobId } = job.data
 
       try {
         const result = await generateAiReport({
@@ -27,6 +28,8 @@ console.log("🟢 Worker started")
           status: "completed",
           ...result
         })
+
+        await jobRepository.updateJobAIInsight(jobId, result)
 
       } catch (err) {
         console.error("❌ Error:", err.message)

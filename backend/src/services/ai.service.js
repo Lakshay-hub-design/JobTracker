@@ -26,24 +26,32 @@ const interviewReportSchema = z.object({
         focus: z.string().describe("The main focus of this day in the preparation plan, e.g. data structures, system design, mock interviews etc."),
         tasks: z.array(z.string()).describe("List of tasks to be done on this day to follow the preparation plan, e.g. read a specific book or article, solve a set of problems, watch a video etc.")
     })).describe("A day-wise preparation plan for the candidate to follow in order to prepare for the interview effectively"),
-    title: z.string().describe("The title of the job for which the interview report is generated"),
+    summary: z.string().describe("2-3 line honest summary of the candidate's profile and readiness for this job"),
+    insights: z.array(z.string()).describe("Actionable insights telling the candidate what to improve or focus on"),
+    strengths: z.array(z.string()).describe("Key strengths of the candidate based on resume vs job match"),
+    nextBestAction: z.string().describe("The single most important next step the candidate should take to improve their chances"),
 })
 
 async function generateAiReport({resumeText, jobDescription}) {
 
     const prompt = `
-    You are an expert technical interviewer.
+        You are a senior software engineering interviewer and career coach.
 
-        Analyze the candidate's resume against the job description.
+        Your goal is to deeply analyze the candidate's profile against the job and provide honest, practical, and actionable feedback.
 
         Return ONLY valid JSON.
 
-        Provide:
-        - Match score (0-100)
-        - Technical questions with intention and ideal answers
-        - Behavioural questions
-        - Skill gaps with severity
-        - 7-day preparation plan
+        Focus on:
+        - Realistic interview questions (avoid generic ones)
+        - Practical skill gaps based on real industry expectations
+        - Clear, actionable insights (what the candidate should do next)
+        - Honest evaluation (do not sugarcoat)
+        - Keep answers concise and useful
+
+        Also provide:
+        - A short summary of the candidate
+        - Key strengths
+        - Specific improvement insights
 
         Resume:
         ${resumeText}
@@ -74,6 +82,7 @@ async function generateAiReport({resumeText, jobDescription}) {
     const result = interviewReportSchema.safeParse(response)
 
     if (!result.success) {
+        console.error(result.error)
         throw new Error("Failed to generate AI report")
     }
 

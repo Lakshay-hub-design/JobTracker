@@ -14,6 +14,12 @@ const createJobService = async ({ body, file, userId }) => {
         throw new ApiError(400, "Company and position are required")
     }
 
+    const allowedStatus = ["applied", "interviewing", "offered", "rejected"]
+
+    if (status && !allowedStatus.includes(status)) {
+        throw new ApiError(400, "Invalid status")
+    }
+
     let resumeData = null
     let resumeText = ""
 
@@ -28,7 +34,7 @@ const createJobService = async ({ body, file, userId }) => {
         status, 
         jobType,
         location,
-        appliedDate,
+        appliedDate: appliedDate || new Date(),
         notes,
         description,
         coverLetter,
@@ -38,7 +44,7 @@ const createJobService = async ({ body, file, userId }) => {
         createdBy: userId,
     })
 
-    if(resumeText && description){
+    if(description){
         const aiReport = await aiReportRepository.createAIReport({
             job: job._id,
             user: userId,
@@ -250,32 +256,36 @@ const getDashboardStats = async (userId) => {
 
 const generateDashboardInsight = async (userId) => {
 
-    const total = await jobRepository.countJobs(userId)
-    const offered = await jobRepository.countOfferedJobs(userId)
+    const total = allJobs.length
+
+    const offered = allJobs.filter(j => j.status === "offered").length
+    const interviewing = allJobs.filter(j => j.status === "interviewing").length
 
     const successRate = total ? Math.round((offered / total) * 100) : 0
-
-    const reports = await aiReportRepository.getAIReportsByUser(userId)
+    const interviewRate = total ? Math.round((interviewing / total) * 100) : 0
     
-    const skillMap = {}
+    const latestInsightJob = await jobRepository.getLatestAIInsight(userId)
 
-    reports.forEach(report => {
-        report.skillGaps.forEach(gap => {
-            skillMap[gap.skill] = (skillMap[gap.skill] || 0) + 1
-        })
-    })
+    const aiInsight = latestInsightJob?.aiInsight || null
 
-    const weakAreas = Object.entries(skillMap)
-        .sort((a, b) =>  b[1] - a[1])
-        .slice(0, 3)
-        .map(item => item[0])
+    if (!aiInsight) {
+        return {
+        successRate,
+        interviewRate,
+
+        summary: "No AI insights yet",
+        weakAreas: [],
+        nextBestAction: "Add resume & job description to get personalized insights 🚀"
+        
+        }
+    }
 
     return {
         successRate,
-        weakAreas,
-        suggession: weakAreas.length
-            ? `Focus on improving: ${weakAreas.join(", ")}`
-            : "You're doing great! Keep applying."
+        interviewRate,
+        summary: aiInsight.summary,
+        weakAreas: aiInsight.weakAreas,
+        nextBestAction: aiInsight.nextBestAction
     }
 }
 
@@ -284,9 +294,15 @@ const getFullDashboardService = async ({userId}) => {
     const stats = await getDashboardStats(userId)
     const aiInsight = await generateDashboardInsight(userId)
 
+    const weeklyApplications = await jobRepository.countThisWeek(userId)
+
     return{
         ...stats,
-        aiInsight
+        aiInsight,
+        weeklyGoal: {
+            target: 5,
+            completed: weeklyApplications
+        }
     }
 }
 

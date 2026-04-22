@@ -6,7 +6,6 @@ const JobSchema = new mongoose.Schema(
         type: String,
         required: [true, "Company name is required"],
         trim: true,
-        lowercase: true
     },
     position: { 
         type: String,
@@ -18,6 +17,12 @@ const JobSchema = new mongoose.Schema(
       enum: ["applied", "interviewing", "offered", "rejected"],
       default: "applied",
     },
+    statusHistory: [
+      {
+        status: String,
+        date: { type: Date, default: Date.now }
+      }
+    ],
     location: {
       type: String,
       required: [true, "Location is required"],
@@ -68,6 +73,13 @@ const JobSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: [true, "Created by is required"],
+    },
+    aiInsight: {
+      summary: String,
+      weakAreas: [String],
+      nextBestAction: String,
+      matchScore: Number,
+      lastGenerated: Date
     },
     aiReport: {
       type: mongoose.Schema.Types.ObjectId,

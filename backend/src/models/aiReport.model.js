@@ -50,7 +50,7 @@ const skillGapSchema = new mongoose.Schema({
 
 const preprationPlanSchema = new mongoose.Schema({
     day: {
-        type: String,
+        type: Number,
         required: [true, 'Day is required']
     },
     focus: {
@@ -92,6 +92,20 @@ const aiReportSchema = new mongoose.Schema({
     behaviouralQuestions: [behaviouralQuestionSchema],
     skillGaps: [skillGapSchema],
     preparationPlan: [preprationPlanSchema],
+    summary: {
+        type: String
+    },
+
+    insights: [{
+        type: String
+    }],
+
+    strengths: [{
+        type: String
+    }],
+    nextBestAction: {
+        type: String
+    },
     error: {
         type: String
     }

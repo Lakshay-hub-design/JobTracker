@@ -16,6 +16,13 @@ class JobRepository {
             .lean()
     }
 
+    async getAllJobsBasic(userId){
+        return await Job
+            .find({ createdBy: userId })
+            .select("status createdAt")
+            .lean()
+    }
+
     async getJobDetails(jobId, userId){
         return await Job.findOne({
             _id: jobId,
@@ -67,6 +74,17 @@ class JobRepository {
         }).select('-description -notes -resume')
     }
 
+    async getLatestAIInsight(userId){
+        return await jobModel
+            .findOne({
+            createdBy: userId,
+            aiInsight: { $exists: true }
+            })
+            .sort({ "aiInsight.lastGenerated": -1 })
+            .select("aiInsight")
+            .lean()
+    }
+
     async countJobs(userId){
         return await Job.countDocuments({ createdBy: userId })
     }
@@ -82,6 +100,16 @@ class JobRepository {
         })
     }
 
+    async countThisWeek(userId){
+        const startOfWeek = new Date()
+        startOfWeek.setDate(startOfWeek.getDate() - startOfWeek.getDay())
+
+        return await Job.countDocuments({
+            createdBy: userId,
+            createdAt: { $gte: startOfWeek }
+        })
+    }
+
     async updateJob(job, data){
         Object.assign(job, data)
         return await job.save()
@@ -92,6 +120,31 @@ class JobRepository {
             { _id: jobId, createdBy: userId },
             data,
             { new: true, runValidators: true }
+        )
+    }
+
+    async updateJobAIInsight(jobId, aiData){
+        return await Job.findByIdAndUpdate(
+            jobId,
+            {
+            aiInsight: {
+                summary: aiData.summary,
+
+                weakAreas: aiData.skillGaps
+                ?.map(gap => gap.skill)
+                .slice(0, 3) || [],
+
+                nextBestAction:
+                aiData.nextBestAction ||
+                aiData.insights?.[0] ||
+                "Keep applying and improving",
+
+                matchScore: aiData.matchScore,
+
+                lastGenerated: new Date()
+            }
+            },
+            { new: true }
         )
     }
 
