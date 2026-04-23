@@ -61,7 +61,7 @@ class JobRepository {
 
     async getRecentJobs(userId, limit = 5){
         return await Job.find({ createdBy: userId })
-            .select('-description -notes -resume -resumeText')
+            .select('company position status appliedDate')
             .sort({ createdAt: -1 })
             .limit(limit)
             .lean()
@@ -75,7 +75,7 @@ class JobRepository {
     }
 
     async getLatestAIInsight(userId){
-        return await jobModel
+        return await Job
             .findOne({
             createdBy: userId,
             aiInsight: { $exists: true }

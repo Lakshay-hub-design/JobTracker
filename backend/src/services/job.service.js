@@ -256,6 +256,8 @@ const getDashboardStats = async (userId) => {
 
 const generateDashboardInsight = async (userId) => {
 
+    const allJobs = await jobRepository.getAllJobsBasic(userId)
+
     const total = allJobs.length
 
     const offered = allJobs.filter(j => j.status === "offered").length
@@ -302,7 +304,7 @@ const getFullDashboardService = async ({userId}) => {
         weeklyGoal: {
             target: 5,
             completed: weeklyApplications
-        }
+        }   
     }
 }
 
