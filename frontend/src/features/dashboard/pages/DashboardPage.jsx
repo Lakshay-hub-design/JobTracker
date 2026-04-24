@@ -21,10 +21,10 @@ const DashboardPage = () => {
       <div className="p-6 space-y-6">
         {/* Header */}
         <div>
-          <h1 className="text-3xl font-bold text-white">
+          <h1 className="text-3xl font-bold text-[#333232] dark:text-[#eeeded]">
             Welcome back, Lakshay 👋
           </h1>
-          <p className="text-gray-400 mt-1">Here’s your job search progress.</p>
+          <p className="dark:text-gray-400 mt-1">Here’s your job search progress.</p>
         </div>
 
         {/* Top Section */}
@@ -42,8 +42,6 @@ const DashboardPage = () => {
       <SummaryCards data={dashboardData} />
 
       <Charts data={dashboardData} />
-
-      <AIInsights insights={dashboardData?.aiInsight} />
 
       <RecentJobs jobs={dashboardData?.recentJobs} />
     </div>

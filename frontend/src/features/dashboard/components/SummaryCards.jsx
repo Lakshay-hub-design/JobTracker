@@ -1,108 +1,126 @@
 import React from 'react'   
-import {
-    Calendar1,
-    FileText,
-    TrendingUp,
-    TrendingDown,
-    BadgeCheck,
-    XCircle
-} from 'lucide-react'
+import { FaFileAlt, FaComments, FaTrophy, FaTimesCircle } from "react-icons/fa";
 
+const getBarColors = (color) => {
+  const map = {
+    orange: [
+      "bg-orange-300/20",
+      "bg-orange-300/30",
+      "bg-orange-300/25",
+      "bg-orange-300/40",
+      "bg-orange-300"
+    ],
+    red: [
+      "bg-red-300/20",
+      "bg-red-300/30",
+      "bg-red-300/25",
+      "bg-red-300/40",
+      "bg-red-300"
+    ],
+    green: [
+      "bg-lime-300/20",
+      "bg-lime-300/30",
+      "bg-lime-300/25",
+      "bg-lime-300/40",
+      "bg-lime-300"
+    ]
+  };
 
+  return map[color] || map.orange;
+};
+
+const iconColors = {
+  orange: "#FFB694",
+  red: "text-red-300",
+  green: "#DFED1A"
+};
 
 const SummaryCards = ({data}) => {
     const { totalJobs, statusStats } = data || {}
   return (
-    <div className='grid grid-cols-2 md:grid-cols-4 gap-5 mt-4 mb-8'>
+    <div className='grid grid-cols-2 md:grid-cols-4 gap-6 px-6 mt-4 mb-8'>
 
         <Card 
             title="Total Applications" 
             value={totalJobs} 
-            change="8"
-            icon='FileText'
+            change="+8"
+            icon={<FaFileAlt />}
             color="orange"
+            bars={[20, 40, 30, 60, 80]}
         />
         
         <Card 
             title="Interviewing"
             value={statusStats?.interviewing || 0}
-            change='12'
-            icon='Calendar1'
-            color="red"
+            change='+12'
+            icon={<FaComments />}
+            color="orange"
+            bars={[30, 20, 35, 25, 70]}
         />
 
         <Card 
             title="Offers Received"
             value={statusStats?.offered || 0}
-            change='5'
-            icon='BadgeCheck'
-            color="blue"
+            change='+5'
+            icon={<FaTrophy />}
+            color="green"
+            bars={[15, 15, 15, 15, 90]}
         />
 
         <Card 
             title="Rejections"
             value={statusStats?.rejected || 0}
-            change='3'
-            icon='XCircle'
-            color="red"
+            change='+3'
+            icon={<FaTimesCircle />}
+            color="orange"
+            bars={[40, 60, 30, 50, 35]}
         />
 
     </div>
   )
 }
 
-const iconMap = {
-  FileText: FileText,
-  Calendar1: Calendar1,
-  BadgeCheck: BadgeCheck,
-  XCircle: XCircle,
-};
 
-const colorMap = {
-  orange: {
-    icon: "text-orange-500",
-    bg: "bg-orange-100",
-  },
-  blue: {
-    icon: "text-blue-500",
-    bg: "bg-blue-100",
-  },
-  red: {
-    icon: "text-red-500",
-    bg: "bg-red-100",
-  },
-};
-
-const Card = ({ title, value, change, icon, color }) => {
-    const Icon = iconMap[icon]
-    const colorStyle = colorMap[color]
-    const isPositive = change >= 0
+const Card = ({ title, value, change, icon, bars, color }) => {
+    const shades = getBarColors(color)
     return (
-        <div className='flex flex-col justify-between bg-white dark:bg-[#221F1E] rounded-4xl shadow-sm p-4 w-full max-w-sm border border-gray-100 dark:border-none'>
-            
+            <div className="bg-[#1A1A1B] rounded-3xl p-5 w-full  
+    border border-white/5 shadow-lg hover:scale-105 transition duration-300">
 
-            <div className="flex justify-between gap-2">
-                <div className={`w-10 h-10 flex items-center justify-center rounded-xl ${colorStyle.bg} dark:bg-[#373433]`}>
-                    <Icon className={`${colorStyle.icon}`} />
-                </div>
-        
-                {/* Change % */}
-                <span
-                className={`flex items-center gap-2 text-sm font-semibold ${
-                    isPositive ? "text-green-500" : "text-red-500"
-                }`}
-                >
-                    {isPositive ? <TrendingUp size={16} /> : <TrendingDown size={16} />} {Math.abs(change)}%
-                </span>
-
-            </div>
-
-            <div className=''>
-                <p className='text-sm text-gray-500 dark:text-[#9F8880] font-medium tracking-wide'>{title}</p>
-                <h2 className='text-2xl font-bold text-gray-900 dark:text-[#DED7D5] mt-1'>{value}</h2>
-            </div>
-
+      {/* Top Section */}
+      <div className="flex justify-between items-center mb-4">
+        <div className={`p-3 rounded-full bg-[#2A2A2D] text-lg`}
+        style={{ color: iconColors[color] }}
+        >
+          {icon}
         </div>
+
+        <span className={`text-xs font-semibold text-[#DFED1A]`}>
+          {change}
+        </span>
+      </div>
+
+      {/* Label */}
+      <p className="text-[10px] uppercase tracking-widest text-[#856457] mb-1">
+        {title}
+      </p>
+
+      {/* Value */}
+      <h2 className="text-3xl font-bold text-white mb-1">
+        {value}
+      </h2>
+
+      {/* Bars */}
+      <div className="flex items-end gap-1 h-10">
+        {bars.map((h, i) => (
+          <div
+            key={i}
+            style={{ height: `${h}%` }}
+            className={`flex-1 rounded-sm ${shades[i]}`}
+          />
+        ))}
+      </div>
+    </div>
     )
 }
 

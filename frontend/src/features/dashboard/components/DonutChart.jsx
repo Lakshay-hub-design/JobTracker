@@ -3,6 +3,7 @@ import {
   Pie,
   Cell,
   ResponsiveContainer,
+  Tooltip
 } from "recharts";
 
 const config = {
@@ -24,6 +25,22 @@ const DonutChart = ({ statusStats }) => {
         color: config[key].color,
     })
     );
+
+    const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    const data = payload[0].payload;
+
+    return (
+      <div className="bg-[#1A1A1B] border border-white/10 px-3 py-2 rounded-lg shadow-lg">
+        <p className="text-xs text-gray-400">{data.name}</p>
+        <p className="text-sm font-semibold text-white">
+          {data.value} applications
+        </p>
+      </div>
+    );
+  }
+  return null;
+};
     const total = Object.values(statusStats).reduce((acc, value) => acc + value, 0)
   return (
     <div className="bg-orange-100/40 dark:bg-[#221F1E] p-5 rounded-4xl shadow-sm w-full">
@@ -32,17 +49,25 @@ const DonutChart = ({ statusStats }) => {
             Status Breakdown
         </h2>
 
-        <div className="relative flex justify-center items-center">
+        <div className="relative flex justify-center overflow-visible items-center">
             
-            <ResponsiveContainer width={200} height={200}>
+            <ResponsiveContainer width="100%" height={200}>
             <PieChart>
+                <Tooltip
+                    content={<CustomTooltip />}
+                    position={{ x: 260, y: 80 }}
+                    wrapperStyle={{ pointerEvents: "none" }}
+                />
                 <Pie
                 data={formattedStatusData}
                 dataKey="value"
                 innerRadius={60}
                 outerRadius={80}
-                paddingAngle={5}
-                cornerRadius={10}
+                cornerRadius={25}
+                paddingAngle={0}
+                startAngle={90}
+                endAngle={-270}
+              
                 stroke="none"
                 >
                 {formattedStatusData.map((entry, index) => (

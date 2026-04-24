@@ -1,12 +1,10 @@
 import {
-    CartesianGrid,
-    Line,
-    LineChart,
-    ResponsiveContainer,
-    Tooltip,
-    XAxis,
-    YAxis,
-} from 'recharts'
+  AreaChart,
+  Area,
+  XAxis,
+  Tooltip,
+  ResponsiveContainer,
+} from "recharts";
 
 const monthNames = [
   "Jan", "Feb", "Mar", "Apr", "May", "Jun",
@@ -37,24 +35,55 @@ const CustomTooltip = ({ active, payload, label }) => {
 
   return (
     <div className='bg-orange-100/40 dark:bg-[#221F1E] p-5 rounded-4xl shadow-sm md:col-span-2'>
-        <h2 className='text-lg font-semibold dark:text-[#D2CBC9] mb-4'>Application Over Time</h2>
+        <div className="flex justify-between items-center mb-6">
+        <h2 className="text-white text-lg font-semibold">
+          Applications Over Time
+        </h2>
 
-        <ResponsiveContainer width="100%" height={200} >
-            <LineChart data={formattedData}>
-                <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                <XAxis dataKey="month" axisLine={false} tickLine={false} />
-                <YAxis axisLine={false} tickLine={false} />
+        <div className="bg-black/40 rounded-full p-1 flex gap-1">
+          <button className="px-3 py-1 text-xs bg-[#2A2A2D] rounded-full text-white">
+            MONTHLY
+          </button>
+        </div>
+      </div>
+
+        <div className="h-62 pt-2">
+        <ResponsiveContainer width="100%" height="100%">
+          <AreaChart data={formattedData} margin={{ left: 10, right: 10, top: 2 }}>
+
           <Tooltip content={<CustomTooltip />} />
 
-                <Line 
-                    type="monotone" 
-                    dataKey="count" 
-                    stroke="#9A3412"
-                    strokeWidth={4}
-                    dot={false}
-                />
-            </LineChart>
+            {/* Gradient */}
+            <defs>
+              <linearGradient id="color" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="#FF6A00" stopOpacity={0.4} />
+                <stop offset="100%" stopColor="#FF6A00" stopOpacity={0} />
+              </linearGradient>
+            </defs>
+
+            {/* X Axis */}
+            <XAxis
+              dataKey="month"
+              stroke="#B99D91"
+              tick={{ fontSize: 15 }}
+              axisLine={false}
+              tickLine={false}
+              padding={{ left: 10, right: 10 }}
+            />
+
+            {/* Area */}
+            <Area
+              type="monotone"
+              dataKey="count"
+              stroke="#FF6A00"
+              strokeWidth={2}
+              fill="url(#color)"
+              dot={false}
+            />
+
+          </AreaChart>
         </ResponsiveContainer>
+      </div>
     </div>
   )
 }
