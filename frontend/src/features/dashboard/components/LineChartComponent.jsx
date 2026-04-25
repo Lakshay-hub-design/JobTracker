@@ -40,8 +40,8 @@ const CustomTooltip = ({ active, payload, label }) => {
           Applications Over Time
         </h2>
 
-        <div className="bg-black/40 rounded-full p-1 flex gap-1">
-          <button className="px-3 py-1 text-xs bg-[#2A2A2D] rounded-full text-white">
+        <div className="bg-[#f0eaea] dark:bg-black/40 rounded-full p-1 flex gap-1">
+          <button className="px-3 py-1 text-xs bg-white dark:bg-[#2A2A2D] rounded-full dark:text-white">
             MONTHLY
           </button>
         </div>

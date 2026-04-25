@@ -36,7 +36,7 @@ const RecentJobs = ({jobs}) => {
     }
 
   return (
-    <div className="px-6">
+    <div className="md:px-6">
       <div className="bg-white dark:bg-[#151312] rounded-4xl p-4 md:p-5  shadow-md">
         {/* 🔥 Header */}
         <div className="flex justify-between sm:flex-row sm:items-center sm:justify-between gap-3 mb-5">
@@ -69,8 +69,8 @@ const RecentJobs = ({jobs}) => {
                 {/* Top */}
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-lg bg-black p-2 flex items-center justify-center">
-                      <IoBusiness />
+                    <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white font-semibold text-lg uppercase`}>
+                      {job.company ? job.company.charAt(0) : "?"}
                     </div>
                     <div>
                       <p className="font-medium text-gray-800 dark:text-[#ccc] capitalize">
@@ -104,8 +104,8 @@ const RecentJobs = ({jobs}) => {
               <div className="hidden md:grid grid-cols-4 items-center px-4 py-3 hover:bg-gray-50 dark:hover:bg-[#1e1d1d] transition rounded-lg">
                 {/* Company */}
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-lg bg-black p-2 flex items-center justify-center">
-                    <IoBusiness />
+                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center font-semibold text-lg uppercase bg-[#e6e2e2] dark:bg-[#222222]`}>
+                    {job.company ? job.company.charAt(0) : "?"}
                   </div>
                   <span className="font-medium capitalize text-gray-800 dark:text-[#797878]">
                     {job.company}

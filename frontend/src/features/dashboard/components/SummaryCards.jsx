@@ -38,7 +38,7 @@ const iconColors = {
 const SummaryCards = ({data}) => {
     const { totalJobs, statusStats } = data || {}
   return (
-    <div className='grid grid-cols-2 md:grid-cols-4 gap-6 px-6 mt-4 mb-8'>
+    <div className='grid grid-cols-2 md:grid-cols-4 gap-6 md:px-6 mt-4 mb-8'>
 
         <Card 
             title="Total Applications" 
@@ -84,18 +84,18 @@ const SummaryCards = ({data}) => {
 const Card = ({ title, value, change, icon, bars, color }) => {
     const shades = getBarColors(color)
     return (
-            <div className="bg-[#1A1A1B] rounded-3xl p-5 w-full  
+            <div className="dark:bg-[#1A1A1B] rounded-3xl p-5 w-full  
     border border-white/5 shadow-lg hover:scale-105 transition duration-300">
 
       {/* Top Section */}
       <div className="flex justify-between items-center mb-4">
-        <div className={`p-3 rounded-full bg-[#2A2A2D] text-lg`}
+        <div className={`p-3 rounded-full bg-[#FFEDE6] dark:bg-[#2A2A2D] text-lg`}
         style={{ color: iconColors[color] }}
         >
           {icon}
         </div>
 
-        <span className={`text-xs font-semibold text-[#DFED1A]`}>
+        <span className={`text-xs font-semibold text-orange-500 dark:text-[#DFED1A]`}>
           {change}
         </span>
       </div>
