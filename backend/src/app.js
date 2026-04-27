@@ -40,11 +40,13 @@ app.get("/health", (req, res) => {
 const authRoutes = require('./routes/auth.routes')
 const jobRoutes = require('./routes/job.routes')
 const userRoutes = require('./routes/user.routes')
+const objectiveRoutes = require('./routes/goal.routes')
 
 app.use('/admin/queues', bullBoard.getRouter())
 
 app.use('/api/auth' , authRoutes)
 app.use('/api/job', jobRoutes)
 app.use('/api/user', userRoutes)
+app.use('/api/objectives', objectiveRoutes)
 
 module.exports = app

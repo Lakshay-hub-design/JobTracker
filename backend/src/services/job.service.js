@@ -3,6 +3,7 @@ const aiQueue = require('../queues/queue')
 const aiReportRepository = require('../repositories/aiReport.repository')
 const jobRepository = require('../repositories/job.repository')
 
+const { updateApplicationObjective, getWeeklyObjectivesService } = require('../services/objective.service')
 const { ApiError } = require('../utils/apiError')
 const extractResumeText = require('./resume.service')
 
@@ -42,6 +43,10 @@ const createJobService = async ({ body, file, userId }) => {
         resume: resumeData,
         resumeText,
         createdBy: userId,
+    })
+
+    updateApplicationObjective(userId).catch(err => {
+        console.error("Goal update failed:", err.message)
     })
 
     if(description){
@@ -296,15 +301,12 @@ const getFullDashboardService = async ({userId}) => {
     const stats = await getDashboardStats(userId)
     const aiInsight = await generateDashboardInsight(userId)
 
-    const weeklyApplications = await jobRepository.countThisWeek(userId)
+    const objectives = await getWeeklyObjectivesService(userId)
 
     return{
         ...stats,
         aiInsight,
-        weeklyGoal: {
-            target: 5,
-            completed: weeklyApplications
-        }   
+        objectives  
     }
 }
 
