@@ -108,7 +108,7 @@ const EmptyDashboard = () => {
           Add Your First Application
         </button>
 
-        <div className="flex flex-wrap justify-center sm:justify-between gap-4 mt-10 text-[#7f7d7d] dark:text-gray-500 text-xs items-center">
+        <div className="flex flex-wrap justify-center sm:justify-between gap-4 mt-8 text-[#7f7d7d] dark:text-gray-500 text-xs items-center">
           <div className="flex items-center gap-1">
             <FiActivity />
             <span>INTERVIEW PREP</span>

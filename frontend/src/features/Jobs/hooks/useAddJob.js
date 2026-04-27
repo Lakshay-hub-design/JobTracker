@@ -3,7 +3,7 @@ import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { useNavigate } from "react-router-dom"
 import { addJob } from "../service/jobsApi"
 
-export const useAddJob = () => {
+export const useAddJob = (refetchDashboard) => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
 
@@ -11,13 +11,15 @@ export const useAddJob = () => {
   const navigate = useNavigate()
 
   const handleAddApplication = async (formData) => {
-    console.log(formData)
     try {
         setLoading(true)
         setError(null)
+        
+        await addJob(axiosPrivate, formData)
 
-        console.log(formData)
-        const data = await addJob(axiosPrivate, formData)
+        if (refetchDashboard) {
+          await refetchDashboard()
+        }
 
         navigate('/jobs')
     } catch (err) {

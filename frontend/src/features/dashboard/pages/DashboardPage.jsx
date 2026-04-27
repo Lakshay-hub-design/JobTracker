@@ -6,10 +6,11 @@ import RecentJobs from '../components/RecentJobs'
 import SummaryCards from '../components/SummaryCards'
 import WeeklyGoals from '../components/WeeklyGoals'
 import { useDashboard } from '../hooks/useDashboard'
+import { useObjective } from '../hooks/useObjectives'
 
 const DashboardPage = () => {
-    const { dashboardData, error } = useDashboard()
-
+    const { dashboardData, refetch, error } = useDashboard()
+    const { handleIncrement } = useObjective(refetch)
     if(error) return <p className='text-red-500'>Error: {error}</p>
 
     if (!dashboardData) {
@@ -43,7 +44,10 @@ const DashboardPage = () => {
           </div>
 
           {/* RIGHT: WEEKLY GOALS */}
-          <WeeklyGoals data={dashboardData.weeklyGoal} />
+          <WeeklyGoals 
+            objectives={dashboardData.objectives} 
+            handleIncrement={handleIncrement}
+          />
         </div>
       </div>
 

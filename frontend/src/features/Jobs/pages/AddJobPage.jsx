@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import { FileUp } from "lucide-react";
 import { useAddJob } from "../hooks/useAddJob";
 import { useNavigate } from "react-router-dom";
+import { useDashboard } from "../../dashboard/hooks/useDashboard";
 
 const AddJobPage = () => {
   const fileInputRef = useRef(null);
@@ -19,7 +20,8 @@ const AddJobPage = () => {
     notes: "",
   });
 
-  const { handleAddApplication, loading } = useAddJob();
+  const { refetch } = useDashboard()
+  const { handleAddApplication, loading } = useAddJob(refetch);
 
   const [errors, setErrors] = useState({});
 
