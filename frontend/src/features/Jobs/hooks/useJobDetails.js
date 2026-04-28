@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { generateAIReport, getJobDetails, updateJob } from "../service/jobsApi"
+import {toast} from "react-hot-toast"
 
 export const useJobDetails = (jobId) => {
     const [job, setJob] = useState(null)
@@ -42,12 +43,18 @@ export const useJobDetails = (jobId) => {
         }
     }
 
-    const handleUpdate = async (updatedData) => {
+    const handleUpdate = async (updatedData, type) => {
         try {
             setLoading(true)
             setError(null)
 
             await updateJob(axiosPrivate, jobId, updatedData)
+           
+            if (type === "status") {
+                toast.success("Status Updated")
+            } else {
+                toast.success("Job Application Updated")
+            }
             fetchJobDetails()
         } catch (err) {
             setError(err.message || 'Failed to update job')

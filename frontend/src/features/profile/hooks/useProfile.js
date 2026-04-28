@@ -4,6 +4,7 @@ import { changePassword, getProfile, getStats, logoutAllDevices, updateProfile }
 import { useEffect } from "react"
 import { AuthContext } from "../../auth/context/AuthContext"
 import { useNavigate } from "react-router-dom"
+import { toast } from "react-hot-toast"
 
 export const useProfile = () => {
     const axiosPrivate = useAxiosPrivate()
@@ -55,9 +56,11 @@ export const useProfile = () => {
             const updated = await updateProfile(axiosPrivate, data, file)
 
             setProfile(updated) 
+            toast.success('Profile Updated Succesfully')
 
         } catch (err) {
             setError(err.message || "Failed to update profile")
+            toast.error('Failed to update profile')
         }
     }
 
@@ -67,12 +70,13 @@ export const useProfile = () => {
             setError(null)
 
             await changePassword(axiosPrivate, data)
-
+            toast.success('Password Updated Succesfully')
             return { success: true }
 
         } catch (err) {
             const message = err.message || "Failed to change password"
             setError(message)
+            toast.error('Failed to change password')
             return { success: false, error: message }
         } finally {
             setLoading(false)

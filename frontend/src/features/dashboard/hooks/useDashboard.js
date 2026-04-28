@@ -10,11 +10,10 @@ export const useDashboard = () => {
     const context = useContext(DashboardContext)
     const { dashboardData, loading, error, setDashboardData, setLoading, setError } = context
 
-    const { setLoading: setAppLoading, setProgress, progress } =
+    const { setLoading: setAppLoading, setProgress } =
     useContext(AppLoadingContext);
 
-    console.log(progress)
-const delay = (ms) => new Promise(res => setTimeout(res, ms));
+    const delay = (ms) => new Promise(res => setTimeout(res, ms));
     const axiosPrivate = useAxiosPrivate()
 
     const fetchDashboardData = async () => {

@@ -17,29 +17,28 @@ const SecurityTab = ({ handleChangePassword, handleLogoutAll}) => {
         })
     }
 
-      const handleSubmit = async () => {
-    setMessage(null)
+    const handleSubmit = async () => {
+      setMessage(null)
 
-    if (formData.newPassword !== formData.confirmPassword) {
-      setMessage("Passwords do not match")
-      return
+      if (formData.newPassword !== formData.confirmPassword) {
+        setMessage("Passwords do not match")
+        return
+      }
+
+      const res = await handleChangePassword(formData)
+
+      if (res.success) {
+        setMessage("Password updated successfully")
+
+        setFormData({
+          currentPassword: "",
+          newPassword: "",
+          confirmPassword: ""
+        })
+      } else {
+        setMessage(res.error)
+      }
     }
-
-    const res = await handleChangePassword(formData)
-
-    if (res.success) {
-      setMessage("Password updated successfully")
-
-      // reset form
-      setFormData({
-        currentPassword: "",
-        newPassword: "",
-        confirmPassword: ""
-      })
-    } else {
-      setMessage(res.error)
-    }
-  }
 
     const handleLogoutAllClick = async () => {
         await handleLogoutAll()
@@ -89,6 +88,7 @@ const SecurityTab = ({ handleChangePassword, handleLogoutAll}) => {
             />
           </div>
         </div>
+        {message && <p className="text-sm text-gray-600 dark:text-red-600">{message}</p>}
 
         <button
           onClick={handleSubmit}
@@ -99,13 +99,12 @@ const SecurityTab = ({ handleChangePassword, handleLogoutAll}) => {
 
         <button
           onClick={handleLogoutAllClick}
-          className="px-6 py-2 text-[#BF2D2D] font-medium ml-10 cursor-pointer"
+          className="px-6 py-2 text-[#BF2D2D] font-medium md:ml-10 cursor-pointer"
         >
           Logout All Devices
         </button>
       </div>
 
-      {message && <p className="text-sm text-gray-600">{message}</p>}
     </div>
   );
 }

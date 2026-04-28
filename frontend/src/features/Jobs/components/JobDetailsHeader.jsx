@@ -17,13 +17,19 @@ const formatDate = (dateString) => {
 const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
   const [showStatusMenu, setShowStatusMenu] = useState(false)
 
-  const menuRef = useRef()
+  const desktopMenuRef = useRef()
+  const mobileMenuRef = useRef()
 
   useEffect(() => {
     const handleClickOutside = (e) => {
-      if (menuRef.current && !menuRef.current.contains(e.target)) {
-        setShowStatusMenu(false)
+      if (
+        (desktopMenuRef.current && desktopMenuRef.current.contains(e.target)) ||
+        (mobileMenuRef.current && mobileMenuRef.current.contains(e.target))
+      ) {
+        return
       }
+
+      setShowStatusMenu(false)
     }
 
     document.addEventListener("mousedown", handleClickOutside)
@@ -32,7 +38,7 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
     if(!job) return null
   
   const handleStatusUpdate = async (status) => {
-    await handleUpdate({status})
+    await handleUpdate({status}, "status")
     setShowStatusMenu(false)
   }
 
@@ -97,7 +103,7 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
                 {aiReport?.status === "not_ready" && "Generate AI Report"}
               </button>
 
-              <div ref={menuRef} className="relative">
+              <div ref={desktopMenuRef} className="relative">
                 <button
                   onClick={() => setShowStatusMenu((prev) => !prev)}
                   className="relative px-6 py-3 rounded-full bg-gray-300 dark:bg-[#FC9D7D] dark:text-[#212121] font-medium cursor-pointer hover:scale-105 transition hover:bg-gray-200 dark:hover:bg-[#f8b29a]"
@@ -192,7 +198,7 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
                   ? "Retry AI Report"
                   : "Generate AI Report"}
           </button>
-          <div ref={menuRef} className="relative flex-1">
+          <div ref={mobileMenuRef} className="relative flex-1">
           <button
             onClick={() => setShowStatusMenu((prev) => !prev)}
             className=" w-full flex items-center gap-2 justify-center py-3 rounded-full bg-gray-200 dark:bg-[#2a2726]  font-medium"

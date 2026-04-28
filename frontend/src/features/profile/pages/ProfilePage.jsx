@@ -5,10 +5,9 @@ import ProfileStats from '../components/ProfileStats'
 import ProfileTabs from '../components/ProfileTabs'
 
 const ProfilePage = () => {
-    const { profile, stats, loading, error, handleUpdateProfile, handleChangePassword, handleLogoutAll } = useProfile()
+    const { profile, stats, loading, handleUpdateProfile, handleChangePassword, handleLogoutAll } = useProfile()
     
     if (loading) return <p>Loading profile...</p>
-    if (error) return <p className="text-red-500">{error}</p>
 
     if (!profile) return null
 

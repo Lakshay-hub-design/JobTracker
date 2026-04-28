@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import AppRoutes from './routes/AppRoutes'
-import { ToastContainer } from 'react-toastify';
+import { Toaster } from "react-hot-toast";
 import './App.css'
 import { AppLoadingContext } from './features/app/context/AppLoadingContext';
 import LoadingScreen from './components/LoadingScreen';
@@ -11,14 +11,22 @@ const { loading, progress } = useContext(AppLoadingContext);
     <div>
       {loading && <LoadingScreen progress={progress} />}
       <AppRoutes />
-      <ToastContainer
+      <Toaster
         position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        closeOnClick
-        pauseOnHover
-        draggable
-        icon={false}
+        toastOptions={{
+          duration: 3000,
+          style: {
+            marginTop: '10px',
+            background: "rgba(26, 26, 27, 0.6)",
+            backdropFilter: "blur(12px)",
+            WebkitBackdropFilter: "blur(12px)",
+            color: "#fff",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            borderRadius: "14px",
+            padding: "12px 16px",
+            boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
+          },
+        }}
       />
     </div>
   )

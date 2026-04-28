@@ -10,8 +10,7 @@ export const useAuth = () => {
 
     const context = useContext(AuthContext)
 
-    const { setLoading: setAppLoading, setProgress, progress } = useContext(AppLoadingContext);
-    console.log(progress)
+    const { setLoading: setAppLoading, setProgress } = useContext(AppLoadingContext);
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
     const delay = (ms) => new Promise(res => setTimeout(res, ms));
