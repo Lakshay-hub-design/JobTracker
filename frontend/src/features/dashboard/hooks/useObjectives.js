@@ -1,6 +1,6 @@
 import toast from "react-hot-toast";
 import useAxiosPrivate from "../../../shared/api/axiosPrivate";
-import { createObjective, incrementObjective } from "../services/objectiveApi";
+import { createObjective, deleteObjective, incrementObjective } from "../services/objectiveApi";
 
 export const useObjective = (refetchDAshboard) => {
     const axiosPrivate = useAxiosPrivate()
@@ -31,8 +31,19 @@ export const useObjective = (refetchDAshboard) => {
         }
     }
 
+    const handleDelete = async (objectiveId) => {
+        try {
+            await deleteObjective(axiosPrivate, objectiveId)
+            refetchDAshboard()
+            toast.success('Objective Deleted!')
+        } catch (err) {
+            console.log(err)
+        }
+    }
+
     return {
         handleIncrement,
-        handleCreate
+        handleCreate,
+        handleDelete
     }
 }

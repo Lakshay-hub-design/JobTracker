@@ -13,3 +13,11 @@ export async function createObjective (axiosPrivate, data) {
     throw error.response?.data || error
   }
 }
+
+export async function deleteObjective(axiosPrivate, objectiveId){
+  try {
+    await axiosPrivate.delete(`/api/objectives/${objectiveId}/delete`)
+  } catch (error) {
+    throw error.response?.data || error
+  }
+}

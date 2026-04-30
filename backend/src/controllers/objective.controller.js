@@ -2,7 +2,8 @@ const asyncHandler = require("../middlewares/asyncHandler")
 const {
   getWeeklyObjectivesService,
   incrementObjectiveService,
-  createObjectiveService
+  createObjectiveService,
+  deleteObjectiveService
 } = require("../services/objective.service")
 
 const getWeeklyObjectives = asyncHandler(async (req, res) => {
@@ -21,8 +22,18 @@ const createObjective = async (req, res) => {
   res.json({ success: true, objective })
 }
 
+const deleteObjective = async (req, res) => {
+  const objective = await deleteObjectiveService(
+    req.params.id,
+    req.user._id
+  );
+
+  res.status(200).json({ success: true, objective});
+};
+
 module.exports = {
     getWeeklyObjectives,
     incrementObjective,
-    createObjective
+    createObjective,
+    deleteObjective
 }

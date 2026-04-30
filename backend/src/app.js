@@ -40,7 +40,7 @@ app.get("/health", (req, res) => {
 const authRoutes = require('./routes/auth.routes')
 const jobRoutes = require('./routes/job.routes')
 const userRoutes = require('./routes/user.routes')
-const objectiveRoutes = require('./routes/goal.routes')
+const objectiveRoutes = require('./routes/objective.routes')
 
 app.use('/admin/queues', bullBoard.getRouter())
 

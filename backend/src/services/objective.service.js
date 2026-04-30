@@ -1,6 +1,7 @@
 const Objective = require('../models/objective.model')
 const getWeekId = require('../utils/getWeekId')
 const { ApiError } = require('../utils/apiError')
+const mongoose = require('mongoose')
 
 const getWeeklyObjectivesService = async (userId) => {
   const weekId = getWeekId()
@@ -31,8 +32,8 @@ const getWeeklyObjectivesService = async (userId) => {
   return objectives
 }
 
-const incrementObjectiveService = async (goalId, userId) => {
-  const objective = await Objective.findOne({ _id: goalId, userId })
+const incrementObjectiveService = async (objectiveId, userId) => {
+  const objective = await Objective.findOne({ _id: objectiveId, userId })
 
   if (!objective) throw new ApiError(404, "Objective not found")
 
@@ -64,6 +65,19 @@ const createObjectiveService = async (userId, data) => {
   return objective
 }
 
+const deleteObjectiveService = async (objectiveId, userId) => {
+
+  if (!mongoose.Types.ObjectId.isValid(objectiveId)) {
+    throw new ApiError(400, "Invalid objective ID");
+  }
+
+  const deleteObjective = await Objective.findOneAndDelete({ _id: objectiveId, userId})
+
+  if (!deleteObjective) throw new ApiError(404, "Objective not found")
+
+  return deleteObjective
+}
+
 const updateApplicationObjective = async (userId) => {
   const weekId = getWeekId()
 
@@ -88,5 +102,6 @@ module.exports = {
     getWeeklyObjectivesService,
     incrementObjectiveService,
     createObjectiveService,
+    deleteObjectiveService,
     updateApplicationObjective
 }

@@ -10,7 +10,7 @@ import { useObjective } from '../hooks/useObjectives'
 
 const DashboardPage = () => {
     const { dashboardData, refetch, error } = useDashboard()
-    const { handleIncrement } = useObjective(refetch)
+    const { handleIncrement, handleDelete } = useObjective(refetch)
     if(error) return <p className='text-red-500'>Error: {error}</p>
 
     if (!dashboardData) {
@@ -47,6 +47,7 @@ const DashboardPage = () => {
           <WeeklyGoals 
             objectives={dashboardData.objectives} 
             handleIncrement={handleIncrement}
+            handleDelete={handleDelete}
           />
         </div>
       </div>
