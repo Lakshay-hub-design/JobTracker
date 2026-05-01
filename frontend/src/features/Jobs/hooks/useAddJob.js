@@ -1,12 +1,15 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { useNavigate } from "react-router-dom"
 import { addJob } from "../service/jobsApi"
 import toast from "react-hot-toast"
+import { DashboardContext } from "../../dashboard/context/DashboardContext"
 
-export const useAddJob = (refetchDashboard) => {
+export const useAddJob = () => {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
+
+  const { incrementObjectiveLocal } = useContext(DashboardContext)
 
   const axiosPrivate = useAxiosPrivate()
   const navigate = useNavigate()
@@ -19,9 +22,7 @@ export const useAddJob = (refetchDashboard) => {
         
         await addJob(axiosPrivate, formData)
 
-        if (refetchDashboard) {
-          await refetchDashboard()
-        }
+        incrementObjectiveLocal({ type: 'application' })
 
         toast.success("Job successfully added 🎉", {
           id: toastId,

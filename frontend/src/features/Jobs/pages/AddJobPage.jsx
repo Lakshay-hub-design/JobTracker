@@ -91,9 +91,7 @@ const AddJobPage = () => {
     if (file) {
       form.append("resume", file);
     }
-    for (let pair of form.entries()) {
-      console.log(pair[0], pair[1]);
-    }
+
     handleAddApplication(form);
   };
 

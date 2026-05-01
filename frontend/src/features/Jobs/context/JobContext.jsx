@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useEffect, useState, useMemo } from "react";
 import useAxiosPrivate from "../../../shared/api/axiosPrivate";
 import { getNotifications } from "../service/jobsApi";
 
@@ -34,9 +34,37 @@ export const JobProvider = ({ children }) => {
         fetchNotifications()
     }, [])
 
+    const value = useMemo(() => ({
+        jobs,
+        loading,
+        error,
+        page,
+        status,
+        search,
+        pagination,
+        notifications,
+        setNotifications,
+        setPagination,
+        setJobs,
+        setLoading,
+        setError,
+        setPage,
+        setStatus,
+        setSearch
+    }), [
+        jobs,
+        loading,
+        error,
+        page,
+        status,
+        search,
+        pagination,
+        notifications
+    ])
+
 
     return (
-        <JobContext.Provider value={{ jobs, loading, error, page, status, search, pagination, notifications, setNotifications, setPagination, setJobs, setLoading, setError, setPage, setStatus, setSearch}}>
+        <JobContext.Provider value={value}>
             {children}
         </JobContext.Provider>
     )

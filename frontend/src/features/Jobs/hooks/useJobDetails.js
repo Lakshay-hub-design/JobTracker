@@ -45,7 +45,6 @@ export const useJobDetails = (jobId) => {
 
     const handleUpdate = async (updatedData, type) => {
         try {
-            setLoading(true)
             setError(null)
 
             await updateJob(axiosPrivate, jobId, updatedData)
@@ -58,8 +57,6 @@ export const useJobDetails = (jobId) => {
             fetchJobDetails()
         } catch (err) {
             setError(err.message || 'Failed to update job')
-        } finally {
-            setLoading(false)
         }
     }
 

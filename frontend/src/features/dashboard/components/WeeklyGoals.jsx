@@ -1,13 +1,11 @@
 import { useEffect, useState } from "react";
 import { useObjective } from "../hooks/useObjectives";
 import AddObjectiveModal from "./AddObjectiveModel";
-import { useDashboard } from "../hooks/useDashboard";
 import { MoreVertical } from "lucide-react";
 
 
 const WeeklyGoals = ({ objectives, handleIncrement, handleDelete }) => {
-  const { refetch } = useDashboard();
-  const { handleCreate } = useObjective(refetch);
+  const { handleCreate } = useObjective();
   const [showModal, setShowModal] = useState(false);
   const [openMenuId, setOpenMenuId] = useState(null);
 

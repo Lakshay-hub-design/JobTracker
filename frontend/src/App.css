@@ -132,15 +132,15 @@ html {
   scroll-behavior: smooth;
 }
 
-::-webkit-scrollbar {
+.custom-app-scrollbar::-webkit-scrollbar {
   width: 8px;
 }
 
-::-webkit-scrollbar-track {
+.custom-app-scrollbar::-webkit-scrollbar-track {
   background: transparent; /* clean look */
 }
 
-::-webkit-scrollbar-thumb {
+.custom-app-scrollbar::-webkit-scrollbar-thumb {
   background: linear-gradient(
     180deg,
     rgba(255, 115, 0, 0.6),
@@ -150,7 +150,7 @@ html {
   transition: all 0.3s ease;
 }
 
-::-webkit-scrollbar-thumb:hover {
+.custom-app-scrollbar::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(
     180deg,
     rgba(255, 115, 0, 0.9),
@@ -158,7 +158,6 @@ html {
   );
 }
 
-/* Add in global CSS */
 .custom-scroll::-webkit-scrollbar {
   width: 6px;
 }

@@ -1,6 +1,7 @@
 import { ArrowRight, Calendar1, MapPin } from 'lucide-react'
 import { useNavigate } from 'react-router-dom';
 import { MdDeleteForever } from "react-icons/md";
+import React from 'react';
 
 const statusColor = {
     applied: "bg-gray-200 text-gray-700",
@@ -37,8 +38,8 @@ const formatDate = (dateString) => {
   })
 }
 
-const JobCards = ({ job, setShowModal, setSelectedJobId }) => {
- 
+const JobCards = ({ job, onDelete }) => {
+ console.log("Rendered:", job._id)
     const navigate = useNavigate()
     const bgColor = getColorById(job._id);
 
@@ -84,10 +85,7 @@ const JobCards = ({ job, setShowModal, setSelectedJobId }) => {
         <ArrowRight size={16} className="ml-2" />
       </button>
       <button 
-      onClick={() => {
-        setSelectedJobId(job._id)
-        setShowModal(true)
-      }}
+      onClick={() => onDelete(job._id)}
       className='px-4 py-2 bg-gray-200 rounded-full font-semibold cursor-pointer active:scale-95 transition'>
         <MdDeleteForever size={22} className='text-red-500' />
       </button>
@@ -96,4 +94,4 @@ const JobCards = ({ job, setShowModal, setSelectedJobId }) => {
   );
 }
 
-export default JobCards
+export default React.memo(JobCards)

@@ -39,7 +39,7 @@ export const useJobs = (page, filters) => {
 
     useEffect(() => {
         fetchJobs()
-    }, [page, filters, debouncedSearch])
+    }, [page, filters.status, filters.jobType, debouncedSearch])
 
     const handleDelete = async (jobId) => {
         try {
@@ -47,8 +47,9 @@ export const useJobs = (page, filters) => {
             setError(null)
 
             await deleteJob(axiosPrivate, jobId)
+
+            setJobs(prev => prev.filter(job => job._id !== jobId))
             toast.success('Job Succesfully Deleted')
-            fetchJobs()
 
         } catch (err) {
             setError(err.message || 'Failed to delete job')

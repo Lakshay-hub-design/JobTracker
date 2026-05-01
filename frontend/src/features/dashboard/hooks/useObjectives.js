@@ -1,14 +1,19 @@
 import toast from "react-hot-toast";
 import useAxiosPrivate from "../../../shared/api/axiosPrivate";
 import { createObjective, deleteObjective, incrementObjective } from "../services/objectiveApi";
+import { useContext } from "react";
+import { DashboardContext } from "../context/DashboardContext";
 
-export const useObjective = (refetchDAshboard) => {
+export const useObjective = () => {
     const axiosPrivate = useAxiosPrivate()
+
+    const { incrementObjectiveLocal, addObjectiveLocal, deleteObjectiveLocal } = useContext(DashboardContext)
+
 
     const handleIncrement = async (objectiveId) => {
         try{
             await incrementObjective(axiosPrivate, objectiveId)
-            refetchDAshboard()
+            incrementObjectiveLocal({ id: objectiveId })
         }catch (err){
             console.log(err)
         }
@@ -17,8 +22,8 @@ export const useObjective = (refetchDAshboard) => {
     const handleCreate = async (data) => {
         const toastId = toast.loading("Adding new objective...")
         try {
-            await createObjective(axiosPrivate, data)
-            refetchDAshboard()
+            const res = await createObjective(axiosPrivate, data)
+            addObjectiveLocal(res.objective)
 
             toast.success("Objective successfully added", {
                 id: toastId,
@@ -34,7 +39,7 @@ export const useObjective = (refetchDAshboard) => {
     const handleDelete = async (objectiveId) => {
         try {
             await deleteObjective(axiosPrivate, objectiveId)
-            refetchDAshboard()
+            deleteObjectiveLocal(objectiveId)
             toast.success('Objective Deleted!')
         } catch (err) {
             console.log(err)

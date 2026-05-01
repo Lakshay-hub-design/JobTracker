@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import JobsHeader from '../components/JobsHeader'
 import JobCards from '../components/JobCards'
 import { useJobs } from '../hooks/useJob'
@@ -15,6 +15,11 @@ const JobsPage = () => {
     const [selectedJobId, setSelectedJobId] = useState(null)
 
     const { jobs, search, setSearch, pagination, handleDelete, loading, error } = useJobs(page, filters)
+
+    const openDeleteModal = useCallback((id) => {
+        setSelectedJobId(id)
+        setShowModal(true)
+    }, [])
 
     if(loading) return <p>Loading jobs...</p>
     if(error) return <p className='text-red-500'>Error: {error}</p>
@@ -40,8 +45,7 @@ const JobsPage = () => {
                 <JobCards 
                     key={job._id} 
                     job={job}
-                    setShowModal={setShowModal} 
-                    setSelectedJobId={setSelectedJobId}
+                    onDelete={openDeleteModal}
                 />
             ))}
         </div>

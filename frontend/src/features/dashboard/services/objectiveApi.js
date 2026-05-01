@@ -8,7 +8,8 @@ export async function incrementObjective (axiosPrivate, objectiveId) {
 
 export async function createObjective (axiosPrivate, data) {
   try {
-    await axiosPrivate.post("/api/objectives", data)
+    const res = await axiosPrivate.post("/api/objectives", data)
+    return res.data
   } catch (error) {
     throw error.response?.data || error
   }
