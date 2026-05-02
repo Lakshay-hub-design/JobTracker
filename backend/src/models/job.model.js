@@ -41,6 +41,10 @@ const JobSchema = new mongoose.Schema(
     followUpDate: {
       type: Date,
     },
+    isFollowUpDone: {
+      type: Boolean,
+      default: false
+    },
     appliedDate: { 
         type: Date,
         default: Date.now

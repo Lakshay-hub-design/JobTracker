@@ -310,39 +310,55 @@ const getFullDashboardService = async ({userId}) => {
     }
 }
 
-const getFollowUpsService  = async ({userId}) => {
-    const today = new Date()
+const getFollowUpsService = async ({ userId }) => {
+  const today = new Date()
+  today.setHours(0, 0, 0, 0)
 
-    const next5Days = new Date()
-    next5Days.setDate(today.getDate() + 5)
+  const next5Days = new Date()
+  next5Days.setDate(today.getDate() + 5)
 
-    const jobs = await jobRepository.getFollowUpJobs(userId)
+  const pastLimit = new Date()
+  pastLimit.setDate(today.getDate() - 2)
 
-    const notifications = jobs.map(job => {
-        const followDate = new Date(job.followUpDate)
+  const jobs = await jobRepository.getFollowUpJobs(userId)
 
-        return {
+  const notifications = jobs
+    .filter(job => !job.isFollowUpDone)
+    .map(job => {
+      const followDate = new Date(job.followUpDate)
+      followDate.setHours(0, 0, 0, 0)
+
+      return {
         _id: job._id,
         jobId: job._id,
         company: job.company,
         position: job.position,
         followUpDate: followDate,
         type: followDate < today ? "overdue" : "upcoming"
-        }
+      }
     })
 
-    const filtered = notifications.filter(n => {
-        return (
-        n.type === "overdue" ||
-        (n.type === "upcoming" && n.followUpDate <= next5Days)
-        )
-    })
+  const filtered = notifications.filter(n => {
+    return (
+      (n.type === "overdue" && n.followUpDate >= pastLimit) ||
+      (n.type === "upcoming" && n.followUpDate <= next5Days)
+    )
+  })
 
-    filtered.sort((a, b) => {
-        return new Date(a.followUpDate) - new Date(b.followUpDate)
-    })
+  filtered.sort((a, b) => a.followUpDate - b.followUpDate)
 
-    return filtered
+  return filtered
+}
+
+const markFollowUpDoneService = async ({ jobId, userId }) => {
+
+  const job = await jobRepository.setFollowUpTrue(jobId, userId)
+
+  if (!job) {
+    return res.status(404).json({ message: "Job not found" })
+  }
+
+  res.json({ success: true })
 }
 
 module.exports = {
@@ -353,5 +369,6 @@ module.exports = {
     getFullDashboardService,
     updateJobService,
     deleteJobService,
-    getFollowUpsService
+    getFollowUpsService,
+    markFollowUpDoneService
 }

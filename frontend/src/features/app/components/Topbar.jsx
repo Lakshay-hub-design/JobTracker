@@ -1,14 +1,17 @@
 import React, { useContext, useState } from "react";
 import { Search } from "lucide-react";
-import { BiSolidBell } from "react-icons/bi";
+import { HiOutlineBellAlert } from "react-icons/hi2";
 import { AuthContext } from "../../auth/context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
 import { JobContext } from "../../Jobs/context/JobContext";
 import { useTheme } from "../context/ThemeContext";
-import { IoSunnyOutline, IoMoonSharp } from "react-icons/io5"
+import { IoSunnyOutline, IoMoonSharp } from "react-icons/io5";
+import { useJobs } from "../../Jobs/hooks/useJob";
+import { Check } from "lucide-react";
 
 const Topbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
+  const [confirmId, setConfirmId] = useState(null);
 
   const context = useContext(AuthContext);
   const jobContext = useContext(JobContext);
@@ -16,7 +19,8 @@ const Topbar = () => {
   const { user } = context;
   const { search, setSearch, notifications } = jobContext;
 
-  const { theme, toggleTheme } = useTheme()
+  const { theme, toggleTheme } = useTheme();
+  const { handleMarkDone } = useJobs();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -35,6 +39,94 @@ const Topbar = () => {
     if (diff === -1) return "Yesterday";
     if (diff < 0) return `${Math.abs(diff)} days ago`;
     return `In ${diff} days`;
+  };
+
+  const Section = ({ title, color, items }) => {
+    const isRed = color === "red";
+
+    return (
+      <div>
+        <h3
+          className={`text-[11px] font-semibold mb-3 uppercase tracking-widest
+        ${isRed ? "text-red-400" : "text-gray-400"}`}
+        >
+          {title}
+        </h3>
+
+        <div className="space-y-3">
+          {items.map((item) => (
+            <div
+              key={item._id}
+              onClick={() => {
+                navigate(`/job/${item.jobId}`);
+                setShowNotifications(false);
+              }}
+              className={`group flex items-start gap-3 p-3 rounded-xl cursor-pointer
+              backdrop-blur-md bg-white/40 dark:bg-white/5
+              border border-white/20 dark:border-white/10
+              hover:scale-[1.02] hover:shadow-lg transition-all duration-200`}
+            >
+              <div
+                className={`h-9 w-9 rounded-full flex items-center justify-center text-xs font-bold
+              ${
+                isRed ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"
+              }`}
+              >
+                {isRed ? "!" : "📅"}
+              </div>
+
+              <div className="flex-1 min-w-0">
+                <p className="text-sm font-medium text-gray-800 dark:text-white truncate">
+                  {item.company}
+                </p>
+
+                <p className="text-xs text-gray-500 dark:text-gray-300 truncate">
+                  {item.position}
+                </p>
+
+                <p
+                  className={`text-xs mt-1 ${
+                    isRed ? "text-red-400" : "text-gray-400"
+                  }`}
+                >
+                  {formatFollowUpDate(item.followUpDate)}
+                </p>
+              </div>
+
+              <div className="flex flex-col items-end gap-2">
+                <span
+                  className={`text-[10px] px-2 py-1 rounded-full whitespace-nowrap
+      ${isRed ? "bg-red-100 text-red-600" : "bg-blue-100 text-blue-600"}`}
+                >
+                  {title}
+                </span>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+
+                    setConfirmId(item.jobId)
+                  }}
+                  className="
+      flex items-center gap-1
+      text-[11px] px-2.5 py-1.5
+      rounded-full
+      bg-green-100 text-green-700
+      hover:bg-green-200
+      active:scale-95
+      transition
+      font-medium
+    "
+                >
+                  <Check size={12} />
+                  Done
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -83,7 +175,10 @@ const Topbar = () => {
         </button>
         <div className="relative">
           <button onClick={() => setShowNotifications(true)}>
-            <BiSolidBell className="text-gray-600 dark:text-[#94A3B8] cursor-pointer" size={20} />
+            <HiOutlineBellAlert
+              className="text-gray-600 dark:text-[#94A3B8] cursor-pointer"
+              size={22}
+            />
           </button>
           {notifications.length > 0 && (
             <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs px-1 rounded-full">
@@ -92,142 +187,195 @@ const Topbar = () => {
           )}
 
           {showNotifications && (
-            <div className="absolute right-0 mt-3 w-[380px] max-h-[500px] bg-white dark:bg-[#2e2929] rounded-2xl shadow-2xl border border-gray-100 dark:border-[#484242] z-50 overflow-hidden animate-fadeIn flex flex-col">
-              {/* HEADER */}
-              <div className="p-4 border-b dark:border-[#413d3d] flex justify-between items-center">
-                <h2 className="text-sm font-semibold text-gray-800 dark:text-[#ad8383]">
-                  Notifications
-                </h2>
+            <>
+              {/* BACKDROP (only mobile) */}
+              <div
+                className="fixed inset-0 bg-black/40 z-40 sm:hidden"
+                onClick={() => setShowNotifications(false)}
+              />
 
-                <button
-                  onClick={() => setShowNotifications(false)}
-                  className="text-gray-400 hover:text-black transition"
+              {/* ================== DESKTOP ================== */}
+              <div
+                className="hidden sm:block absolute right-0 mt-3 w-[380px] z-50
+      animate-popup"
+              >
+                <div
+                  className="
+        backdrop-blur-xl bg-white/80 dark:bg-[#1f1f1f]/80
+        border border-white/20 dark:border-white/10
+        rounded-2xl shadow-2xl overflow-hidden flex flex-col
+      "
                 >
-                  ✕
-                </button>
-              </div>
+                  {/* HEADER */}
+                  <div className="p-4 flex justify-between items-center border-b border-white/20">
+                    <h2 className="text-sm font-semibold text-gray-800 dark:text-white">
+                      Notifications
+                    </h2>
 
-              {/* CONTENT */}
-              <div className="flex-1 overflow-y-auto p-3 space-y-5">
-                {notifications.length === 0 ? (
-                  <div className="text-center py-12 text-gray-500 text-sm">
-                    🎉 You're all caught up!
+                    <button onClick={() => setShowNotifications(false)}>
+                      ✕
+                    </button>
                   </div>
-                ) : (
-                  <>
-                    {/* 🔴 OVERDUE */}
-                    {notifications.filter((n) => n.type === "overdue").length >
-                      0 && (
-                      <div>
-                        <h3 className="text-[11px] font-semibold text-red-500 mb-2 uppercase tracking-widest">
-                          Overdue
-                        </h3>
 
-                        <div className="space-y-2">
-                          {notifications
-                            .filter((n) => n.type === "overdue")
-                            .map((item) => (
-                              <div
-                                key={item._id}
-                                onClick={() => {
-                                  navigate(`/job/${item.jobId}`);
-                                  setShowNotifications(false);
-                                }}
-                                className="group flex items-start gap-3 p-3 rounded-xl bg-red-50 dark:bg-[#231e1e] border dark:border-[#4b4545] border-red-100 hover:shadow-sm transition cursor-pointer"
-                              >
-                                {/* ICON */}
-                                <div className="h-8 w-8 rounded-full bg-red-100 flex items-center justify-center text-red-600 text-xs font-bold">
-                                  !
-                                </div>
-
-                                {/* TEXT */}
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-800 dark:text-[#c2afaf] truncate">
-                                    {item.company}
-                                  </p>
-                                  <p className="text-xs text-gray-500 dark:text-[#beb7b7] truncate">
-                                    {item.position}
-                                  </p>
-                                  <p className="text-xs text-red-500 mt-1">
-                                    {formatFollowUpDate(item.followUpDate)}
-                                  </p>
-                                </div>
-
-                                {/* BADGE */}
-                                <span className="text-[10px] px-2 py-1 rounded-full bg-red-100 text-red-600 whitespace-nowrap">
-                                  Overdue
-                                </span>
-                              </div>
-                            ))}
-                        </div>
+                  {/* CONTENT */}
+                  <div className="max-h-[400px] overflow-y-auto p-3 space-y-6">
+                    {notifications.length === 0 ? (
+                      <div className="text-center py-10 text-gray-500 text-sm">
+                        🎉 You're all caught up!
                       </div>
+                    ) : (
+                      <>
+                        {notifications.some((n) => n.type === "overdue") && (
+                          <Section
+                            title="Overdue"
+                            color="red"
+                            items={notifications.filter(
+                              (n) => n.type === "overdue",
+                            )}
+                          />
+                        )}
+
+                        {notifications.some((n) => n.type === "upcoming") && (
+                          <Section
+                            title="Upcoming"
+                            color="blue"
+                            items={notifications.filter(
+                              (n) => n.type === "upcoming",
+                            )}
+                          />
+                        )}
+                      </>
                     )}
-
-                    {/* 🔵 UPCOMING */}
-                    {notifications.filter((n) => n.type === "upcoming").length >
-                      0 && (
-                      <div>
-                        <h3 className="text-[11px] font-semibold text-gray-400 mb-2 uppercase tracking-widest">
-                          Upcoming
-                        </h3>
-
-                        <div className="space-y-2">
-                          {notifications
-                            .filter((n) => n.type === "upcoming")
-                            .map((item) => (
-                              <div
-                                key={item._id}
-                                onClick={() => {
-                                  navigate(`/job/${item.jobId}`);
-                                  setShowNotifications(false);
-                                }}
-                                className="group flex items-start gap-3 p-3 rounded-xl bg-white dark:bg-[#231e1e] border dark:border-[#4b4545] hover:shadow-sm transition cursor-pointer"
-                              >
-                                {/* ICON */}
-                                <div className="h-8 w-8 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 text-xs">
-                                  📅
-                                </div>
-
-                                {/* TEXT */}
-                                <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-medium text-gray-800 dark:text-[#c2afaf] truncate">
-                                    {item.company}
-                                  </p>
-                                  <p className="text-xs text-gray-500 dark:text-[#beb7b7] truncate">
-                                    {item.position}
-                                  </p>
-                                  <p className="text-xs text-gray-400 mt-1">
-                                    {formatFollowUpDate(item.followUpDate)}
-                                  </p>
-                                </div>
-
-                                {/* BADGE */}
-                                <span className="text-[10px] px-2 py-1 rounded-full bg-blue-50 text-blue-600 whitespace-nowrap">
-                                  Upcoming
-                                </span>
-                              </div>
-                            ))}
-                        </div>
-                      </div>
-                    )}
-                  </>
-                )}
+                  </div>
+                </div>
               </div>
-            </div>
+
+              {/* ================== MOBILE ================== */}
+              <div className="fixed inset-x-0 bottom-0 z-50 sm:hidden">
+                <div
+                  className="
+        w-full 
+        h-[30vh]
+        
+        rounded-t-3xl
+        backdrop-blur-xl bg-white/90 dark:bg-[#1f1f1f]/90
+        border border-white/20 dark:border-white/10
+        shadow-2xl flex flex-col
+        animate-slideUp
+      "
+                >
+                  {/* DRAG HANDLE */}
+                  <div className="flex justify-center py-2">
+                    <div className="w-10 h-1.5 bg-gray-300 rounded-full" />
+                  </div>
+
+                  {/* HEADER */}
+                  <div className="p-4 flex justify-between items-center border-b border-white/20">
+                    <h2 className="text-sm font-semibold text-gray-800 dark:text-white">
+                      Notifications
+                    </h2>
+
+                    <button onClick={() => setShowNotifications(false)}>
+                      ✕
+                    </button>
+                  </div>
+
+                  {/* CONTENT */}
+                  <div className="flex-1 overflow-y-auto p-3 space-y-7">
+                    {notifications.length === 0 ? (
+                      <div className="text-center py-10 text-gray-500 text-sm">
+                        🎉 You're all caught up!
+                      </div>
+                    ) : (
+                      <>
+                        {notifications.some((n) => n.type === "overdue") && (
+                          <Section
+                            title="Overdue"
+                            color="red"
+                            items={notifications.filter(
+                              (n) => n.type === "overdue",
+                            )}
+                          />
+                        )}
+
+                        {notifications.some((n) => n.type === "upcoming") && (
+                          <Section
+                            title="Upcoming"
+                            color="blue"
+                            items={notifications.filter(
+                              (n) => n.type === "upcoming",
+                            )}
+                          />
+                        )}
+                      </>
+                    )}
+                  </div>
+                </div>
+              </div>
+            </>
           )}
         </div>
         <div className="border dark:border-[#222222] h-8"></div>
         <div
-        onClick={() => navigate('/settings')}
-        className="w-8 h-8 bg-gray-300 rounded-full overflow-hidden hover:scale-105 transition cursor-pointer">
+          onClick={() => navigate("/settings")}
+          className="w-8 h-8 bg-gray-300 rounded-full overflow-hidden hover:scale-105 transition cursor-pointer"
+        >
           <img
             src={user?.personalInfo?.profileImage?.url}
             className="object-cover w-full h-full"
             alt=""
           />
         </div>
-        <h3 className="hidden md:block font-medium text-sm ">{user.username}</h3>
+        <h3 className="hidden md:block font-medium text-sm ">
+          {user.username}
+        </h3>
       </div>
+      {confirmId && (
+  <div className="fixed inset-0 z-50 flex items-center justify-center">
+    
+    {/* BACKDROP */}
+    <div
+      className="absolute inset-0 bg-black/40"
+      onClick={() => setConfirmId(null)}
+    />
+
+    {/* MODAL */}
+    <div className="
+      relative w-[90%] max-w-sm
+      backdrop-blur-xl bg-white/90 dark:bg-[#1f1f1f]/90
+      border border-white/20
+      rounded-2xl shadow-2xl p-5
+      animate-popup
+    ">
+      <h3 className="text-sm font-semibold mb-2 text-gray-800 dark:text-white">
+        Mark as done?
+      </h3>
+
+      <p className="text-xs text-gray-500 mb-4">
+        This follow-up will be removed from your notifications.
+      </p>
+
+      <div className="flex justify-end gap-2">
+        <button
+          onClick={() => setConfirmId(null)}
+          className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 dark:text-black hover:bg-gray-200"
+        >
+          Cancel
+        </button>
+
+        <button
+          onClick={async () => {
+            await handleMarkDone(confirmId);
+            setConfirmId(null);
+          }}
+          className="px-3 py-1.5 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600"
+        >
+          Confirm
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 };

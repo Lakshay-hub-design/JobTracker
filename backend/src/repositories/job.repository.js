@@ -123,6 +123,14 @@ class JobRepository {
         )
     }
 
+    async setFollowUpTrue(jobId, userId){
+        return await Job.findOneAndUpdate(
+            { _id: jobId, createdBy: userId },
+            { isFollowUpDone: true },
+            { new: true }
+        )
+    }
+
     async updateJobAIInsight(jobId, aiData){
         return await Job.findByIdAndUpdate(
             jobId,

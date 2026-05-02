@@ -67,3 +67,12 @@ export async function getNotifications(axiosPrivate){
         throw error.response?.data || error
     }
 }
+
+export const markFollowUpDone = async (axiosPrivate, jobId) => {
+  try {
+        const res = await axiosPrivate.patch(`/api/jobs/followup/${jobId}/done`)
+        return res.data
+  } catch (error) {
+        throw error.response?.data || error
+  }
+}

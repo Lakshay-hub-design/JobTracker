@@ -74,7 +74,7 @@ const Layout = () => {
         className="
           fixed bottom-22 right-4 
           md:hidden 
-          z-50 
+          z-40 
           h-14 w-14 
           rounded-full 
           bg-[#FF8563]
@@ -88,7 +88,7 @@ const Layout = () => {
         <Plus size={26} />
       </button>
 
-      <div className="fixed bottom-0 left-0 w-full md:hidden z-50">
+      <div className="fixed bottom-0 left-0 right-0 md:hidden z-40">
         <BottomNav />
       </div>
 

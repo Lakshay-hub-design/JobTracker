@@ -10,6 +10,7 @@ router.post('/generate/:id', authMiddleware, upload.single('resume'), jobControl
 
 router.get('/',authMiddleware, jobController.getJobs)
 router.get('/followups', authMiddleware, jobController.getFollowUps)
+router.patch("/followup/:jobId/done", authMiddleware, jobController.markFollowUpDone)
 router.get('/:id', authMiddleware, jobController.getJobDetails)
 router.get('/dashboard/full', authMiddleware, jobController.getFullDashboard)
 
