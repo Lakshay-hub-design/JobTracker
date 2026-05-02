@@ -171,7 +171,7 @@ const Topbar = () => {
           + Add Job
         </button>
         <button className="hidden md:block" onClick={toggleTheme}>
-          {theme === "dark" ? <IoMoonSharp /> : <IoSunnyOutline />}
+          {theme === "dark" ?  <IoSunnyOutline /> : <IoMoonSharp /> }
         </button>
         <div className="relative">
           <button onClick={() => setShowNotifications(true)}>
