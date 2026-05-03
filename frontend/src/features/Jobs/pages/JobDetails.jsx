@@ -119,6 +119,7 @@ const JobDetails = () => {
       <JobDetailsMain 
         job={job}
         setShowDrawer={setShowDrawer}
+        handleUpdate={handleUpdate}
        />
 
       {showDrawer && (

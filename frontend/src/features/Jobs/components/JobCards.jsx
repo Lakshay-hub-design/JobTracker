@@ -39,7 +39,6 @@ const formatDate = (dateString) => {
 }
 
 const JobCards = ({ job, onDelete }) => {
- console.log("Rendered:", job._id)
     const navigate = useNavigate()
     const bgColor = getColorById(job._id);
 

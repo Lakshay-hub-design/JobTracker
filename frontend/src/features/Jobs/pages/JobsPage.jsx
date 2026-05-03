@@ -15,6 +15,7 @@ const JobsPage = () => {
     const [selectedJobId, setSelectedJobId] = useState(null)
 
     const { jobs, search, setSearch, pagination, handleDelete, loading, error } = useJobs(page, filters)
+    
 
     const openDeleteModal = useCallback((id) => {
         setSelectedJobId(id)

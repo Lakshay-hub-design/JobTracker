@@ -46,15 +46,26 @@ export const useJobDetails = (jobId) => {
     const handleUpdate = async (updatedData, type) => {
         try {
             setError(null)
+            setJob(prev => {
+  const updated = {
+    ...prev,
+    ...updatedData
+  }
+
+  console.log("UPDATED JOB:", updated) // ✅ correct
+
+  return updated
+})
 
             await updateJob(axiosPrivate, jobId, updatedData)
            
             if (type === "status") {
                 toast.success("Status Updated")
+            } else if (type === "followup") {
+                toast.success("Follow-up rescheduled")
             } else {
                 toast.success("Job Application Updated")
             }
-            fetchJobDetails()
         } catch (err) {
             setError(err.message || 'Failed to update job')
         }
