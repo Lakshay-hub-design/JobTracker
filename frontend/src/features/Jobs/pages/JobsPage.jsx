@@ -4,6 +4,7 @@ import JobCards from '../components/JobCards'
 import { useJobs } from '../hooks/useJob'
 import JobsFooter from '../components/JobsFooter'
 import DeleteModal from '../components/DeleteModal'
+import JobsSkeleton from '../components/JobsSkeleton'
 
 const JobsPage = () => {
     const [page, setPage] = useState(1)
@@ -22,7 +23,7 @@ const JobsPage = () => {
         setShowModal(true)
     }, [])
 
-    if(loading) return <p>Loading jobs...</p>
+    if(loading) return <JobsSkeleton />
     if(error) return <p className='text-red-500'>Error: {error}</p>
 
     const handleConfirmDelete = async () => {

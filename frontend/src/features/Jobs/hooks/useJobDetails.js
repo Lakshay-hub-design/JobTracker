@@ -47,15 +47,14 @@ export const useJobDetails = (jobId) => {
         try {
             setError(null)
             setJob(prev => {
-  const updated = {
-    ...prev,
-    ...updatedData
-  }
+                const updated = {
+                    ...prev,
+                    ...updatedData
+                }
 
-  console.log("UPDATED JOB:", updated) // ✅ correct
 
-  return updated
-})
+                return updated
+            })
 
             await updateJob(axiosPrivate, jobId, updatedData)
            

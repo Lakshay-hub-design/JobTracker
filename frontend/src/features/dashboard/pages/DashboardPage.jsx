@@ -1,6 +1,7 @@
 import AIInsightCard from '../components/AIInsightCard'
 import AIInsights from '../components/AIInsights'
 import Charts from '../components/Charts'
+import DashboardSkeleton from '../components/DashboardSkelton'
 import EmptyDashboard from '../components/EmptyDashboard'
 import RecentJobs from '../components/RecentJobs'
 import SummaryCards from '../components/SummaryCards'
@@ -9,9 +10,11 @@ import { useDashboard } from '../hooks/useDashboard'
 import { useObjective } from '../hooks/useObjectives'
 
 const DashboardPage = () => {
-    const { dashboardData, refetch, error } = useDashboard()
+    const { dashboardData, loading, refetch, error } = useDashboard()
     const { handleIncrement, handleDelete } = useObjective(refetch)
     if(error) return <p className='text-red-500'>Error: {error}</p>
+
+    if(loading) return <DashboardSkeleton />
 
     if (!dashboardData) {
       return null; 

@@ -10,10 +10,9 @@ export const useAuth = () => {
 
     const context = useContext(AuthContext)
 
-    const { setLoading: setAppLoading, setProgress } = useContext(AppLoadingContext);
+    const { setLoading: setAppLoading, startProgress, completeProgress } = useContext(AppLoadingContext);
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
-    const delay = (ms) => new Promise(res => setTimeout(res, ms));
     const { user, setUser, accessToken, setAccessToken, loading, setLoading, error, setError } = context
 
     const handleRegister = async({name, email, password}) => {
@@ -52,7 +51,7 @@ export const useAuth = () => {
 
     const handleResendOtp = async(email) => {
         try {
-            setLoading(false)
+            setLoading(true)
             setError(null)
 
             await resendOtp(email)
@@ -60,31 +59,39 @@ export const useAuth = () => {
         } catch (err) {
             setError(err.message || 'something went wrong')
         } finally {
-            setLoading(true)
+            setLoading(false)
         }
     }
 
     const handleLogin = async({email, password}) => {
+        let progressInterval;
+        const MIN_TIME = 500
+        const start = Date.now()
+
         try {
+            setLoading(true)
             setAppLoading(true)
-            setProgress(20)
             setError(null)
-            await delay(200)
+
+            progressInterval = startProgress()
 
             const data = await login({email, password})
-            setProgress(40)
-            await delay(200)
             setAccessToken(data.accessToken)
             setUser(data.user)
 
-            setProgress(70)
-            await delay(200)
+            const elapsed = Date.now() - start
+            const remaining = Math.max(0, MIN_TIME - elapsed)
 
-            navigate('/dashboard')
+            setTimeout(() => {
+                completeProgress(progressInterval)
+                navigate('/dashboard')
+            }, remaining)
         } catch (err) {
+            clearInterval(progressInterval)
+            setAppLoading(false)
             setError(err.message || 'Something went wrong')
         } finally {
-            setAppLoading(false)
+            setLoading(false)
         }
     }
 

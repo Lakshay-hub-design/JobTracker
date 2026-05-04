@@ -3,12 +3,12 @@ import { useProfile } from '../hooks/useProfile'
 import ProfileHeader from '../components/ProfileHeader'
 import ProfileStats from '../components/ProfileStats'
 import ProfileTabs from '../components/ProfileTabs'
+import ProfileSkeleton from '../components/ProfileSkelton'
 
 const ProfilePage = () => {
     const { profile, stats, loading, handleUpdateProfile, handleChangePassword, handleLogoutAll } = useProfile()
     
-    if (loading) return <p>Loading profile...</p>
-
+    if (loading) return <ProfileSkeleton />
     if (!profile) return null
 
   return (

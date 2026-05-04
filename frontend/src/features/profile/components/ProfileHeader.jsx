@@ -30,7 +30,6 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
   return (
 <div className="bg-white dark:bg-[#1D1B1A] p-4 md:p-6 rounded-2xl shadow-sm">
 
-  {/* 🔥 MOBILE LAYOUT */}
   <div className="flex flex-col items-center text-center md:hidden">
 
     {/* Avatar */}
@@ -81,12 +80,10 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
 
   </div>
 
-  {/* 💻 DESKTOP LAYOUT */}
   <div className="hidden md:flex items-center justify-between">
 
     <div className="flex items-center gap-5">
 
-      {/* Avatar */}
       <div className="relative h-24 w-24 rounded-full bg-gray-200 flex items-center justify-center">
 
         <div
@@ -109,7 +106,6 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
         )}
       </div>
 
-      {/* Info */}
       <div>
         <h2 className="text-2xl dark:text-[#C99380] font-bold">
           {username}
@@ -135,7 +131,6 @@ const ProfileHeader = ({ profile, handleUpdateProfile }) => {
       </div>
     </div>
 
-    {/* Edit Button */}
     <button className="px-5 py-3 flex items-center gap-2 bg-[#E4E2E1] text-gray-700 font-bold rounded-full hover:bg-gray-200 transition">
       <RiPencilFill />
       Edit Profile

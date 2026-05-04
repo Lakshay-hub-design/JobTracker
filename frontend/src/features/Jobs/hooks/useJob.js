@@ -21,6 +21,7 @@ export const useJobs = (page, filters) => {
 
     const fetchJobs = async () => {
         try {
+            setLoading(true)
             setError(null)
 
             const res = await getJobs(axiosPrivate, {
@@ -34,6 +35,8 @@ export const useJobs = (page, filters) => {
 
         } catch (err) {
             setError(err.message || 'Failed to fetch jobs')
+        } finally {
+            setLoading(false)
         }
     }
 
