@@ -6,10 +6,10 @@ const LoadingScreen = ({progress}) => {
     useEffect(() => {
     const interval = setInterval(() => {
         setDisplayProgress(prev => {
-        if (prev < progress) return prev + 1; // smooth increase
+        if (prev < progress) return prev + 1;
         return prev;
         });
-    }, 15); // speed (lower = faster)
+    }, 15)
 
     return () => clearInterval(interval);
     }, [progress]);
@@ -19,7 +19,6 @@ const LoadingScreen = ({progress}) => {
       
       <div className="text-center space-y-6">
 
-        {/* 🔴 Animated Circle */}
         <div className="relative flex items-center justify-center">
           <div className="w-20 h-20 rounded-full bg-[#E0531F] blur-xl opacity-70 animate-pulse"></div>
 
@@ -28,17 +27,14 @@ const LoadingScreen = ({progress}) => {
           <div className="absolute w-16 h-16 bg-[#E0531F] rounded-full"></div>
         </div>
 
-        {/* 🧠 Title */}
         <h1 className="text-4xl font-bold tracking-wide">
           JOBTRACKER<span className="text-[#E0531F]">.</span>
         </h1>
 
-        {/* 📄 Subtitle */}
         <p className="text-gray-400">
           Loading your career workspace...
         </p>
 
-        {/* 📊 Progress Bar */}
         <div className="w-64 mx-auto">
           <div className="h-[4px] bg-gray-700 rounded-full overflow-hidden">
             <div
@@ -48,7 +44,6 @@ const LoadingScreen = ({progress}) => {
           </div>
         </div>
 
-        {/* ⚡ Status Text */}
         <div className="flex justify-center gap-4 text-xs text-gray-500 mt-2">
           <span className="bg-[#1f1f2e] px-3 py-1 rounded-full">
             SYNCHRONIZING
@@ -58,7 +53,6 @@ const LoadingScreen = ({progress}) => {
           </span>
         </div>
 
-        {/* 🔐 Footer */}
         <div className="flex justify-between text-[10px] text-gray-500 pt-6 w-80 mx-auto">
           <span>🔒 End-to-End Encryption</span>
           <span className="text-green-400">● System Operational</span>

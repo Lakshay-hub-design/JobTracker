@@ -1,5 +1,5 @@
 import { createContext, useContext, useEffect, useState } from "react";
-import useAxiosPrivate from "../../../shared/api/axiosPrivate";
+import useAxiosPrivate from "../../shared/api/axiosPrivate";
 
 const ThemeContext = createContext()
 

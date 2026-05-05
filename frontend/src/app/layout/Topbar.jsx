@@ -1,12 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Search } from "lucide-react";
 import { HiOutlineBellAlert } from "react-icons/hi2";
-import { AuthContext } from "../../auth/context/AuthContext";
+import { AuthContext } from "../../features/auth/context/AuthContext";
 import { useLocation, useNavigate } from "react-router-dom";
-import { JobContext } from "../../Jobs/context/JobContext";
-import { useTheme } from "../context/ThemeContext";
+import { JobContext } from "../../features/Jobs/context/JobContext";
+import { useTheme } from "../providers/ThemeContext";
 import { IoSunnyOutline, IoMoonSharp } from "react-icons/io5";
-import { useJobs } from "../../Jobs/hooks/useJob";
+import { useJobs } from "../../features/Jobs/hooks/useJob";
 import { Check } from "lucide-react";
 
 const Topbar = () => {

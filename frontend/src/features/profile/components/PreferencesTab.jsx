@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react"
-import { useTheme } from "../../app/context/ThemeContext"
+import { useTheme } from "../../../app/providers/ThemeContext"
 
 const techOptions = ["React", "Node.js", "MongoDB", "JavaScript", "Python"]
 

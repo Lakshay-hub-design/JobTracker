@@ -5,6 +5,7 @@ import BreadCrums from '../components/BreadCrums'
 import JobDetailsHeader from '../components/JobDetailsHeader'
 import JobDetailsMain from '../components/JobDetailsMain'
 import EditJobDrawer from '../components/EditJobDrawer'
+import JobDetailsSkeleton from '../components/JobDetailsSkeleton'
 
 const JobDetails = () => {
   const [showAIModal, setShowAIModal] = useState(false)
@@ -18,7 +19,7 @@ const JobDetails = () => {
 
   const navigate = useNavigate()
   const { jobId } = useParams()
-  const { job, aiReport, triggerAIReport, refetch,  error, handleUpdate } = useJobDetails(jobId)
+  const { job, aiReport, triggerAIReport, refetch, loading, error, handleUpdate } = useJobDetails(jobId)
 
   useEffect(() => {
     if (aiReport?.status !== "pending") return
@@ -32,6 +33,7 @@ const JobDetails = () => {
 
   
     if(error) return <p className='text-red-500'>Error: {error}</p>
+    if(loading) return <JobDetailsSkeleton />
 
     if(!job) return <p className='text-gray-500'>No job details found.</p>
 

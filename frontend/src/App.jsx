@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
-import AppRoutes from './routes/AppRoutes'
+import AppRoutes from './app/routes/AppRoutes'
 import { Toaster } from "react-hot-toast";
 import './App.css'
-import { AppLoadingContext } from './features/app/context/AppLoadingContext';
-import LoadingScreen from './components/LoadingScreen';
+import { AppLoadingContext } from './app/providers/AppLoadingContext';
+import LoadingScreen from './shared/components/loaders/LoadingScreen';
 
 const App = () => {
 const { loading, progress } = useContext(AppLoadingContext);

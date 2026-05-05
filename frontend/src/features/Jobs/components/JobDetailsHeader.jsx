@@ -44,6 +44,7 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
 
   return (
     <div>
+      {/* Desktop View */}
       <div className="hidden md:grid grid-cols-4 gap-4">
         <div className="bg-white dark:bg-[#221F1E] p-6 px-10 rounded-xl col-span-3 shadow-sm flex justify-between items-start">
           <div>
@@ -143,6 +144,7 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
           </div>
         </div>
       </div>
+      {/* Mobile View */}
       <div className="md:hidden space-y-3">
         <p className="text-sm uppercase text-gray-400 tracking-wide">
           {job.company}

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
 
-import FeaturesSection from '../../components/landing/Features'
-import Footer from '../../components/landing/Footer'
-import Navbar from '../../components/landing/Navbar'
-import About from '../../components/landing/About'
-import HeroSection from '../../components/landing/HeroSection'
+import Footer from '../components/Footer'
+import Navbar from '../components/Navbar'
+import About from '../components/About'
+import HeroSection from '../components/HeroSection'
+import Features from '../components/Features'
 
 const Landing = () => {
 
@@ -22,7 +22,7 @@ const Landing = () => {
         <HeroSection />
       </section>
       <section id="features">
-        <FeaturesSection />
+        <Features />
       </section>
       <section id="about">
         <About />

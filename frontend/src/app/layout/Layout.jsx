@@ -1,10 +1,10 @@
 import { useContext, useEffect } from 'react'
-import BreadCrums from '../../Jobs/components/BreadCrums'
+import BreadCrums from '../../features/Jobs/components/BreadCrums'
 import Sidebar from './Sidebar'
 import Topbar from './Topbar'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { useTheme } from '../context/ThemeContext'
-import { AuthContext } from '../../auth/context/AuthContext'
+import { useTheme } from '../providers/ThemeContext'
+import { AuthContext } from '../../features/auth/context/AuthContext'
 import BottomNav from './BottomNav'
 import { Plus } from 'lucide-react'
 

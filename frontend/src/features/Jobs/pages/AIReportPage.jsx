@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useJobDetails } from "../hooks/useJobDetails";
 import { useParams } from "react-router-dom";
+import AIReportSkeleton from "../components/AIReportSkeleton";
 
 const NAV_ITEMS = [
   {
@@ -200,10 +201,9 @@ const getSeverityStyle = (severity) => {
 const AIReportPage = () => {
   const [activeNav, setActiveNav] = useState("technical");
   const { jobId } = useParams();
-  console.log("Fetching AI report for jobId:", jobId);
   const { aiReport, loading, error } = useJobDetails(jobId);
-  console.log("AI Report:", aiReport);
-  if (loading) return <p>Loading AI report...</p>;
+  
+  if (loading) return <AIReportSkeleton />
   if (error) return <p className="text-red-500">Error: {error}</p>;
   if (!aiReport) return <p className="text-gray-500">No AI report found.</p>;
 
@@ -290,7 +290,7 @@ const AIReportPage = () => {
           )}
         </main>
 
-        <aside className="md:w-[280px] p-4 flex flex-col gap-6 order-1 lg:order-3">
+        <aside className="md:w-[330px] p-4 flex flex-col gap-6 order-1 lg:order-3">
           <div className="flex bg-white dark:bg-[#221F1E] rounded-3xl p-4 flex-col items-center gap-2">
             <p className="text-xs uppercase text-[#5c5a5a]">Match Score</p>
 

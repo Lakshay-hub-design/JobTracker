@@ -131,10 +131,6 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
               Edit Job Details
             </button>
 
-            <button className="px-3 py-2 border dark:border-[#635956] rounded-lg dark:text-[#cccccc] hover:bg-gray-100 text-sm flex items-center gap-2 justify-center font-bold bg-white dark:bg-[#33302f]">
-              <IoShareSocialSharp />
-              Share Profile
-            </button>
           </div>
         </div>
       </div>

@@ -3,12 +3,14 @@ import { DashboardContext } from "../context/DashboardContext"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { getDashboardStats } from "../services/dashBoardApi"
 import { useEffect } from "react"
-import { AppLoadingContext } from "../../app/context/AppLoadingContext"
+import { AppLoadingContext } from "../../../app/providers/AppLoadingContext"
 
 export const useDashboard = () => {
     
     const context = useContext(DashboardContext)
     const { dashboardData, loading, error, setDashboardData, setLoading, setError } = context
+
+    const { setLoading: setAppLoading, setProgress } = useContext(AppLoadingContext)
 
     const axiosPrivate = useAxiosPrivate()
 
@@ -28,6 +30,11 @@ export const useDashboard = () => {
             if(!isBackground) {
                 setLoading(false)
             }
+
+            setTimeout(() => {
+                setAppLoading(false)
+                setProgress(0)
+            }, 150)
         }
     }
 

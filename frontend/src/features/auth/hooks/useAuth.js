@@ -3,7 +3,7 @@ import { AuthContext } from "../context/AuthContext"
 import { forgotPassword, getMe, login, logout, register, resendOtp, resetPassword, verifyEmail } from "../services/authApi"
 import { useNavigate } from "react-router-dom"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
-import { AppLoadingContext } from "../../app/context/AppLoadingContext"
+import { AppLoadingContext } from "../../../app/providers/AppLoadingContext"
 
 
 export const useAuth = () => {
@@ -86,6 +86,7 @@ export const useAuth = () => {
                 completeProgress(progressInterval)
                 navigate('/dashboard')
             }, remaining)
+
         } catch (err) {
             clearInterval(progressInterval)
             setAppLoading(false)

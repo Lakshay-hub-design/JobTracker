@@ -14,19 +14,16 @@ export const AuthProvider = ({children}) => {
     useEffect(() => {
         if (hasRefreshed.current) return
         hasRefreshed.current = true
-      const refresh = async () => {
-        try {
-            setLoading(true)
-            const res = await api.get('/api/auth/refresh-token')
+        const refresh = async () => {
+            try {
+                const res = await api.get('/api/auth/refresh-token')
 
-            setAccessToken(res.data.accessToken)
-        } catch (err) {
-            console.log("Error refreshing token:", err.response?.data || err.message)
-        } finally {
-            setLoading(false)
+                setAccessToken(res.data.accessToken)
+            } catch (err) {
+                console.log("Error refreshing token:", err.response?.data || err.message)
+            }
         }
-      }
-      refresh()
+        refresh()
     }, [])
     
 

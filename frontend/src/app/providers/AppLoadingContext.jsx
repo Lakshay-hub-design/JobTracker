@@ -36,11 +36,6 @@ export const AppLoadingProvider = ({ children }) => {
         if (current >= 100) {
             current = 100
             clearInterval(finishInterval)
-
-            setTimeout(() => {
-                setLoading(false)
-                setProgress(0)
-            }, 200)
         }
 
         setProgress(current)
