@@ -10,15 +10,11 @@ export const useDashboard = () => {
     const context = useContext(DashboardContext)
     const { dashboardData, loading, error, setDashboardData, setLoading, setError } = context
 
-    const { setLoading: setAppLoading, setProgress } = useContext(AppLoadingContext)
-
     const axiosPrivate = useAxiosPrivate()
 
-    const fetchDashboardData = async (isBackground = false) => {
+    const fetchDashboardData = async () => {
         try {
-            if(!isBackground) {
-                setLoading(true)
-            }
+            setLoading(true)
 
             setError(null)
 
@@ -27,23 +23,14 @@ export const useDashboard = () => {
         } catch (err) {
             setError(err.message || 'Failed to load dashboard')
         } finally {
-            if(!isBackground) {
-                setLoading(false)
-            }
-
-            setTimeout(() => {
-                setAppLoading(false)
-                setProgress(0)
-            }, 150)
+            setLoading(false)
         }
     }
 
     useEffect(() => {
         if (!dashboardData) {
-            fetchDashboardData(false)
-        } else {
-            fetchDashboardData(true)
-        }
+            fetchDashboardData()
+        } 
     }, [])
     
     return {

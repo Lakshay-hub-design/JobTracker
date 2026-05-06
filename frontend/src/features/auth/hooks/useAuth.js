@@ -10,7 +10,6 @@ export const useAuth = () => {
 
     const context = useContext(AuthContext)
 
-    const { setLoading: setAppLoading, startProgress, completeProgress } = useContext(AppLoadingContext);
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
     const { user, setUser, accessToken, setAccessToken, loading, setLoading, error, setError } = context
@@ -64,32 +63,18 @@ export const useAuth = () => {
     }
 
     const handleLogin = async({email, password}) => {
-        let progressInterval;
-        const MIN_TIME = 500
-        const start = Date.now()
 
         try {
             setLoading(true)
-            setAppLoading(true)
             setError(null)
-
-            progressInterval = startProgress()
 
             const data = await login({email, password})
             setAccessToken(data.accessToken)
             setUser(data.user)
 
-            const elapsed = Date.now() - start
-            const remaining = Math.max(0, MIN_TIME - elapsed)
-
-            setTimeout(() => {
-                completeProgress(progressInterval)
-                navigate('/dashboard')
-            }, remaining)
+            navigate('/dashboard')
 
         } catch (err) {
-            clearInterval(progressInterval)
-            setAppLoading(false)
             setError(err.message || 'Something went wrong')
         } finally {
             setLoading(false)

@@ -102,7 +102,15 @@ const userSchema = new mongoose.Schema({
       type: String,
       enum: ["light", "dark"],
       default: "light"
-    }
+    },
+    aiUsageToday: {
+      type: Number,
+      default: 0
+    },
+    lastAIDate: {
+      type: Date,
+      default: null
+    },
 },{
     timestamps: true
 })

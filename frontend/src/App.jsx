@@ -6,10 +6,8 @@ import { AppLoadingContext } from './app/providers/AppLoadingContext';
 import LoadingScreen from './shared/components/loaders/LoadingScreen';
 
 const App = () => {
-const { loading, progress } = useContext(AppLoadingContext);
   return (
     <div>
-      {loading && <LoadingScreen progress={progress} />}
       <AppRoutes />
       <Toaster
         position="top-right"

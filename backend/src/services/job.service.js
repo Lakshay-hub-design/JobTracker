@@ -5,6 +5,7 @@ const jobRepository = require('../repositories/job.repository')
 
 const { updateApplicationObjective, getWeeklyObjectivesService } = require('../services/objective.service')
 const { ApiError } = require('../utils/apiError')
+const { checkUserAILimit } = require('../utils/checkUserAiLimit')
 const extractResumeText = require('./resume.service')
 
 
@@ -50,38 +51,50 @@ const createJobService = async ({ body, file, userId }) => {
     })
 
     if(description){
-        const aiReport = await aiReportRepository.createAIReport({
-            job: job._id,
-            user: userId,
-            status: "pending"
-        })
+        const canUseAI = await checkUserAILimit(userId)
 
-        await jobRepository.updateJob(job, {
-            aiReport: aiReport._id
-        })
+        if(canUseAI){
+            const aiReport = await aiReportRepository.createAIReport({
+                job: job._id,
+                user: userId,
+                status: "pending"
+            })
 
-        await aiQueue.add('process-job', {
-            jobId: job._id,
-            resumeText: resumeText || null,
-            description,
-            aiReportId: aiReport._id,
-            userId
-        }, {
-            attempts: 3,
-            backoff: {
-                type: 'exponential',
-                delay: 5000
-            },
-            removeOnComplete: true,
-            removeOnFail: false
-        })
+            await jobRepository.updateJob(job, {
+                aiReport: aiReport._id
+            })
+
+            await aiQueue.add('process-job', {
+                userId,
+                jobId: job._id,
+                resumeText: resumeText || null,
+                description,
+                aiReportId: aiReport._id,
+                userId
+            }, {
+                attempts: 3,
+                backoff: {
+                    type: 'exponential',
+                    delay: 5000
+                },
+                removeOnComplete: true,
+                removeOnFail: false
+            })
+        }else {
+            await aiReportRepository.createAIReport({
+                job: job._id,
+                user: userId,
+                status: "limit_reached",
+                error: "User has reached daily AI processing limit"
+            })
+        }
     }
 
     return job
 }
 
 const generateAIReportService = async ({ jobId, file, body, userId }) => {
-    const { description } = body
+    const { description } = body || {}
     let job = await jobRepository.getJobDetails(jobId, userId)
 
     if(!job){
@@ -115,6 +128,38 @@ const generateAIReportService = async ({ jobId, file, body, userId }) => {
     }
 
     let report = await aiReportRepository.getAIReport(job.aiReport)
+
+    const canUseAI = await checkUserAILimit(userId)
+
+    if (!canUseAI) {
+        if (!report) {
+
+            report = await aiReportRepository.createAIReport({
+                job: jobId,
+                user: userId,
+                status: 'limit_reached'
+            })
+
+            await jobRepository.updateJobById(
+                job._id,
+                userId,
+                {
+                    aiReport: report._id
+                }
+            )
+
+        } else {
+
+            await aiReportRepository.updateAIReport(
+                report._id,
+                {
+                    status: 'limit_reached'
+                }
+            )
+        }
+
+        throw new ApiError(403, 'User has reached daily AI processing limit')
+    }
 
     if(!report){
         report = await aiReportRepository.createAIReport({
@@ -232,9 +277,17 @@ const getJobDetailsService = async ({ jobId, userId }) => {
 
 const getDashboardStats = async (userId) => {
 
-    const totalJobs = await jobRepository.countJobs(userId)
-
-    const statusStatsRaw = await jobRepository.getStatusStats(userId)
+    const [
+        totalJobs,
+        statusStatsRaw,
+        monthlyStats,
+        recentJobs
+    ] = await Promise.all([
+        jobRepository.countJobs(userId),
+        jobRepository.getStatusStats(userId),
+        jobRepository.getMonthlyStats(userId),
+        jobRepository.getRecentJobs(userId, 5)
+    ])
 
     const statusStats = {
         applied: 0,
@@ -247,10 +300,6 @@ const getDashboardStats = async (userId) => {
         statusStats[item._id] = item.count
     })
 
-    const monthlyStats =  await jobRepository.getMonthlyStats(userId)
-
-    const recentJobs = await jobRepository.getRecentJobs(userId, 5)
-
     return {
         totalJobs,
         statusStats,
@@ -261,7 +310,10 @@ const getDashboardStats = async (userId) => {
 
 const generateDashboardInsight = async (userId) => {
 
-    const allJobs = await jobRepository.getAllJobsBasic(userId)
+    const [allJobs, latestInsightJob ] = await Promise.all ([
+        jobRepository.getAllJobsBasic(userId),
+        jobRepository.getLatestAIInsight(userId)
+    ])
 
     const total = allJobs.length
 
@@ -271,8 +323,6 @@ const generateDashboardInsight = async (userId) => {
     const successRate = total ? Math.round((offered / total) * 100) : 0
     const interviewRate = total ? Math.round((interviewing / total) * 100) : 0
     
-    const latestInsightJob = await jobRepository.getLatestAIInsight(userId)
-
     const aiInsight = latestInsightJob?.aiInsight || null
 
     if (!aiInsight) {
@@ -298,10 +348,11 @@ const generateDashboardInsight = async (userId) => {
 
 const getFullDashboardService = async ({userId}) => {
 
-    const stats = await getDashboardStats(userId)
-    const aiInsight = await generateDashboardInsight(userId)
-
-    const objectives = await getWeeklyObjectivesService(userId)
+    const [stats, aiInsight, objectives] = await Promise.all([
+        getDashboardStats(userId),
+        generateDashboardInsight(userId),
+        getWeeklyObjectivesService(userId)
+    ])
 
     return{
         ...stats,

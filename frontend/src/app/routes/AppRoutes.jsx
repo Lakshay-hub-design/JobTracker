@@ -17,15 +17,16 @@ const Profile = lazy(() => import('../../features/profile/pages/ProfilePage'))
 const Landing = lazy(() => import('../../features/landing/pages/Landing'))
 
 
-const Register = lazy(() => import('../../features/auth/pages/Register'))
-const Login = lazy(() => import('../../features/auth/pages/Login'))
-const VerifyEmail = lazy(() => import('../../features/auth/pages/VerifyEmail'))
-const ForgotPassword = lazy(() => import('../../features/auth/pages/ForgotPassword'))
-const ResetPassword = lazy(() => import('../../features/auth/pages/ResetPassword'))
+import Login from '../../features/auth/pages/Login'
+import Register from '../../features/auth/pages/Register'
+import VerifyEmail from '../../features/auth/pages/VerifyEmail'
+import ForgotPassword from '../../features/auth/pages/ForgotPassword'
+import ResetPassword from '../../features/auth/pages/ResetPassword'
+import PageLoader from '../../shared/components/loaders/PageLoader'
 
 const AppRoutes = () => {
   return (
-    <Suspense fallback={<LoadingScreen />}>
+    <Suspense fallback={<PageLoader />}>
       <Routes>
 
         <Route element={<PublicRoute />}>
