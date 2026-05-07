@@ -32,14 +32,17 @@ export const useJobDetails = (jobId) => {
 
     const triggerAIReport = async (formData = null) => {
         try {
-            setLoading(true)
             setError(null)
 
             await generateAIReport(axiosPrivate, jobId, formData)
+            toast.success('AI report generation started. It may take a few moments.')
         } catch (err) {
-            setError(err.message || 'Failed to fetch job details')
-        } finally {
-            setLoading(false)
+            if(err.response.status === 403){
+                toast.error('Daily AI report generation limit reached. Please try again tomorrow.')
+            } else {
+                toast.error('Failed to generate AI report. Please try again.')
+            }
+            setError(err.message || 'Failed to generate AI report')
         }
     }
 

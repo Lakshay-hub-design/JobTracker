@@ -88,9 +88,9 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
                 className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition
               ${
                 aiReport?.status === "completed"
-                  ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+                  ? "bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer"
                   : aiReport?.status === "pending"
-                    ? "bg-gray-200 text-gray  -500 cursor-not-allowed"
+                    ? "bg-gray-200 dark:bg-[#3c3c3c] text-gray-500 dark:text-gray-400 cursor-not-allowed"
                     : aiReport?.status === "failed"
                       ? "bg-red-100 text-red-600 hover:bg-red-200"
                       : "bg-gray-200 text-blue-700 hover:bg-gray-100"
@@ -102,6 +102,7 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
                 {aiReport?.status === "completed" && "View AI Report"}
                 {aiReport?.status === "failed" && "Retry AI Report"}
                 {aiReport?.status === "not_ready" && "Generate AI Report"}
+                {aiReport?.status === "limit_reached" && "Daily Limit Reached"}
               </button>
 
               <div ref={desktopMenuRef} className="relative">
