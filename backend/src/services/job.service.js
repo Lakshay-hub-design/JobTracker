@@ -2,10 +2,11 @@ const uploadFile = require('../providers/storage.service')
 const aiQueue = require('../queues/queue')
 const aiReportRepository = require('../repositories/aiReport.repository')
 const jobRepository = require('../repositories/job.repository')
+const authRepository = require('../repositories/user.repository')
 
 const { updateApplicationObjective, getWeeklyObjectivesService } = require('../services/objective.service')
 const { ApiError } = require('../utils/apiError')
-const { checkUserAILimit } = require('../utils/checkUserAiLimit')
+const { reserveAIUsage } = require('../utils/aiLimit.util')
 const extractResumeText = require('./resume.service')
 
 
@@ -50,8 +51,10 @@ const createJobService = async ({ body, file, userId }) => {
         console.error("Goal update failed:", err.message)
     })
 
+    let aiLimitReached = false
+
     if(description){
-        const canUseAI = await checkUserAILimit(userId)
+        const canUseAI = await reserveAIUsage(userId)
 
         if(canUseAI){
             const aiReport = await aiReportRepository.createAIReport({
@@ -70,7 +73,6 @@ const createJobService = async ({ body, file, userId }) => {
                 resumeText: resumeText || null,
                 description,
                 aiReportId: aiReport._id,
-                userId
             }, {
                 attempts: 3,
                 backoff: {
@@ -81,6 +83,8 @@ const createJobService = async ({ body, file, userId }) => {
                 removeOnFail: false
             })
         }else {
+            aiLimitReached = true
+
             await aiReportRepository.createAIReport({
                 job: job._id,
                 user: userId,
@@ -90,7 +94,10 @@ const createJobService = async ({ body, file, userId }) => {
         }
     }
 
-    return job
+    return {
+        job,
+        aiLimitReached
+    }
 }
 
 const generateAIReportService = async ({ jobId, file, body, userId }) => {
@@ -129,7 +136,7 @@ const generateAIReportService = async ({ jobId, file, body, userId }) => {
 
     let report = await aiReportRepository.getAIReport(job.aiReport)
 
-    const canUseAI = await checkUserAILimit(userId)
+    const canUseAI = await reserveAIUsage(userId)
 
     if (!canUseAI) {
         if (!report) {
@@ -199,7 +206,7 @@ const generateAIReportService = async ({ jobId, file, body, userId }) => {
 
 const getJobsService = async ({ userId, query }) => {
 
-    const { status, jobType, search, page = 1, limit = 9 } = query
+    const { status, jobType, search, page = 1, limit = 8 } = query
     
     const filter = { createdBy: userId }
 
@@ -310,9 +317,10 @@ const getDashboardStats = async (userId) => {
 
 const generateDashboardInsight = async (userId) => {
 
-    const [allJobs, latestInsightJob ] = await Promise.all ([
+    const [allJobs, latestInsightJob, user ] = await Promise.all ([
         jobRepository.getAllJobsBasic(userId),
-        jobRepository.getLatestAIInsight(userId)
+        jobRepository.getLatestAIInsight(userId),
+        authRepository.findByIdAndAIusage(userId)
     ])
 
     const total = allJobs.length
@@ -324,6 +332,11 @@ const generateDashboardInsight = async (userId) => {
     const interviewRate = total ? Math.round((interviewing / total) * 100) : 0
     
     const aiInsight = latestInsightJob?.aiInsight || null
+
+    const aiUsageToday = user?.aiUsageToday || 0
+    const aiLimit = 5
+
+    const aiLimitReached = aiUsageToday >= aiLimit
 
     if (!aiInsight) {
         return {
@@ -340,6 +353,11 @@ const generateDashboardInsight = async (userId) => {
     return {
         successRate,
         interviewRate,
+
+        aiUsageToday,
+        aiLimit,
+        aiLimitReached,
+        
         summary: aiInsight.summary,
         weakAreas: aiInsight.weakAreas,
         nextBestAction: aiInsight.nextBestAction

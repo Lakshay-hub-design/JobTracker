@@ -1,7 +1,7 @@
 export async function addJob(axiosPrivate, formData){
     try {
         const res = await axiosPrivate.post('/api/job/add-job', formData)
-        return res.data
+        return res.data.data
     } catch (error) {
         throw error.response?.data || error
     }

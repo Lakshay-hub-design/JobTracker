@@ -5,7 +5,7 @@ const redis = require("../config/redis")
 const aiReportModel = require("../models/aiReport.model")
 const { generateAiReport } = require("../services/ai.service")
 const jobRepository = require("../repositories/job.repository")
-const { incrementAIUsage } = require("../utils/checkUserAiLimit")
+const { rollbackAIUsage } = require("../utils/aiLimit.util")
 
 const startWorker = async () => {
 console.log("🟢 Worker started")
@@ -30,10 +30,7 @@ console.log("🟢 Worker started")
           ...result
         })
 
-        await jobRepository.updateJobAIInsight(jobId, result)
-
-        await incrementAIUsage(userId)
-        
+        await jobRepository.updateJobAIInsight(jobId, result)        
       } catch (err) {
         console.error("❌ Error:", err.message)
 
@@ -42,6 +39,8 @@ console.log("🟢 Worker started")
             status: "failed",
             error: err.message || "AI generation failed"
           })
+
+          await rollbackAIUsage(userId)
         }
 
         throw err

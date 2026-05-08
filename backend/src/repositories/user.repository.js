@@ -36,6 +36,10 @@ class AuthRepository {
         return User.findById(id)
     }
 
+    async findByIdAndAIusage(userId) {
+        return User.findById(userId).select("+aiUsageToday")
+    }
+
     async createUser(userData){
         return await User.create(userData)
     }

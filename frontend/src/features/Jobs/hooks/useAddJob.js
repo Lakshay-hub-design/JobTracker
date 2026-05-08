@@ -20,13 +20,19 @@ export const useAddJob = () => {
         setLoading(true)
         setError(null)
         
-        await addJob(axiosPrivate, formData)
+        const result = await addJob(axiosPrivate, formData)
 
         incrementObjectiveLocal({ type: 'application' })
 
         toast.success("Job successfully added 🎉", {
           id: toastId,
         });
+
+        if (result.aiLimitReached) {
+            toast.error(
+                "Daily AI insight limit reached. Job added without AI analysis."
+            )
+        }
 
         navigate('/jobs')
     } catch (err) {

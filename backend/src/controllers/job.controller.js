@@ -3,7 +3,7 @@ const asyncHandler = require('../middlewares/asyncHandler');
 const { createJobService, getJobsService, getJobDetailsService, getFullDashboardService, updateJobService, deleteJobService, generateAIReportService, getFollowUpsService, markFollowUpDoneService } = require('../services/job.service');
 
 const createJob = asyncHandler(async (req, res) => {
-    const job = await createJobService({
+    const result = await createJobService({
         body: req.body,
         file: req.file,
         userId: req.user._id
@@ -12,7 +12,7 @@ const createJob = asyncHandler(async (req, res) => {
     res.status(201).json({
         success: true,
         message: "Job created successfully",
-        job
+        data: result
     })
 })
 

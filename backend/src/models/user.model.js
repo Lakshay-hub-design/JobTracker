@@ -107,8 +107,8 @@ const userSchema = new mongoose.Schema({
       type: Number,
       default: 0
     },
-    lastAIDate: {
-      type: Date,
+    aiUsageDate: {
+      type: String,
       default: null
     },
 },{

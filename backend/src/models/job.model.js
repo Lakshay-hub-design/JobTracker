@@ -17,12 +17,6 @@ const JobSchema = new mongoose.Schema(
       enum: ["applied", "interviewing", "offered", "rejected"],
       default: "applied",
     },
-    statusHistory: [
-      {
-        status: String,
-        date: { type: Date, default: Date.now }
-      }
-    ],
     location: {
       type: String,
       required: [true, "Location is required"],
