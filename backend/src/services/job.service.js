@@ -6,7 +6,7 @@ const authRepository = require('../repositories/user.repository')
 
 const { updateApplicationObjective, getWeeklyObjectivesService } = require('../services/objective.service')
 const { ApiError } = require('../utils/apiError')
-const { reserveAIUsage } = require('../utils/aiLimit.util')
+const { reserveAIUsage, getCurrentAIUsage } = require('../utils/aiLimit.util')
 const extractResumeText = require('./resume.service')
 
 
@@ -84,13 +84,6 @@ const createJobService = async ({ body, file, userId }) => {
             })
         }else {
             aiLimitReached = true
-
-            await aiReportRepository.createAIReport({
-                job: job._id,
-                user: userId,
-                status: "limit_reached",
-                error: "User has reached daily AI processing limit"
-            })
         }
     }
 
@@ -265,10 +258,11 @@ const deleteJobService = async ({ jobId, userId }) => {
 
 const getJobDetailsService = async ({ jobId, userId }) => {
     const job = await jobRepository.getJobDetails(jobId, userId)
-
     if(!job){
         throw new ApiError(404, 'Job not found')
     }
+
+    const aiUsage = await getCurrentAIUsage(userId)
 
     let aiReport = null
 
@@ -278,7 +272,10 @@ const getJobDetailsService = async ({ jobId, userId }) => {
 
     return {
         job,
-        aiReport
+        aiReport,
+        aiLimitReached: aiUsage.aiLimitReached,
+        aiUsageToday: aiUsage.aiUsageToday,
+        aiLimit: aiUsage.aiLimit
     }
 }
 
@@ -317,10 +314,10 @@ const getDashboardStats = async (userId) => {
 
 const generateDashboardInsight = async (userId) => {
 
-    const [allJobs, latestInsightJob, user ] = await Promise.all ([
+    const [allJobs, latestInsightJob, aiUsage ] = await Promise.all ([
         jobRepository.getAllJobsBasic(userId),
         jobRepository.getLatestAIInsight(userId),
-        authRepository.findByIdAndAIusage(userId)
+        getCurrentAIUsage(userId)
     ])
 
     const total = allJobs.length
@@ -333,11 +330,6 @@ const generateDashboardInsight = async (userId) => {
     
     const aiInsight = latestInsightJob?.aiInsight || null
 
-    const aiUsageToday = user?.aiUsageToday || 0
-    const aiLimit = 5
-
-    const aiLimitReached = aiUsageToday >= aiLimit
-
     if (!aiInsight) {
         return {
         successRate,
@@ -349,6 +341,12 @@ const generateDashboardInsight = async (userId) => {
         
         }
     }
+
+    const {
+        aiUsageToday,
+        aiLimit,
+        aiLimitReached
+    } = aiUsage
 
     return {
         successRate,

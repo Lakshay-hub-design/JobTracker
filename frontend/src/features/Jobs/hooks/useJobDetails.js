@@ -8,6 +8,7 @@ export const useJobDetails = (jobId) => {
     const [aiReport, setAIReport] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+    const [aiLimitReached, setAILimitReached] = useState(false)
 
     const axiosPrivate = useAxiosPrivate()
 
@@ -19,6 +20,7 @@ export const useJobDetails = (jobId) => {
             const data = await getJobDetails(axiosPrivate, jobId)
             setJob(data.job)
             setAIReport(data.aiReport)
+            setAILimitReached(data.aiLimitReached)
         } catch (err) {
             setError(err.message || 'Failed to fetch job details')
         } finally {
@@ -73,5 +75,5 @@ export const useJobDetails = (jobId) => {
         }
     }
 
-    return { job, aiReport, loading, error, refetch: fetchJobDetails, triggerAIReport, handleUpdate }
+    return { job, aiReport, loading, error, aiLimitReached, refetch: fetchJobDetails, triggerAIReport, handleUpdate }
 }

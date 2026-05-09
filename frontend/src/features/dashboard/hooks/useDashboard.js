@@ -1,4 +1,4 @@
-import { useContext } from "react"
+import { useCallback, useContext } from "react"
 import { DashboardContext } from "../context/DashboardContext"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { getDashboardStats } from "../services/dashBoardApi"
@@ -12,26 +12,26 @@ export const useDashboard = () => {
 
     const axiosPrivate = useAxiosPrivate()
 
-    const fetchDashboardData = async () => {
+    const fetchDashboardData = useCallback(async () => {
         try {
             setLoading(true)
-
             setError(null)
 
             const data = await getDashboardStats(axiosPrivate)
+
             setDashboardData(data)
         } catch (err) {
             setError(err.message || 'Failed to load dashboard')
         } finally {
             setLoading(false)
         }
-    }
+    }, [axiosPrivate])
 
     useEffect(() => {
         if (!dashboardData) {
             fetchDashboardData()
         } 
-    }, [])
+    }, [dashboardData, fetchDashboardData])
     
     return {
         dashboardData, loading, error, refetch: fetchDashboardData

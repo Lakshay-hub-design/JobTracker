@@ -19,7 +19,7 @@ const JobDetails = () => {
 
   const navigate = useNavigate()
   const { jobId } = useParams()
-  const { job, aiReport, triggerAIReport, refetch, loading, error, handleUpdate } = useJobDetails(jobId)
+  const { job, aiReport, aiLimitReached, triggerAIReport, refetch, loading, error, handleUpdate } = useJobDetails(jobId)
 
   useEffect(() => {
     if (aiReport?.status !== "pending") return
@@ -107,6 +107,7 @@ const JobDetails = () => {
       <JobDetailsHeader
         job={job}
         aiReport={aiReport}
+        aiLimitReached={aiLimitReached}
         onAIAction={handleAIAction}
         handleUpdate={handleUpdate}
       />

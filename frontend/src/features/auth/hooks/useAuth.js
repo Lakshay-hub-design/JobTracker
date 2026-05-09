@@ -70,6 +70,7 @@ export const useAuth = () => {
 
             const data = await login({email, password})
             setAccessToken(data.accessToken)
+            console.log("LOGIN USER:", data.user)
             setUser(data.user)
 
             navigate('/dashboard')
@@ -125,22 +126,6 @@ export const useAuth = () => {
             setLoading(false)
         }
     }
-
-    useEffect(() => {
-        if(!accessToken) return;
-      const getAndSetUser = async () => {
-        try {
-            const data = await getMe(axiosPrivate)
-            
-            setUser(data.user)
-        } catch (error) {
-            console.log("Error fetching user data:", error)
-        }
-      }
-
-      getAndSetUser()
-    }, [accessToken])
     
-
     return { user, loading, error, handleRegister, handleVerifyEmail, handleResendOtp, handleLogin, handleLogout, handleForgotPassword, handleResetPassword }
 }

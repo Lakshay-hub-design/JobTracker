@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState, useRef } from "react";
+import { createContext, useEffect, useState, useRef, useMemo } from "react";
 import api from "../../../shared/api/axios";
 
 export const AuthContext = createContext()
@@ -8,27 +8,54 @@ export const AuthProvider = ({children}) => {
     const [accessToken, setAccessToken] = useState(null)
     const [error, setError] = useState(null)
     const [loading, setLoading] = useState(false)
+    const [authLoading, setAuthLoading] = useState(true)
 
     const hasRefreshed = useRef(false)
 
     useEffect(() => {
         if (hasRefreshed.current) return
         hasRefreshed.current = true
-        const refresh = async () => {
+
+        const initializeAuth = async () => {
             try {
                 const res = await api.get('/api/auth/refresh-token')
-
                 setAccessToken(res.data.accessToken)
+
+                if(res.data.user){
+                    setUser(res.data.user)
+                }
+
             } catch (err) {
                 console.log("Error refreshing token:", err.response?.data || err.message)
+            } finally {
+                setAuthLoading(false)
             }
         }
-        refresh()
+
+        initializeAuth()
     }, [])
+
+    const value = useMemo(() => ({
+        user,
+        setUser,
+        accessToken,
+        setAccessToken,
+        loading,
+        setLoading,
+        authLoading,
+        error,
+        setError
+    }), [
+        user,
+        accessToken,
+        loading,
+        authLoading,
+        error
+    ])
     
 
     return (
-        <AuthContext.Provider value={{ user, setUser, accessToken, setAccessToken, error, setError, loading, setLoading }} >
+        <AuthContext.Provider value={value} >
             {children}
         </AuthContext.Provider>
     )

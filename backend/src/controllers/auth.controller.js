@@ -47,7 +47,7 @@ const resendOtp = asyncHandler(async (req, res) => {
 const refreshAccessTokenController = asyncHandler(async (req, res) => {
     const refreshToken = req.cookies.refreshToken
 
-    const { newAccessToken, newRefreshToken } = await refreshAccessToken(refreshToken)
+    const { newAccessToken, newRefreshToken, user } = await refreshAccessToken(refreshToken)
 
     res.cookie('refreshToken', newRefreshToken, {
         httpOnly: true,
@@ -58,6 +58,7 @@ const refreshAccessTokenController = asyncHandler(async (req, res) => {
     res.status(200).json({
       success: true,
       accessToken: newAccessToken,
+      user
     });
 })
 
@@ -75,9 +76,10 @@ const login = asyncHandler(async (req, res, next) => {
         accessToken,
         user: {
             id: user._id,
-            name: user.name,
+            name: user.username,
             email: user.email,
-            role: user.role
+            personalInfo: user.personalInfo,
+            theme: user.theme
         }
     })
 })

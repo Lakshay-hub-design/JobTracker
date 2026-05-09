@@ -181,7 +181,14 @@ const refreshAccessToken = async (refreshToken) => {
 
         return {
             newAccessToken,
-            newRefreshToken
+            newRefreshToken,
+            user: {
+                _id: user._id,
+                name: user.username,
+                email: user.email,
+                theme: user.theme,
+                personalInfo: user.personalInfo
+            }
         }
     } catch (error) {
         throw error

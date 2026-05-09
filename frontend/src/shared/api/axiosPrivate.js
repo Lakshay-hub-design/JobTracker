@@ -1,21 +1,24 @@
-import { useContext, useRef } from 'react'
+import { useContext, useRef, useEffect } from 'react'
 import { AuthContext } from '../../features/auth/context/AuthContext'
-import { useEffect } from 'react'
 import api from './axios'
 
 const useAxiosPrivate = () => {
     const context = useContext(AuthContext)
-    const { accessToken, setAccessToken } = context
+    const { accessToken, setAccessToken, setUser } = context
     const tokenRef = useRef(accessToken)
 
     useEffect(() => {
       tokenRef.current = accessToken
     }, [accessToken])
 
+    const refreshPromiseRef = useRef(null)
+
     useEffect(() => {
       const requestInterceptor = api.interceptors.request.use(
         (config) => {
-            if(!config.headers.Authorization){
+            config.headers = config.headers || {}
+
+            if(!config.headers.Authorization && tokenRef.current){
                 config.headers.Authorization = `Bearer ${tokenRef.current}`
             }
             return config
@@ -28,25 +31,48 @@ const useAxiosPrivate = () => {
         async (error) => {
             const prevRequest = error?.config
 
+            if (!prevRequest) {
+                return Promise.reject(error);
+            }
+
+            const isRefreshRequest =
+                prevRequest.url?.includes("/api/auth/refresh-token");
+
             if(
                 error?.response?.status === 401 &&
                 !prevRequest._retry &&
-                !prevRequest.url.includes("/api/auth/refresh-token") 
+                !isRefreshRequest
             ){
                 prevRequest._retry = true;
 
                 try {
-                    const res = await api.get(
-                        "/api/auth/refresh-token",
-                    );
+                    if (!refreshPromiseRef.current) {
+                        refreshPromiseRef.current = api.get(
+                            "/api/auth/refresh-token"
+                        );
+                    }
+
+                    const res = await refreshPromiseRef.current
+
+                    refreshPromiseRef.current = null
+
+                    const newAccessToken = res.data.accessToken;
 
                     setAccessToken(res.data.accessToken);
 
-                    prevRequest.headers.Authorization = `Bearer ${res.data.accessToken}`;
+                    setUser(res.data.user)
+
+                    prevRequest.headers.Authorization = `Bearer ${newAccessToken}`;
 
                     return api(prevRequest);
                 } catch (err) {
+                    refreshPromiseRef.current = null;
                     console.log("Refresh failed", err.response?.data || err.message);
+
+                    setAccessToken(null);
+                    setUser(null);
+
+                    return Promise.reject(err);
                 }
             }
             return Promise.reject(error);
@@ -57,7 +83,7 @@ const useAxiosPrivate = () => {
         api.interceptors.request.eject(requestInterceptor)
         api.interceptors.response.eject(responseInterceptor)
       }
-    }, [])
+    }, [setAccessToken, setUser])
     return api
 }
 

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { createContext } from 'react'
 
 export const DashboardContext = createContext()
@@ -19,7 +19,7 @@ export const DashboardProvider = ({children}) => {
                 (type && obj.type === type)
 
                 if (match) {
-                const newProgress = obj.progress + 1
+                const newProgress = (obj.progress || 0) + 1
 
                 return {
                     ...obj,
@@ -48,8 +48,20 @@ export const DashboardProvider = ({children}) => {
         }))
     }
 
+    const value = useMemo(() => ({
+        dashboardData,
+        setDashboardData,
+        loading,
+        setLoading,
+        error,
+        setError,
+        incrementObjectiveLocal,
+        addObjectiveLocal,
+        deleteObjectiveLocal
+    }), [dashboardData, loading, error])
+
     return (
-        <DashboardContext.Provider value={{ dashboardData, setDashboardData, loading, setLoading, error, setError, incrementObjectiveLocal, addObjectiveLocal, deleteObjectiveLocal}}>
+        <DashboardContext.Provider value={value}>
             {children}
         </DashboardContext.Provider>
     )

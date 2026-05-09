@@ -18,7 +18,6 @@ const Topbar = () => {
 
   const { user } = context;
   const { search, setSearch, notifications } = jobContext;
-
   const { theme, toggleTheme } = useTheme();
   const { handleMarkDone } = useJobs();
 
@@ -327,7 +326,7 @@ const Topbar = () => {
           />
         </div>
         <h3 className="hidden md:block font-medium text-sm ">
-          {user.username}
+          {user.name}
         </h3>
       </div>
       {confirmId && (

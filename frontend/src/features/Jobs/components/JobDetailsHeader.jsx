@@ -14,12 +14,11 @@ const formatDate = (dateString) => {
 }
 
 
-const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
+const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate, aiLimitReached }) => {
   const [showStatusMenu, setShowStatusMenu] = useState(false)
-
+console.log(aiLimitReached)
   const desktopMenuRef = useRef()
   const mobileMenuRef = useRef()
-
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (
@@ -41,6 +40,15 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
     await handleUpdate({status}, "status")
     setShowStatusMenu(false)
   }
+
+  const isPending = aiReport?.status === "pending"
+  const isCompleted = aiReport?.status === "completed"
+  const isFailed = aiReport?.status === "failed"
+
+  const canGenerate =
+    !aiReport && !aiLimitReached
+  const limitBlocked =
+    !aiReport && aiLimitReached
 
   return (
     <div>
@@ -84,25 +92,39 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
             <div className="flex gap-2">
               <button
                 onClick={onAIAction}
-                disabled={aiReport?.status === "pending"}
+                disabled={isPending || limitBlocked}
                 className={`px-6 py-3 rounded-full font-medium flex items-center gap-2 transition
-              ${
-                aiReport?.status === "completed"
-                  ? "bg-blue-100 text-blue-700 hover:bg-blue-200 cursor-pointer"
-                  : aiReport?.status === "pending"
-                    ? "bg-gray-200 dark:bg-[#3c3c3c] text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                    : aiReport?.status === "failed"
+
+                  ${
+                    isCompleted
+                      ? "bg-blue-100 text-blue-700 hover:bg-blue-200"
+
+                    : isPending
+                      ? "bg-gray-200 dark:bg-[#3c3c3c] text-gray-500 dark:text-gray-400 cursor-not-allowed"
+
+                    : isFailed
                       ? "bg-red-100 text-red-600 hover:bg-red-200"
-                      : "bg-gray-200 text-blue-700 hover:bg-gray-100"
-              }
-            `}
+
+                    : limitBlocked
+                      ? "bg-amber-500/10 border border-amber-500/20 text-amber-400 cursor-not-allowed"
+
+                    : "bg-gray-200 text-blue-700 hover:bg-gray-100"
+                  }
+                `}
               >
+
                 <TbReportSearch />
-                {aiReport?.status === "pending" && "Generating..."}
-                {aiReport?.status === "completed" && "View AI Report"}
-                {aiReport?.status === "failed" && "Retry AI Report"}
-                {aiReport?.status === "not_ready" && "Generate AI Report"}
-                {aiReport?.status === "limit_reached" && "Daily Limit Reached"}
+
+                {isCompleted && "View AI Report"}
+
+                {isPending && "Generating..."}
+
+                {isFailed && "Retry AI Report"}
+
+                {canGenerate && "Generate AI Report"}
+
+                {limitBlocked && "Daily Limit Reached"}
+
               </button>
 
               <div ref={desktopMenuRef} className="relative">
@@ -189,17 +211,19 @@ const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate }) => {
         <div className="flex gap-3">
           <button
             onClick={onAIAction}
-            disabled={aiReport?.status === "pending"}
+            disabled={isPending || limitBlocked}
             className="flex-1 py-3 rounded-full bg-[#e7c3f3] dark:bg-[#2a2726] text-[#670f7d] dark:text-[#d6a1e3] dark:border-[0.5px] border-[#706b71] font-medium flex items-center justify-center gap-2"
           >
             <TbReportSearch size={16} />
-            {aiReport?.status === "completed"
+            {isCompleted
               ? "View AI Report"
-              : aiReport?.status === "pending"
+              : isPending
                 ? "Generating..."
-                : aiReport?.status === "failed"
+                : isFailed
                   ? "Retry AI Report"
-                  : "Generate AI Report"}
+                  : canGenerate
+                  ? "Generate AI Report"
+                  : "Daily Limit Reached"}
           </button>
           <div ref={mobileMenuRef} className="relative flex-1">
           <button
