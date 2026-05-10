@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { generateAIReport, getJobDetails, updateJob } from "../service/jobsApi"
 import {toast} from "react-hot-toast"
+import { JobContext } from "../context/JobContext"
 
 export const useJobDetails = (jobId) => {
     const [job, setJob] = useState(null)
@@ -9,6 +10,11 @@ export const useJobDetails = (jobId) => {
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
     const [aiLimitReached, setAILimitReached] = useState(false)
+    const {
+        addNotificationLocal,
+        updateNotificationLocal,
+        removeNotificationLocal
+    } = useContext(JobContext)
 
     const axiosPrivate = useAxiosPrivate()
 
@@ -61,12 +67,31 @@ export const useJobDetails = (jobId) => {
                 return updated
             })
 
+            const updatedJob = {
+                ...job,
+                ...updatedData
+            }
+
+            if (type === "followup-added") {
+                addNotificationLocal(updatedJob)
+            }
+
+            if(type === "followup-updated"){
+                updateNotificationLocal(updatedJob)
+            }
+
+            if (updatedData.isFollowUpDone) {
+                removeNotificationLocal(job._id)
+            }
+
             await updateJob(axiosPrivate, jobId, updatedData)
            
             if (type === "status") {
                 toast.success("Status Updated")
-            } else if (type === "followup") {
+            } else if (type === "followup-updated") {
                 toast.success("Follow-up rescheduled")
+            } else if (type === "followup-added") {
+                toast.success("Follow-up added")
             } else {
                 toast.success("Job Application Updated")
             }

@@ -16,7 +16,7 @@ export const JobProvider = ({ children }) => {
     const [status, setStatus] = useState("")
     const [search, setSearch] = useState("")
 
-    const [notifications, setNotifications] = useState({})
+    const [notifications, setNotifications] = useState([])
 
     const axiosPrivate = useAxiosPrivate()
 
@@ -34,6 +34,65 @@ export const JobProvider = ({ children }) => {
         fetchNotifications()
     }, [])
 
+    
+
+    const getNotificationType = (dateString) => {
+
+        const today = new Date()
+        today.setHours(0, 0, 0, 0)
+
+        const date = new Date(dateString)
+        date.setHours(0, 0, 0, 0)
+
+        const diff = Math.ceil(
+            (date - today) / (1000 * 60 * 60 * 24)
+        )
+
+        return diff < 0 ? "overdue" : "upcoming"
+    }
+
+    const addNotificationLocal = (job) => {
+        setNotifications(prev => {
+            const exists = prev.some(
+                item => item.jobId === job._id
+            )
+
+            if (exists) return prev
+
+            return [
+                ...prev,
+                {
+                    _id: job._id,
+                    jobId: job._id,
+                    company: job.company,
+                    position: job.position,
+                    followUpDate: job.followUpDate,
+                    type: getNotificationType(job.followUpDate)
+                }
+            ]
+        })
+    }
+
+    const updateNotificationLocal = (job) => {
+        setNotifications(prev =>
+            prev.map(item =>
+                item.jobId === job._id
+                    ? {
+                        ...item,
+                        followUpDate: job.followUpDate,
+                        type: getNotificationType(job.followUpDate)
+                    }
+                    : item
+            )
+        )
+    }
+
+    const removeNotificationLocal = (jobId) => {
+        setNotifications(prev =>
+            prev.filter(item => item.jobId !== jobId)
+        )
+    }
+
     const value = useMemo(() => ({
         jobs,
         loading,
@@ -43,7 +102,9 @@ export const JobProvider = ({ children }) => {
         search,
         pagination,
         notifications,
-        setNotifications,
+        addNotificationLocal,
+        updateNotificationLocal,
+        removeNotificationLocal,
         setPagination,
         setJobs,
         setLoading,

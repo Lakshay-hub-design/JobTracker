@@ -10,7 +10,6 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
   const [showReschedule, setShowReschedule] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
   const { handleMarkDone } = useJobs()
-
   const handleReschedule = async (date) => {
     if (!date) return
 
@@ -25,9 +24,15 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
         return;
       }
 
+      const actionType = job.followUpDate
+        ? "followup-updated"
+        : "followup-added";
+
     await handleUpdate(
-      { followUpDate: new Date(date).toISOString() },
-      "followup"
+      { followUpDate: new Date(date).toISOString(),
+        isFollowUpDone: false
+      },
+      actionType
     )
   }
 
@@ -109,12 +114,14 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
           </div>
         </div>
 
-        <FollowUpCard
-          key={job.followUpDate}
-          job={job}
-          onMarkDone={() => handleMarkDone(job._id)}
-          onReschedule={() => setShowReschedule(true)}
-        />
+        
+          <FollowUpCard
+            key={job.followUpDate}
+            job={job}
+            onMarkDone={() => handleMarkDone(job._id)}
+            onReschedule={() => setShowReschedule(true)}
+          />
+        
 
         {/* Quick Actions */}
         <div className="bg-amber-600/10 border border-amber-600/20 p-5 rounded-xl shadow-sm">
@@ -136,11 +143,17 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
       </div>
       {showReschedule && (
         <div className="fixed inset-0 z-50 flex items-center justify-center">
+
+          {/* BACKDROP */}
           <div
             className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-            onClick={() => setShowReschedule(false)}
+            onClick={() => {
+              setShowReschedule(false)
+              setSelectedDate(null)
+            }}
           />
 
+          {/* MODAL */}
           <div
             className="
               relative w-[90%] max-w-sm p-5 rounded-2xl
@@ -149,21 +162,64 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
               animate-popup
             "
           >
-            <h3 className="text-sm font-semibold mb-3 text-gray-800 dark:text-white">
-              Reschedule Follow-up
+
+            {/* TITLE */}
+            <h3
+              className="
+                text-sm font-semibold mb-2
+                text-gray-800 dark:text-white
+              "
+            >
+              {job.followUpDate
+                ? "Reschedule Follow-up"
+                : "Add Follow-up"}
             </h3>
 
+            {/* DESCRIPTION */}
+            <p
+              className="
+                text-xs text-gray-500
+                dark:text-gray-400 mb-4
+              "
+            >
+              {job.followUpDate
+                ? "Choose a new follow-up date."
+                : "Schedule your next follow-up reminder."}
+            </p>
+
+            {/* DATE INPUT */}
             <input
               type="date"
               value={selectedDate || ""}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              className="w-full p-2 rounded-lg border dark:bg-[#2a2a2a] dark:text-white"
+              onChange={(e) =>
+                setSelectedDate(e.target.value)
+              }
+              className="
+                w-full p-2.5 rounded-xl border
+                bg-white dark:bg-[#2a2a2a]
+                dark:text-white
+                border-gray-200 dark:border-white/10
+                focus:outline-none
+                focus:ring-2
+                focus:ring-orange-500/30
+              "
             />
 
-            <div className="flex justify-end gap-2 mt-4">
+            {/* ACTIONS */}
+            <div className="flex justify-end gap-2 mt-5">
+
               <button
-                onClick={() => setShowReschedule(false)}
-                className="px-3 py-1.5 rounded-lg bg-gray-100 dark:bg-[#333]"
+                onClick={() => {
+                  setShowReschedule(false)
+                  setSelectedDate(null)
+                }}
+                className="
+                  px-3 py-1.5 rounded-lg
+                  bg-gray-100 dark:bg-[#333]
+                  text-gray-700 dark:text-gray-200
+                  hover:bg-gray-200 dark:hover:bg-[#444]
+                  transition
+                "
               >
                 Cancel
               </button>
@@ -171,13 +227,23 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
               <button
                 onClick={async () => {
                   await handleReschedule(selectedDate)
+
                   setShowReschedule(false)
                   setSelectedDate(null)
                 }}
-                className="bg-orange-500 text-white px-3 py-1.5 rounded-lg hover:bg-orange-600"
+                className="
+                  bg-orange-500 text-white
+                  px-3 py-1.5 rounded-lg
+                  hover:bg-orange-600
+                  active:scale-95
+                  transition-all duration-200
+                "
               >
-                Save
+                {job.followUpDate
+                  ? "Save Changes"
+                  : "Add Follow-up"}
               </button>
+
             </div>
           </div>
         </div>

@@ -421,11 +421,7 @@ const markFollowUpDoneService = async ({ jobId, userId }) => {
 
   const job = await jobRepository.setFollowUpTrue(jobId, userId)
 
-  if (!job) {
-    return res.status(404).json({ message: "Job not found" })
-  }
-
-  res.json({ success: true })
+  if (!job) throw new ApiError(404, 'Job not found')
 }
 
 module.exports = {

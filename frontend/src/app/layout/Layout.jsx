@@ -36,19 +36,9 @@ const Layout = () => {
 
     return []
   }
-  const context = useContext(AuthContext)
-  const { user } = context
-  const { setTheme } = useTheme()
-
-  useEffect(() => {
-    if(user?.theme) {
-      setTheme(user.theme)
-      localStorage.setItem('theme', user.theme)
-    }
-  }, [user])
-
+ 
   return (
-    <div className='flex h-screen bg-gray-50 dark:bg-[#121110] overflow-x-hidden dark:text-gray-100  transition-colors duration-300'>
+    <div className='flex h-screen bg-gray-50 dark:bg-[#121110] overflow-x-hidden dark:text-gray-100 transition-colors duration-300'>
       <div className="hidden md:block">
         <Sidebar />
       </div>
@@ -61,7 +51,8 @@ const Layout = () => {
           <BreadCrums items={getBreadcrumbs()} />
         </div>
 
-        <main className='flex-1 overflow-y-auto custom-app-scrollbar pb-22 md:pb-4'>
+        <main className='flex-1 overflow-y-auto custom-app-scrollbar pb-22 md:pb-4 transition-colors duration-300
+'>
           <div className="p-4">
             <Outlet />
           </div>

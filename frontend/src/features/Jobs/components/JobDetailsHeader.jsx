@@ -16,7 +16,6 @@ const formatDate = (dateString) => {
 
 const JobDetailsHeader = ({ job, aiReport, onAIAction, handleUpdate, aiLimitReached }) => {
   const [showStatusMenu, setShowStatusMenu] = useState(false)
-console.log(aiLimitReached)
   const desktopMenuRef = useRef()
   const mobileMenuRef = useRef()
   useEffect(() => {

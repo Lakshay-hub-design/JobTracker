@@ -4,18 +4,31 @@ import useAxiosPrivate from "../../shared/api/axiosPrivate";
 const ThemeContext = createContext()
 
 export const ThemeProvider = ({children}) => {
-    const [theme, setTheme] = useState('light')
+    const [theme, setTheme] = useState(() => {
+        return localStorage.getItem('theme') || 'light'
+    })
 
     const axiosPrivate = useAxiosPrivate()
 
-    useEffect(() => {
-        document.documentElement.classList.toggle('dark', theme === 'dark')
-    }, [theme])
+    const applyTheme = (newTheme) => {
+        if(newTheme === 'dark'){
+            document.documentElement.classList.add('dark')
+        } else {
+            document.documentElement.classList.remove('dark')
+        }
+    }
+
+    useState(() => {
+        applyTheme(theme)
+    })
 
     const toggleTheme = async () => {
         const newTheme = theme === 'light' ? 'dark' : 'light'
 
+        applyTheme(newTheme)
+
         setTheme(newTheme)
+        
         localStorage.setItem('theme', newTheme)
 
         try {

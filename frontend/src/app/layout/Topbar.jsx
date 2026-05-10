@@ -104,7 +104,7 @@ const Topbar = () => {
                   onClick={(e) => {
                     e.stopPropagation();
 
-                    setConfirmId(item.jobId)
+                    setConfirmId(item.jobId);
                   }}
                   className="
       flex items-center gap-1
@@ -129,7 +129,10 @@ const Topbar = () => {
   };
 
   return (
-    <div className="bg-white border-b dark:border-black px-5 py-2 flex dark:bg-[#151312] dark:text-gray-100  items-center justify-between">
+    <div
+      className="bg-white border-b dark:border-black px-5 py-2 flex dark:bg-[#151312] dark:text-gray-100 transition-colors duration-300
+  items-center justify-between"
+    >
       <div className="hidden md:block"></div>
       <div className=" md:hidden">
         <h1 className="font-semibold text-lg text-orange-500">JobTracker</h1>
@@ -170,7 +173,7 @@ const Topbar = () => {
           + Add Job
         </button>
         <button className="hidden md:block" onClick={toggleTheme}>
-          {theme === "dark" ?  <IoSunnyOutline /> : <IoMoonSharp /> }
+          {theme === "dark" ? <IoSunnyOutline /> : <IoMoonSharp />}
         </button>
         <div className="relative">
           <button onClick={() => setShowNotifications(true)}>
@@ -195,17 +198,15 @@ const Topbar = () => {
 
               {/* ================== DESKTOP ================== */}
               <div
-                className="hidden sm:block absolute right-0 mt-3 w-[380px] z-50
-      animate-popup"
+                className="hidden sm:block absolute right-0 mt-3 w-[380px] z-50 animate-popup"
               >
                 <div
                   className="
-        backdrop-blur-xl bg-white/80 dark:bg-[#1f1f1f]/80
-        border border-white/20 dark:border-white/10
-        rounded-2xl shadow-2xl overflow-hidden flex flex-col
-      "
+                    backdrop-blur-xl bg-white/80 dark:bg-[#1f1f1f]/80
+                    border border-white/20 dark:border-white/10
+                    rounded-2xl shadow-2xl overflow-hidden flex flex-col
+                  "
                 >
-                  {/* HEADER */}
                   <div className="p-4 flex justify-between items-center border-b border-white/20">
                     <h2 className="text-sm font-semibold text-gray-800 dark:text-white">
                       Notifications
@@ -216,7 +217,6 @@ const Topbar = () => {
                     </button>
                   </div>
 
-                  {/* CONTENT */}
                   <div className="max-h-[400px] overflow-y-auto p-3 space-y-6">
                     {notifications.length === 0 ? (
                       <div className="text-center py-10 text-gray-500 text-sm">
@@ -253,22 +253,20 @@ const Topbar = () => {
               <div className="fixed inset-x-0 bottom-0 z-50 sm:hidden">
                 <div
                   className="
-        w-full 
-        h-[30vh]
-        
-        rounded-t-3xl
-        backdrop-blur-xl bg-white/90 dark:bg-[#1f1f1f]/90
-        border border-white/20 dark:border-white/10
-        shadow-2xl flex flex-col
-        animate-slideUp
-      "
+                    w-full 
+                    h-[30vh]
+                    
+                    rounded-t-3xl
+                    backdrop-blur-xl bg-white/90 dark:bg-[#1f1f1f]/90
+                    border border-white/20 dark:border-white/10
+                    shadow-2xl flex flex-col
+                    animate-slideUp
+                  "
                 >
-                  {/* DRAG HANDLE */}
                   <div className="flex justify-center py-2">
                     <div className="w-10 h-1.5 bg-gray-300 rounded-full" />
                   </div>
 
-                  {/* HEADER */}
                   <div className="p-4 flex justify-between items-center border-b border-white/20">
                     <h2 className="text-sm font-semibold text-gray-800 dark:text-white">
                       Notifications
@@ -279,7 +277,6 @@ const Topbar = () => {
                     </button>
                   </div>
 
-                  {/* CONTENT */}
                   <div className="flex-1 overflow-y-auto p-3 space-y-7">
                     {notifications.length === 0 ? (
                       <div className="text-center py-10 text-gray-500 text-sm">
@@ -325,56 +322,55 @@ const Topbar = () => {
             alt=""
           />
         </div>
-        <h3 className="hidden md:block font-medium text-sm ">
-          {user.name}
-        </h3>
+        <h3 className="hidden md:block font-medium text-sm ">{user?.name}</h3>
       </div>
       {confirmId && (
-  <div className="fixed inset-0 z-50 flex items-center justify-center">
-    
-    {/* BACKDROP */}
-    <div
-      className="absolute inset-0 bg-black/40"
-      onClick={() => setConfirmId(null)}
-    />
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          {/* BACKDROP */}
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setConfirmId(null)}
+          />
 
-    {/* MODAL */}
-    <div className="
+          {/* MODAL */}
+          <div
+            className="
       relative w-[90%] max-w-sm
       backdrop-blur-xl bg-white/90 dark:bg-[#1f1f1f]/90
       border border-white/20
       rounded-2xl shadow-2xl p-5
       animate-popup
-    ">
-      <h3 className="text-sm font-semibold mb-2 text-gray-800 dark:text-white">
-        Mark as done?
-      </h3>
+    "
+          >
+            <h3 className="text-sm font-semibold mb-2 text-gray-800 dark:text-white">
+              Mark as done?
+            </h3>
 
-      <p className="text-xs text-gray-500 mb-4">
-        This follow-up will be removed from your notifications.
-      </p>
+            <p className="text-xs text-gray-500 mb-4">
+              This follow-up will be removed from your notifications.
+            </p>
 
-      <div className="flex justify-end gap-2">
-        <button
-          onClick={() => setConfirmId(null)}
-          className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 dark:text-black hover:bg-gray-200"
-        >
-          Cancel
-        </button>
+            <div className="flex justify-end gap-2">
+              <button
+                onClick={() => setConfirmId(null)}
+                className="px-3 py-1.5 text-sm rounded-lg bg-gray-100 dark:text-black hover:bg-gray-200"
+              >
+                Cancel
+              </button>
 
-        <button
-          onClick={async () => {
-            await handleMarkDone(confirmId);
-            setConfirmId(null);
-          }}
-          className="px-3 py-1.5 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600"
-        >
-          Confirm
-        </button>
-      </div>
-    </div>
-  </div>
-)}
+              <button
+                onClick={async () => {
+                  await handleMarkDone(confirmId);
+                  setConfirmId(null);
+                }}
+                className="px-3 py-1.5 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600"
+              >
+                Confirm
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

@@ -1,6 +1,6 @@
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import { AuthContext } from "../context/AuthContext"
-import { forgotPassword, getMe, login, logout, register, resendOtp, resetPassword, verifyEmail } from "../services/authApi"
+import { forgotPassword, login, logout, register, resendOtp, resetPassword, verifyEmail } from "../services/authApi"
 import { useNavigate } from "react-router-dom"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
 import { AppLoadingContext } from "../../../app/providers/AppLoadingContext"
@@ -12,7 +12,7 @@ export const useAuth = () => {
 
     const navigate = useNavigate()
     const axiosPrivate = useAxiosPrivate()
-    const { user, setUser, accessToken, setAccessToken, loading, setLoading, error, setError } = context
+    const { user, setUser, setAccessToken, loading, setLoading, error, setError } = context
 
     const handleRegister = async({name, email, password}) => {
         try {
@@ -70,7 +70,6 @@ export const useAuth = () => {
 
             const data = await login({email, password})
             setAccessToken(data.accessToken)
-            console.log("LOGIN USER:", data.user)
             setUser(data.user)
 
             navigate('/dashboard')

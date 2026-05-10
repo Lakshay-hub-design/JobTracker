@@ -110,9 +110,8 @@ const getFollowUps = asyncHandler(async (req, res) => {
 })
 
 const markFollowUpDone = asyncHandler(async (req, res) => {
-
     await markFollowUpDoneService({ 
-        jobId: req.params.id,
+        jobId: req.params.jobId,
         userId: req.user.id
      })
 
