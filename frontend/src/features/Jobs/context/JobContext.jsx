@@ -17,8 +17,13 @@ export const JobProvider = ({ children }) => {
     const [search, setSearch] = useState("")
 
     const [notifications, setNotifications] = useState([])
+    const [jobRefreshKey, setJobRefreshKey] = useState(0)
 
     const axiosPrivate = useAxiosPrivate()
+
+    const triggerJobRefresh = () => {
+        setJobRefreshKey(prev => prev + 1)
+    }
 
     const fetchNotifications = async() => {
         try {
@@ -51,14 +56,40 @@ export const JobProvider = ({ children }) => {
         return diff < 0 ? "overdue" : "upcoming"
     }
 
-    const addNotificationLocal = (job) => {
+    const syncFollowUpNotification = (job) => {
+
         setNotifications(prev => {
+
+            // remove notification
+            if (
+                job.isFollowUpDone ||
+                !job.followUpDate
+            ) {
+                return prev.filter(
+                    item => item.jobId !== job._id
+                )
+            }
+
             const exists = prev.some(
                 item => item.jobId === job._id
             )
 
-            if (exists) return prev
+            // update existing
+            if (exists) {
+                return prev.map(item =>
+                    item.jobId === job._id
+                        ? {
+                            ...item,
+                            followUpDate: job.followUpDate,
+                            type: getNotificationType(
+                                job.followUpDate
+                            )
+                        }
+                        : item
+                )
+            }
 
+            // add new
             return [
                 ...prev,
                 {
@@ -67,29 +98,20 @@ export const JobProvider = ({ children }) => {
                     company: job.company,
                     position: job.position,
                     followUpDate: job.followUpDate,
-                    type: getNotificationType(job.followUpDate)
+                    type: getNotificationType(
+                        job.followUpDate
+                    )
                 }
             ]
         })
     }
 
-    const updateNotificationLocal = (job) => {
-        setNotifications(prev =>
-            prev.map(item =>
-                item.jobId === job._id
-                    ? {
-                        ...item,
-                        followUpDate: job.followUpDate,
-                        type: getNotificationType(job.followUpDate)
-                    }
-                    : item
-            )
-        )
-    }
+    const markNotificationDoneLocal = (jobId) => {
 
-    const removeNotificationLocal = (jobId) => {
         setNotifications(prev =>
-            prev.filter(item => item.jobId !== jobId)
+            prev.filter(
+                item => item.jobId !== jobId
+            )
         )
     }
 
@@ -102,9 +124,11 @@ export const JobProvider = ({ children }) => {
         search,
         pagination,
         notifications,
-        addNotificationLocal,
-        updateNotificationLocal,
-        removeNotificationLocal,
+        jobRefreshKey,
+        triggerJobRefresh,
+        setNotifications,
+        syncFollowUpNotification,
+        markNotificationDoneLocal,
         setPagination,
         setJobs,
         setLoading,
@@ -120,7 +144,8 @@ export const JobProvider = ({ children }) => {
         status,
         search,
         pagination,
-        notifications
+        notifications,
+        jobRefreshKey
     ])
 
 

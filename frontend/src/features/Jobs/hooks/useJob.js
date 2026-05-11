@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
-import { deleteJob, getJobs, markFollowUpDone } from "../service/jobsApi"
+import { deleteJob, getJobs } from "../service/jobsApi"
 import { JobContext } from "../context/JobContext"
 import { toast } from "react-hot-toast"
 
 export const useJobs = (page, filters) => {
     const context = useContext(JobContext)
-    const { jobs, setJobs, loading, pagination, setPagination, setNotifications, setLoading, error, setError, status, setStatus, search, setSearch } = context
+    const { jobs, setJobs, loading, pagination, setPagination, setLoading, error, setError, status, setStatus, search, setSearch } = context
     const [debouncedSearch, setDebouncedSearch] = useState(search)
 
     const axiosPrivate = useAxiosPrivate()
@@ -62,16 +62,8 @@ export const useJobs = (page, filters) => {
         }
     }
 
-    const handleMarkDone = async(jobId) => {
-        try {
-            await markFollowUpDone(axiosPrivate, jobId)
-            setNotifications(prev => prev.filter(n => n.jobId !== jobId))
-        } catch (err) {
-            setError(err.message || 'Failed to mark follow-up as done')
-        }
-    }
 
     return {
-        jobs, loading, error, pagination, status, setStatus, search, setSearch, refetch: fetchJobs, handleDelete, handleMarkDone
+        jobs, loading, error, pagination, status, setStatus, search, setSearch, refetch: fetchJobs, handleDelete, 
     }
 }

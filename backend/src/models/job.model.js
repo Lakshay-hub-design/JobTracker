@@ -56,7 +56,10 @@ const JobSchema = new mongoose.Schema(
     },
     resume: { 
         url: String,
-        fileId: String 
+        fileId: String,
+        name: String,
+        uploadedAt: Date,
+        size: Number
     },
     resumeText: {
       type: String,

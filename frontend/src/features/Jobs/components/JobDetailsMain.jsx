@@ -3,13 +3,11 @@ import { MdEdit } from "react-icons/md";
 import { IoShareSocialSharp } from "react-icons/io5";
 import { Download, FileText, Upload } from 'lucide-react';
 import FollowUpCard from './FollowUpCard';
-import { useJobs } from '../hooks/useJob';
 import toast from 'react-hot-toast';
 
-const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
+const JobDetailsMain = ({ job, setShowDrawer, handleUpdate, handleMarkDone }) => {
   const [showReschedule, setShowReschedule] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
-  const { handleMarkDone } = useJobs()
   const handleReschedule = async (date) => {
     if (!date) return
 
@@ -35,6 +33,19 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
       actionType
     )
   }
+
+  const formatFileSize = (bytes) => {
+
+    if (!bytes) return "Unknown size"
+
+    const kb = bytes / 1024
+
+    if (kb < 1024) {
+        return `${kb.toFixed(1)} KB`
+    }
+
+    return `${(kb / 1024).toFixed(1)} MB`
+}
 
   return (
     <div className="grid md:grid-cols-3 gap-6">
@@ -77,32 +88,82 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
           </h3>
 
           {job.resume?.url && (
-            <div className="flex items-center justify-between bg-white dark:bg-[#4a4645] rounded-xl p-3 shadow-sm border dark:border-[#635956] mb-4">
-              <div className="flex items-center gap-3">
-                <div className="bg-red-100 p-2 rounded-lg">
-                  <FileText className="text-red-500" size={20} />
+            <div
+              className="
+                flex items-center justify-between
+                bg-white dark:bg-[#4a4645]
+                rounded-2xl p-4
+                shadow-sm border dark:border-[#635956]
+                mb-4 hover:shadow-md
+                transition-all duration-300
+              "
+            >
+
+              <div className="flex items-center gap-3 min-w-0">
+
+                <div
+                  className="
+                    bg-red-100 dark:bg-red-500/10
+                    p-3 rounded-xl
+                  "
+                >
+                  <FileText
+                    className="text-red-500"
+                    size={22}
+                  />
                 </div>
 
-                <div>
-                  <p className="text-sm font-medium text-gray-800 truncate max-w-[150px]">
-                    {job.resume.name}
+                <div className="min-w-0">
+
+                  <p
+                    className="
+                      text-sm font-semibold
+                      text-gray-800 dark:text-white
+                      truncate max-w-[180px]
+                    "
+                  >
+                    {job.resume.name || "Resume.pdf"}
                   </p>
-                  <p className="text-xs text-gray-500 dark:text-[#ccc7c7]">
-                    Added{" "}
-                    {job.resume.addedDate
-                      ? new Date(job.resume.addedDate).toLocaleDateString()
-                      : "Unknown date"}
-                  </p>
+
+                  <div className="flex items-center gap-2 mt-1">
+
+                    <p className="text-xs text-gray-500 dark:text-[#ccc7c7]">
+                      {job.resume.uploadedAt
+                        ? new Date(
+                            job.resume.uploadedAt
+                          ).toLocaleDateString()
+                        : "Unknown date"}
+                    </p>
+
+                    <span className="text-gray-400 text-xs">
+                      •
+                    </span>
+
+                    <p className="text-xs text-gray-500 dark:text-[#ccc7c7]">
+                      {formatFileSize(job.resume.size)}
+                    </p>
+
+                  </div>
                 </div>
               </div>
+
               <a
                 href={job.resume.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-gray-500 dark:text-[#ccc7c7] hover:text-black"
+                className="
+                  p-2 rounded-lg
+                  hover:bg-gray-100
+                  dark:hover:bg-[#5c5756]
+                  transition
+                "
               >
-                <Download size={18} />
+                <Download
+                  size={18}
+                  className="text-gray-600 dark:text-[#ddd]"
+                />
               </a>
+
             </div>
           )}
           <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 flex flex-col items-center justify-center text-gray-400 hover:border-gray-400 transition cursor-pointer">
@@ -118,7 +179,7 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate }) => {
           <FollowUpCard
             key={job.followUpDate}
             job={job}
-            onMarkDone={() => handleMarkDone(job._id)}
+            onMarkDone={() => handleMarkDone()}
             onReschedule={() => setShowReschedule(true)}
           />
         

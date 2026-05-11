@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import useAxiosPrivate from "../../../shared/api/axiosPrivate"
-import { generateAIReport, getJobDetails, updateJob } from "../service/jobsApi"
+import { generateAIReport, getJobDetails, markFollowUpDone, updateJob } from "../service/jobsApi"
 import {toast} from "react-hot-toast"
 import { JobContext } from "../context/JobContext"
 
@@ -11,9 +11,8 @@ export const useJobDetails = (jobId) => {
     const [error, setError] = useState(null)
     const [aiLimitReached, setAILimitReached] = useState(false)
     const {
-        addNotificationLocal,
-        updateNotificationLocal,
-        removeNotificationLocal
+        syncFollowUpNotification,
+        jobRefreshKey
     } = useContext(JobContext)
 
     const axiosPrivate = useAxiosPrivate()
@@ -36,7 +35,7 @@ export const useJobDetails = (jobId) => {
 
     useEffect(() => {
         if (jobId) fetchJobDetails()
-    }, [jobId])
+    }, [jobId, jobRefreshKey])
 
     const triggerAIReport = async (formData = null) => {
         try {
@@ -72,17 +71,7 @@ export const useJobDetails = (jobId) => {
                 ...updatedData
             }
 
-            if (type === "followup-added") {
-                addNotificationLocal(updatedJob)
-            }
-
-            if(type === "followup-updated"){
-                updateNotificationLocal(updatedJob)
-            }
-
-            if (updatedData.isFollowUpDone) {
-                removeNotificationLocal(job._id)
-            }
+            syncFollowUpNotification(updatedJob)
 
             await updateJob(axiosPrivate, jobId, updatedData)
            
@@ -100,5 +89,36 @@ export const useJobDetails = (jobId) => {
         }
     }
 
-    return { job, aiReport, loading, error, aiLimitReached, refetch: fetchJobDetails, triggerAIReport, handleUpdate }
+    const handleMarkDone = async () => {
+
+        try {
+
+            const updatedJob = {
+                ...job,
+                isFollowUpDone: true
+            }
+
+            setJob(updatedJob)
+
+            syncFollowUpNotification(updatedJob)
+
+            await markFollowUpDone(
+                axiosPrivate,
+                jobId
+            )
+
+            toast.success(
+                "Follow-up marked as done"
+            )
+
+        } catch (err) {
+
+            setError(
+                err.message ||
+                "Failed to mark follow-up"
+            )
+        }
+    }
+
+    return { job, aiReport, loading, error, aiLimitReached, refetch: fetchJobDetails, triggerAIReport, handleUpdate, handleMarkDone }
 }

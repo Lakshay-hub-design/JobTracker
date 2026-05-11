@@ -6,20 +6,23 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { JobContext } from "../../features/Jobs/context/JobContext";
 import { useTheme } from "../providers/ThemeContext";
 import { IoSunnyOutline, IoMoonSharp } from "react-icons/io5";
-import { useJobs } from "../../features/Jobs/hooks/useJob";
 import { Check } from "lucide-react";
+import { markFollowUpDone } from "../../features/Jobs/service/jobsApi";
+import useAxiosPrivate from "../../shared/api/axiosPrivate";
+import toast from "react-hot-toast";
 
 const Topbar = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [confirmId, setConfirmId] = useState(null);
 
+  const axiosPrivate = useAxiosPrivate();
+
   const context = useContext(AuthContext);
   const jobContext = useContext(JobContext);
 
   const { user } = context;
-  const { search, setSearch, notifications } = jobContext;
+  const { search, setSearch, notifications, markNotificationDoneLocal, triggerJobRefresh } = jobContext;
   const { theme, toggleTheme } = useTheme();
-  const { handleMarkDone } = useJobs();
 
   const location = useLocation();
   const navigate = useNavigate();
@@ -127,6 +130,30 @@ const Topbar = () => {
       </div>
     );
   };
+
+  const handleNotificationDone = async(jobId) => {
+
+      try {
+
+          markNotificationDoneLocal(jobId)
+
+          triggerJobRefresh()
+          await markFollowUpDone(
+              axiosPrivate,
+              jobId
+          )
+
+          toast.success(
+              "Follow-up marked as done"
+          )
+
+      } catch (err) {
+
+          toast.error(
+              "Failed to mark follow-up"
+          )
+      }
+  }
 
   return (
     <div
@@ -360,7 +387,7 @@ const Topbar = () => {
 
               <button
                 onClick={async () => {
-                  await handleMarkDone(confirmId);
+                  await handleNotificationDone(confirmId);
                   setConfirmId(null);
                 }}
                 className="px-3 py-1.5 text-sm rounded-lg bg-green-500 text-white hover:bg-green-600"

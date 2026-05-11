@@ -13,7 +13,10 @@ async function uploadFile(file){
 
     return {
         url: response.url,
-        fileId: response.fileId
+        fileId: response.fileId,
+        name: response.name,
+        uploadedAt: new Date(),
+        size: response.size
     }
 }
 
