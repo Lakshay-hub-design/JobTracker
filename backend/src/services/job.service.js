@@ -235,7 +235,7 @@ const getJobsService = async ({ userId, query }) => {
     }
 }
 
-const updateJobService = async ({ jobId, userId, data }) => {
+const updateJobService = async ({ jobId, userId, data, file }) => {
 
     const job = await jobRepository.getJobDetails(jobId, userId)
 
@@ -243,7 +243,19 @@ const updateJobService = async ({ jobId, userId, data }) => {
         throw new ApiError(404, 'Job not found')
     }
 
-    const updatedJob = await jobRepository.updateJobById(jobId, userId, data)
+    let updatedData = {
+        ...data
+    }
+
+    if (file) {
+        const resumeData = await uploadFile(file)
+        const resumeText = await extractResumeText(file.buffer)
+
+        updatedData.resume = resumeData
+        updatedData.resumeText = resumeText
+    }
+
+    const updatedJob = await jobRepository.updateJobById(jobId, userId, updatedData)
 
     return updatedJob
 }

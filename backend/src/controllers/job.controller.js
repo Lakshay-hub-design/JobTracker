@@ -74,7 +74,8 @@ const updateJob = asyncHandler(async (req, res) => {
     const updatedJob = await updateJobService({
         jobId: req.params.id,
         userId: req.user.id,
-        data: req.body
+        data: req.body,
+        file: req.file
     })
 
     res.status(200).json({

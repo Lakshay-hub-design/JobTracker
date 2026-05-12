@@ -14,7 +14,7 @@ router.patch("/followup/:jobId/done", authMiddleware, jobController.markFollowUp
 router.get('/:id', authMiddleware, jobController.getJobDetails)
 router.get('/dashboard/full', authMiddleware, jobController.getFullDashboard)
 
-router.patch('/:id', authMiddleware, jobController.updateJob)
+router.patch('/:id', authMiddleware, upload.single('resume'), jobController.updateJob)
 router.delete('/:id', authMiddleware, jobController.deleteJob)
 
 module.exports = router

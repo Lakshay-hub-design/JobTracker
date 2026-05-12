@@ -4,10 +4,14 @@ import { IoShareSocialSharp } from "react-icons/io5";
 import { Download, FileText, Upload } from 'lucide-react';
 import FollowUpCard from './FollowUpCard';
 import toast from 'react-hot-toast';
+import { useRef } from 'react';
 
 const JobDetailsMain = ({ job, setShowDrawer, handleUpdate, handleMarkDone }) => {
   const [showReschedule, setShowReschedule] = useState(false)
   const [selectedDate, setSelectedDate] = useState(null)
+
+  const inputRef = useRef(null)
+
   const handleReschedule = async (date) => {
     if (!date) return
 
@@ -45,6 +49,18 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate, handleMarkDone }) =>
     }
 
     return `${(kb / 1024).toFixed(1)} MB`
+}
+
+const handleResumeUpload = async (e) => {
+  const file = e.target.files[0]
+
+  if(!file) return
+
+  const formData = new FormData()
+
+  formData.append('resume', file)
+
+  await handleUpdate(formData, 'resume')
 }
 
   return (
@@ -166,13 +182,20 @@ const JobDetailsMain = ({ job, setShowDrawer, handleUpdate, handleMarkDone }) =>
 
             </div>
           )}
-          <div className="border-2 border-dashed border-gray-300 rounded-xl p-4 flex flex-col items-center justify-center text-gray-400 hover:border-gray-400 transition cursor-pointer">
+          <div onClick={() => inputRef.current.click()} className="border-2 border-dashed border-gray-300 rounded-xl p-4 flex flex-col items-center justify-center text-gray-400 hover:border-gray-400 transition cursor-pointer">
             <div className="bg-gray-100 rounded-full p-2 mb-2">
               <Upload size={18} />
             </div>
 
-            <p className="text-sm font-medium">Upload New Attachment</p>
+            <p className="text-sm font-medium">{job.resume?.url ? 'Replace Resume' : 'Upload Resume'}</p>
           </div>
+          <input 
+            ref={inputRef} 
+            type="file" 
+            onChange={handleResumeUpload} 
+            accept=".pdf,.doc,.docx"
+            className='hidden' 
+          />
         </div>
 
         

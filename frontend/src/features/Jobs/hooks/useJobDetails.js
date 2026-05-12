@@ -56,24 +56,30 @@ export const useJobDetails = (jobId) => {
     const handleUpdate = async (updatedData, type) => {
         try {
             setError(null)
-            setJob(prev => {
-                const updated = {
-                    ...prev,
+            const isFormData = updatedData instanceof FormData
+
+            if(!isFormData){
+                setJob(prev => {
+                    const updated = {
+                        ...prev,
+                        ...updatedData
+                    }
+
+
+                    return updated
+                })
+
+                const updatedJob = {
+                    ...job,
                     ...updatedData
                 }
 
-
-                return updated
-            })
-
-            const updatedJob = {
-                ...job,
-                ...updatedData
+                syncFollowUpNotification(updatedJob)
             }
 
-            syncFollowUpNotification(updatedJob)
+            const res = await updateJob(axiosPrivate, jobId, updatedData)
 
-            await updateJob(axiosPrivate, jobId, updatedData)
+            setJob(res.job)
            
             if (type === "status") {
                 toast.success("Status Updated")
@@ -81,6 +87,8 @@ export const useJobDetails = (jobId) => {
                 toast.success("Follow-up rescheduled")
             } else if (type === "followup-added") {
                 toast.success("Follow-up added")
+            } else if(type === 'resume'){
+                toast.success("Resume updated")
             } else {
                 toast.success("Job Application Updated")
             }
