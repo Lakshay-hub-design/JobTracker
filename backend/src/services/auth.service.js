@@ -151,7 +151,7 @@ const resetPassrord = async (token, newPassword) => {
 const refreshAccessToken = async (refreshToken) => {
     if(!refreshToken){
         const error = new Error('Refresh token not found')
-        error.statusCode = 404
+        error.statusCode = 401
         throw error
     }
 

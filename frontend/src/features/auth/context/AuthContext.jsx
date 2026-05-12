@@ -26,7 +26,13 @@ export const AuthProvider = ({children}) => {
                 }
 
             } catch (err) {
-                console.log("Error refreshing token:", err.response?.data || err.message)
+                if (err.response?.status !== 401) {
+
+                    console.log(
+                        "Refresh error:",
+                        err.response?.data || err.message
+                    )
+                }
             } finally {
                 setAuthLoading(false)
             }
